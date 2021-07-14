@@ -24,7 +24,7 @@ class VCList extends StatelessWidget {
           FutureBuilder(
               future: c.getVCList(did),
               builder: (context, snapshot) {
-                print(snapshot);
+                g.log.i(snapshot);
                 if (snapshot.connectionState != ConnectionState.done) {
                   return Center(child: CircularProgressIndicator());
                 } else {

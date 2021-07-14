@@ -48,7 +48,7 @@ class VCListController extends GetxController {
       }
       retVCList.add(vc);
     }
-    print(retVCList.runtimeType);
+    g.log.i(retVCList.runtimeType);
     return retVCList;
   }
 }

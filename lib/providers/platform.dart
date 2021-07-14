@@ -19,7 +19,7 @@ class Platform {
   }
 
   getDIDDocument(Uri getDIDDocumentUri) async {
-    print(getDIDDocumentUri.normalizePath());
+    g.log.i(getDIDDocumentUri.normalizePath());
     http.Response response = await http.get(getDIDDocumentUri); //.replace(queryParameters: {'did': did}));
 
     return responseCheck(response);
