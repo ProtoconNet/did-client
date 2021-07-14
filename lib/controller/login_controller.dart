@@ -28,7 +28,11 @@ class LoginController extends GetxController {
       final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
-      final privateKey = await storage.read(key: 'privateKey');
+      final didListStr = await storage.read(key: 'DIDList') as String;
+      g.log.i("didListStr: $didListStr");
+      final didList = json.decode(didListStr);
+      g.log.i("did first: $didList, ${didList.runtimeType}");
+      final privateKey = didList.values.toList()[0];
       final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
 
       final iv = encrypt.IV.fromLength(16);

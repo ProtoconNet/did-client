@@ -14,6 +14,12 @@ import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/providers/secure_storage.dart';
 
 class SchemaController extends GetxController {
+  SchemaController({required this.did, required this.name, required this.requestSchema});
+
+  final String did;
+  final String name;
+  final String requestSchema;
+
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final issuer = Issuer();
@@ -28,7 +34,7 @@ class SchemaController extends GetxController {
   var date = DateTime.now().obs;
   var time = DateTime.now().obs;
   var image = ''.obs;
-  File imageFile;
+  File? imageFile;
 
   var schema = ''.obs;
 
@@ -97,8 +103,8 @@ class SchemaController extends GetxController {
 
     var endpoints = json.decode(response.body);
 
-    await VCManager().setByName(name, 'requestVC', endpoints['VCPost']);
-    await VCManager().setByName(name, 'getVC', endpoints['VCGet']);
+    await DIDManager(did: did).setVCFieldByName(name, 'requestVC', endpoints['VCPost']);
+    await DIDManager(did: did).setVCFieldByName(name, 'getVC', endpoints['VCGet']);
 
     response = await platform.getScheme(Uri.parse(endpoints['scheme']));
     if (json.decode(response.body).containsKey('error')) {
@@ -160,7 +166,7 @@ class SchemaController extends GetxController {
     final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
-    final privateKey = await storage.read(key: 'privateKey');
+    final privateKey = await storage.read(key: 'privateKey') as String;
     final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
 
     final iv = encrypt.IV.fromLength(16);
@@ -223,9 +229,10 @@ class SchemaController extends GetxController {
 
     g.log.i("body:${json.encode(body)}");
 
-    g.log.i("uri:${await VCManager().getByName(name, "requestVC")}");
+    g.log.i("uri:${await DIDManager(did: did).getVCFieldByName(name, "requestVC")}");
 
-    var response = await issuer.requestVC(Uri.parse(await VCManager().getByName(name, "requestVC")));
+    var response = await issuer.requestVC(
+        Uri.parse(await DIDManager(did: did).getVCFieldByName(name, "requestVC")), json.encode(body));
     g.log.i("result of request VC: ${response.body}");
 
     if (response.body == 'Error' || json.decode(response.body).containsKey('error')) {
@@ -246,7 +253,7 @@ class SchemaController extends GetxController {
       return;
     }
 
-    await VCManager().setByName(name, 'JWT', response.headers['authorization']);
+    await DIDManager(did: did).setVCFieldByName(name, 'JWT', response.headers['authorization']);
 
     final challenge = jsonDecode(response.body);
 

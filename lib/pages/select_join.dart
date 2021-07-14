@@ -29,7 +29,7 @@ class SelectJoin extends StatelessWidget {
                       Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                         Text('DID Wallet',
                             style: Get.theme.textTheme.headline5
-                                .copyWith(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
+                                ?.copyWith(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
                         Text('Wiggler Inc.', style: Get.theme.textTheme.subtitle2)
                       ])
                     ],

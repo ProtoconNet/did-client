@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Background extends StatelessWidget {
-  Background({Key key, this.appBar, this.child, this.mainAxisAlignment = MainAxisAlignment.center}) : super(key: key);
+  Background({key, this.appBar, required this.child, this.mainAxisAlignment = MainAxisAlignment.center})
+      : super(key: key);
 
-  final AppBar appBar;
+  final AppBar? appBar;
   final Widget child;
   final MainAxisAlignment mainAxisAlignment;
 

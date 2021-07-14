@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'package:animations/animations.dart';
@@ -7,7 +8,7 @@ import 'package:wallet/providers/global_variable.dart';
 
 import 'package:wallet/controller/did_list_controller.dart';
 import 'package:wallet/widgets/background.dart';
-import 'package:wallet/pages/vc_list_new.dart';
+import 'package:wallet/pages/vc_list.dart';
 
 class DIDList extends StatelessWidget {
   final g = Get.put(GlobalVariable());
@@ -23,7 +24,7 @@ class DIDList extends StatelessWidget {
           title: Center(
               child: Text('Mitum DID',
                   style: GoogleFonts.kaushanScript(
-                      textStyle: Get.theme.textTheme.headline5.copyWith(color: Colors.white)))),
+                      textStyle: Get.theme.textTheme.headline5?.copyWith(color: Colors.white)))),
         ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -33,20 +34,13 @@ class DIDList extends StatelessWidget {
                   future: c.getDIDList(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return Center(child: CircularProgressIndicator());
-                      } else {
+                      if (snapshot.hasData) {
                         g.log.i("DID : ${json.encode(snapshot.data)}");
-                        print(snapshot.data);
+                        final dids = snapshot.data as Map<String, dynamic>;
 
-                        List<Widget> didList = [];
-                        for (var did in snapshot.data) {
-                          g.log.i(did.runtimeType);
-                          g.log.i("DID : $did");
-                          print(did);
-                          didList.add(VCListNew(did: did));
-                        }
-                        return Column(children: didList);
+                        return Column(children: dids.keys.map((did) => VCList(did: did)).toList());
+                      } else {
+                        return Center(child: CircularProgressIndicator());
                       }
                     } else {
                       return Center(child: CircularProgressIndicator());

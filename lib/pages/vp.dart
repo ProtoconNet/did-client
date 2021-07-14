@@ -6,7 +6,7 @@ import 'package:wallet/widgets/background.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class VP extends StatelessWidget {
-  VP({Key key, this.name}) : super(key: key);
+  VP({key, required this.name}) : super(key: key);
 
   final String name;
 

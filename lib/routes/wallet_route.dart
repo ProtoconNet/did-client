@@ -16,9 +16,7 @@ class WalletRoute extends StatelessWidget {
 
   init() async {
     await Permission.camera.request();
-    final pk = await storage.containsKey(key: 'privateKey');
-
-    return {'pk': pk, 'password': g.password.value};
+    return await storage.containsKey(key: 'DIDList');
   }
 
   @override
@@ -30,10 +28,10 @@ class WalletRoute extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          if (!snapshot.data['pk']) {
+          if (!(snapshot.data as bool)) {
             return OnBoarding();
           } else {
-            if (snapshot.data['password'] == "") {
+            if (g.password.value == "") {
               return Login();
             }
             return Home(tabController: g.tabController.value);

@@ -12,6 +12,7 @@ class GlobalVariable extends GetxController {
   var did = ''.obs;
   var tabController = PersistentTabController(initialIndex: 0).obs;
   final log = Logger(printer: SimplePrinter(colors: false));
+  // final log = Logger(printer: PrettyPrinter(methodCount: 2, colors: false));
   final longLog = Logger(printer: PrettyPrinter(methodCount: 3, colors: false));
 
   final themeModeList = {"system": ThemeMode.system, "light": ThemeMode.light, "dark": ThemeMode.dark};
@@ -40,7 +41,7 @@ class GlobalVariable extends GetxController {
   String get theme => box.read('themeMode');
 
   ThemeMode themeMode(val) {
-    return themeModeList[val];
+    return themeModeList[val]!;
   }
 
   void changeTheme(String val) {
@@ -50,7 +51,7 @@ class GlobalVariable extends GetxController {
   String get language => box.read('language');
 
   Locale languageMode(val) {
-    return languageModeList[val];
+    return languageModeList[val]!;
   }
 
   void changeLanguage(String val) {

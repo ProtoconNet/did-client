@@ -14,7 +14,7 @@ class ScanQRController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final GlobalKey qrKey = GlobalKey();
-  QRViewController controller;
+  QRViewController? controller;
 
   var result = "".obs;
 
@@ -29,6 +29,7 @@ class ScanQRController extends GetxController {
           // execute schema page
           if (saveResult) {
             await Get.to(Schema(
+              did: '',
               name: val['claim']['name'],
               requestSchema: val['claim']['schemaRequest'],
             ));
@@ -47,6 +48,6 @@ class ScanQRController extends GetxController {
 
   @override
   onClose() {
-    controller.dispose();
+    controller!.dispose();
   }
 }

@@ -13,10 +13,13 @@ class DIDListController extends GetxController {
   getDIDList() async {
     g.log.i("getDIDList");
 
-    var didListStr = await storage.read(key: "DIDList");
+    var didListStr = await storage.read(key: "DIDList") as String;
+
+    g.log.i(didListStr);
 
     var didList = json.decode(didListStr);
 
+    g.log.i(didList);
     return didList;
   }
 }

@@ -10,14 +10,14 @@ import 'package:wallet/widgets/background.dart';
 import 'package:wallet/controller/schema_controller.dart';
 
 class Schema extends StatelessWidget {
-  Schema({Key key, this.name, this.requestSchema}) : super(key: key);
+  Schema({key, required this.did, required this.name, required this.requestSchema}) : super(key: key);
   final g = Get.put(GlobalVariable());
+  final String did;
   final String name;
   final String requestSchema;
 
-  final SchemaController c = Get.put(SchemaController());
-
   builder(context, snapshot, name) {
+    final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
     c.initInputItems();
     g.log.i('Schema Builder');
     g.log.i(snapshot);
@@ -85,7 +85,7 @@ class Schema extends StatelessWidget {
             c.inputs.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(item['name'].toString().toUpperCase() + " : "),
               TextButton(onPressed: () {
-                DatePicker.showDatePicker(Get.context, showTitleActions: true, onConfirm: (date) {
+                DatePicker.showDatePicker(Get.context!, showTitleActions: true, onConfirm: (date) {
                   c.setDateAt(date, idx);
                 }, currentTime: c.date.value, locale: LocaleType.ko);
               }, child: Obx(() {
@@ -97,7 +97,7 @@ class Schema extends StatelessWidget {
                 );
               })),
               TextButton(onPressed: () {
-                DatePicker.showTimePicker(Get.context, showTitleActions: true, onConfirm: (time) {
+                DatePicker.showTimePicker(Get.context!, showTitleActions: true, onConfirm: (time) {
                   c.setTimeAt(time, idx);
                 }, currentTime: c.time.value, locale: LocaleType.ko);
               }, child: Obx(() {
@@ -133,12 +133,13 @@ class Schema extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
     // g.log.i("Schema build");
     return Background(
         appBar: AppBar(
             title: Text(name,
                 style: GoogleFonts.roboto(
-                    textStyle: Get.theme.textTheme.headline5.copyWith(fontWeight: FontWeight.bold)))),
+                    textStyle: Get.theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)))),
         child: Column(children: [
           FutureBuilder(
               future: c.dynamicFields(name, requestSchema),

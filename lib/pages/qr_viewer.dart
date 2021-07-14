@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:wallet/widgets/background.dart';
 
 class QRViewer extends StatelessWidget {
-  QRViewer({Key key, this.data}) : super(key: key);
+  QRViewer({key, required this.data}) : super(key: key);
 
   final String data;
 

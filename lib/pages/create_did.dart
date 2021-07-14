@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:wallet/widgets/background.dart';
 import 'package:get/get.dart';
 
-import 'package:wallet/controller/create_account_controller.dart';
+import 'package:wallet/controller/create_did_controller.dart';
 
-class CreateAccount extends StatelessWidget {
-  CreateAccount({Key key, this.password}) : super(key: key);
+class CreateDID extends StatelessWidget {
+  CreateDID({key, required this.password}) : super(key: key);
 
   final String password;
-  final CreateAccountController c = Get.put(CreateAccountController());
+  final CreateDIDController c = Get.put(CreateDIDController());
 
   @override
   Widget build(BuildContext context) {
     return Background(
       child: FutureBuilder<String>(
-          future: c.createWallet(password),
+          future: c.createDID(password),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(children: [

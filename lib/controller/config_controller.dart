@@ -154,16 +154,20 @@ class ConfigController extends GetxController {
   eraseAll() async {
     // box.remove('themeMode');
     // box.remove('language');
-    await storage.delete(key: "vc_id");
-    await storage.delete(key: "privateKey");
+    if (await storage.containsKey(key: "DIDList")) {
+      String didList = await storage.read(key: "DIDList") as String;
 
-    var didList = await storage.read(key: "DIDList");
+      print(didList);
+      print(json.decode(didList));
 
-    for (var did in json.decode(didList)) {
-      //var didVC = storage.read(key: did);
-      storage.delete(key: did);
+      for (var did in json.decode(didList).keys.toList()) {
+        //var didVC = storage.read(key: did) as String;
+        if (await storage.containsKey(key: did)) {
+          await storage.delete(key: did);
+        }
+      }
+      await storage.delete(key: "DIDList");
     }
-    storage.delete(key: "DIDList");
 
     // await deleteCacheDir();
     // await deleteAppDir();

@@ -10,14 +10,12 @@ class Issuer {
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        g.log.i(response);
+        g.log.i("$response, ${response.body}");
         return response;
-        break;
       default:
         g.log.w("Response Error", response);
         return response;
-        // throw Error();
-        break;
+      // throw Error();
     }
   }
 
@@ -33,14 +31,14 @@ class Issuer {
     return responseCheck(response);
   }
 
-  requestVC(requestVCUri) async {
-    http.Response response = await http.get(
+  requestVC(requestVCUri, body) async {
+    http.Response response = await http.post(
       requestVCUri,
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-//        HttpHeaders.authorizationHeader: 'Bearer ' + token
       },
+      body: body,
     );
     return responseCheck(response);
   }

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 
-class VerifiableCredentialCard extends StatelessWidget {
-  VerifiableCredentialCard({Key key, this.icon, this.name, this.status}) : super(key: key);
+class VCCard extends StatelessWidget {
+  VCCard({key, required this.icon, required this.name, required this.status}) : super(key: key);
   final g = Get.put(GlobalVariable());
 
   final IconData icon;
@@ -14,6 +14,7 @@ class VerifiableCredentialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     g.log.i("VCCard build");
+
     return Card(
         margin: EdgeInsets.all(0),
         elevation: 1.0,

@@ -8,7 +8,7 @@ import 'package:wallet/pages/scan_qr.dart';
 import 'package:wallet/providers/global_variable.dart';
 
 class Home extends StatelessWidget {
-  Home({key, this.tabController}) : super(key: key);
+  Home({key, required this.tabController}) : super(key: key);
   final g = Get.put(GlobalVariable());
   final PersistentTabController tabController;
 

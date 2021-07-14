@@ -6,7 +6,7 @@ import 'package:wallet/pages/qr_viewer.dart';
 import 'package:wallet/providers/global_variable.dart';
 
 class DIDCard extends StatelessWidget {
-  DIDCard({Key key, this.did, this.children}) : super(key: key);
+  DIDCard({key, required this.did, required this.children}) : super(key: key);
   final g = Get.put(GlobalVariable());
   final String did;
   final List<Widget> children;

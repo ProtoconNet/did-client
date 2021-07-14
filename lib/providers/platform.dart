@@ -11,12 +11,10 @@ class Platform {
       case 2:
         g.log.i(response);
         return response;
-        break;
       default:
         g.longLog.w("Response Error", response);
         return response;
-        // throw Error();
-        break;
+      // throw Error();
     }
   }
 
