@@ -69,8 +69,7 @@ class ConfigController extends GetxController {
     if (await storage.containsKey(key: "DIDList")) {
       String didList = await storage.read(key: "DIDList") as String;
 
-      log.i(didList);
-      log.i(json.decode(didList));
+      log.i("erase ${json.decode(didList)}");
 
       for (var did in json.decode(didList).keys.toList()) {
         //var didVC = storage.read(key: did) as String;

@@ -7,13 +7,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
-import 'package:logger/logger.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/utils/logger.dart';
 
 class LoginController extends GetxController {
-  final logger = Logger(printer: SimplePrinter(colors: false));
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();

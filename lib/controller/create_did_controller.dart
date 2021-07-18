@@ -18,9 +18,7 @@ class CreateDIDController extends GetxController {
   final platform = Platform();
   String publicKey = "";
 
-  Future<String> createDID(String password) async {
-    final passwordBytes = utf8.encode(password);
-
+  generateKeyPair() async {
     final seeds = encrypt.SecureRandom(32).bytes;
 
     final algorithm = Ed25519();
@@ -28,6 +26,16 @@ class CreateDIDController extends GetxController {
 
     var encodedPriv = Base58Encode(await keyPair.extractPrivateKeyBytes());
     var encodedPub = Base58Encode((await keyPair.extractPublicKey()).bytes);
+
+    return [encodedPriv, encodedPub];
+  }
+
+  Future<String> createDID(String password) async {
+    final passwordBytes = utf8.encode(password);
+
+    var keyPair = generateKeyPair();
+    var encodedPriv = keyPair[0];
+    var encodedPub = keyPair[1];
 
     final did = 'did:mtm:' + encodedPub;
     g.inputDID(did);
@@ -43,16 +51,20 @@ class CreateDIDController extends GetxController {
 
     final encrypted = encrypter.encrypt(encodedPriv, iv: iv);
 
+    writeDID(did, encrypted.bytes);
+
+    return did;
+  }
+
+  writeDID(did, encryptedPK) async {
     if (!await storage.containsKey(key: 'DIDList')) {
       await storage.write(key: 'DIDList', value: '{}');
     }
     var didListStr = await storage.read(key: 'DIDList') as String;
     var didList = json.decode(didListStr);
-    didList[did] = Base58Encode(encrypted.bytes);
+    didList[did] = Base58Encode(encryptedPK);
     await storage.write(key: 'DIDList', value: json.encode(didList));
     // await storage.write(key: did, value: Base58Encode(encrypted.bytes));
-
-    return did;
   }
 
   registerDidDocument(did) async {
@@ -67,13 +79,10 @@ class CreateDIDController extends GetxController {
     do {
       response = await platform.setDIDDocument(Uri.parse(dotenv.env['REGISTER_DID_DOCUMENT']!), did);
 
-      // log.i(response.body);
-      // log.i(response.statusCode);
       if ((response.statusCode / 100).floor() != 2) {
         sleep(Duration(seconds: 10));
       } else {
         var response2 = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
-        // log.i("Get DID Document: ${response2.body}");
         if (json.decode(response2.body)['message'] == "success") {
           log.i("DID Registration Success");
         } else {

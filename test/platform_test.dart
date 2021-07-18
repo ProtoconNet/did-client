@@ -14,9 +14,45 @@ import 'package:wallet/providers/platform.dart';
 
 void main() async {
   group('platform test', () {
+    final did = "did:mtm:A5KirmUHQPbm1m7nPob35k3p6gxPxFE64cogoq1Tv5c8";
+
+    test('Create DID Document Test', () async {
+      final platform = Platform();
+
+      final didDocument = platform.createDIDDocument(did);
+
+      print(didDocument);
+
+      // expect((response.statusCode / 100).floor(), 2);
+
+      // final Map<String, dynamic> result = json.decode(response.body);
+
+      // expect(result.containsKey('scheme'), true);
+    });
+
+    test('Set DID Document Test', () async {
+      final platform = Platform();
+
+      // expect((response.statusCode / 100).floor(), 2);
+
+      // final Map<String, dynamic> result = json.decode(response.body);
+
+      // expect(result.containsKey('scheme'), true);
+    });
+
+    test('Get DID Document Test', () async {
+      final platform = Platform();
+
+      // expect((response.statusCode / 100).floor(), 2);
+
+      // final Map<String, dynamic> result = json.decode(response.body);
+
+      // expect(result.containsKey('scheme'), true);
+    });
+
     test('Get Schema Test', () async {
-      var issuer = Issuer();
-      var platform = Platform();
+      final issuer = Issuer();
+      final platform = Platform();
       var response =
           await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCScheme?scheme=driverLicense'));
 
@@ -31,18 +67,7 @@ void main() async {
 
       result = json.decode(response.body);
 
-      print(result);
+      expect(result['message'], 'success');
     });
-
-    // test('Challenge Response Test', () async {
-    //   var issuer = Issuer();
-    //   var response = await issuer.responseChallenge(challengeUri, signature, token);
-
-    //   expect((response.statusCode / 100).floor(), 2);
-
-    //   final Map<String, dynamic> result = json.decode(response.body);
-
-    //   // expect(result.containsKey('scheme'), true);
-    // });
   });
 }

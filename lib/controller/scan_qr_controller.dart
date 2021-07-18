@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:logger/logger.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/pages/schema.dart';
@@ -11,7 +10,6 @@ import 'package:wallet/providers/secure_storage.dart';
 import 'package:wallet/utils/logger.dart';
 
 class ScanQRController extends GetxController {
-  final logger = Logger(printer: PrettyPrinter(methodCount: 1, colors: false));
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();

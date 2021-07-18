@@ -8,10 +8,10 @@ class Platform {
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        log.i(response);
+        // log.i("${response.body}");
         return response;
       default:
-        log.lw("Response Error", response);
+        log.lw("Response Error: $response");
         return response;
       // throw Error();
     }
