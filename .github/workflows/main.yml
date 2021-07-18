@@ -29,5 +29,6 @@ jobs:
       with:
         # The Flutter version to make available on the path
         flutter-version: '2.2.3'
+    - run: cd $GITHUB_WORKSPACE
     - run: flutter pub get
     - run: flutter test
