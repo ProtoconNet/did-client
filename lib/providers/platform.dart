@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/utils/logger.dart';
 
 class Platform {
-  final g = Get.put(GlobalVariable());
   final log = Log();
 
   responseCheck(http.Response response) {

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:fast_base58/fast_base58.dart';
 import 'package:wallet/utils/logger.dart';
 
 class Issuer {
