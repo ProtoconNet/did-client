@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'package:animations/animations.dart';
@@ -9,14 +8,16 @@ import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/controller/did_list_controller.dart';
 import 'package:wallet/widgets/background.dart';
 import 'package:wallet/pages/vc_list.dart';
+import 'package:wallet/utils/logger.dart';
 
 class DIDList extends StatelessWidget {
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final c = Get.put(DIDListController());
 
   @override
   Widget build(BuildContext context) {
-    g.log.i("DIDList build");
+    log.i("DIDList build");
     return Background(
         mainAxisAlignment: MainAxisAlignment.start,
         appBar: AppBar(
@@ -35,7 +36,7 @@ class DIDList extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
-                        g.log.i("DID : ${json.encode(snapshot.data)}");
+                        log.i("DID : ${json.encode(snapshot.data)}");
                         final dids = snapshot.data as Map<String, dynamic>;
 
                         return Column(children: dids.keys.map((did) => VCList(did: did)).toList());

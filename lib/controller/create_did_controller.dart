@@ -9,10 +9,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/providers/platform.dart';
+import 'package:wallet/utils/logger.dart';
 
 class CreateDIDController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final platform = Platform();
   String publicKey = "";
 
@@ -56,26 +58,26 @@ class CreateDIDController extends GetxController {
   registerDidDocument(did) async {
     var response = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
     if (json.decode(response.body)['message'] == "success") {
-      g.log.i("DID Already Exist");
+      log.i("DID Already Exist");
       return;
     } else {
-      g.log.i("DID Not Found. Let's Register");
+      log.i("DID Not Found. Let's Register");
     }
 
     do {
       response = await platform.setDIDDocument(Uri.parse(dotenv.env['REGISTER_DID_DOCUMENT']!), did);
 
-      // g.log.i(response.body);
-      // g.log.i(response.statusCode);
+      // log.i(response.body);
+      // log.i(response.statusCode);
       if ((response.statusCode / 100).floor() != 2) {
         sleep(Duration(seconds: 10));
       } else {
         var response2 = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
-        // g.log.i("Get DID Document: ${response2.body}");
+        // log.i("Get DID Document: ${response2.body}");
         if (json.decode(response2.body)['message'] == "success") {
-          g.log.i("DID Registration Success");
+          log.i("DID Registration Success");
         } else {
-          g.log.i("DID Registration Failed");
+          log.i("DID Registration Failed");
         }
       }
     } while ((response.statusCode / 100).floor() != 2);

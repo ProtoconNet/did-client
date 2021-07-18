@@ -2,24 +2,26 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class Platform {
   final g = Get.put(GlobalVariable());
+  final log = Log();
 
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        g.log.i(response);
+        log.i(response);
         return response;
       default:
-        g.longLog.w("Response Error", response);
+        log.lw("Response Error", response);
         return response;
       // throw Error();
     }
   }
 
   getDIDDocument(Uri getDIDDocumentUri) async {
-    g.log.i(getDIDDocumentUri.normalizePath());
+    log.i(getDIDDocumentUri.normalizePath());
     http.Response response = await http.get(getDIDDocumentUri); //.replace(queryParameters: {'did': did}));
 
     return responseCheck(response);

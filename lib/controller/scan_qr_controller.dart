@@ -8,11 +8,13 @@ import 'package:logger/logger.dart';
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/pages/schema.dart';
 import 'package:wallet/providers/secure_storage.dart';
+import 'package:wallet/utils/logger.dart';
 
 class ScanQRController extends GetxController {
   final logger = Logger(printer: PrettyPrinter(methodCount: 1, colors: false));
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final GlobalKey qrKey = GlobalKey();
   QRViewController? controller;
 
@@ -36,7 +38,7 @@ class ScanQRController extends GetxController {
             g.setPage(0);
           } else {
             result.value = "Same VC Exists";
-            g.log.i(scanData.code);
+            log.i(scanData.code);
           }
           break;
         default:

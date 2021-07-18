@@ -4,21 +4,23 @@ import 'package:animations/animations.dart';
 
 import 'package:wallet/pages/qr_viewer.dart';
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class DIDCard extends StatelessWidget {
   DIDCard({key, required this.did, required this.children}) : super(key: key);
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final String did;
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    g.log.i("DIDCard build");
+    log.i("DIDCard build");
     return Card(
         margin: EdgeInsets.all(0),
         elevation: 1.0,
         child: InkWell(
-            onTap: () => g.log.i('DID tap'),
+            onTap: () => log.i('DID tap'),
             child: Container(
                 padding: EdgeInsets.all(15.0),
                 child: Column(children: [
@@ -38,12 +40,12 @@ class DIDCard extends StatelessWidget {
                     ])),
                     OpenContainer(
                         openBuilder: (context, closedContainer) {
-                          // g.log.i("QRViewer openBuilder");
+                          // log.i("QRViewer openBuilder");
                           return QRViewer(data: did);
                         },
                         openColor: Get.theme.cardColor,
                         onClosed: (success) {
-                          g.log.i("onClose:${success.toString()}");
+                          log.i("onClose:${success.toString()}");
                         },
                         transitionDuration: Duration(milliseconds: 500),
                         closedShape: CircleBorder(),
@@ -52,7 +54,7 @@ class DIDCard extends StatelessWidget {
                         closedBuilder: (context, openContainer) {
                           return InkWell(
                               onTap: () {
-                                // g.log.i("QRViewer closedBuilder");
+                                // log.i("QRViewer closedBuilder");
                                 openContainer();
                               },
                               child: Container(

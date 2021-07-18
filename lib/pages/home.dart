@@ -6,14 +6,16 @@ import 'package:wallet/pages/did_list.dart';
 import 'package:wallet/pages/config.dart';
 import 'package:wallet/pages/scan_qr.dart';
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class Home extends StatelessWidget {
   Home({key, required this.tabController}) : super(key: key);
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final PersistentTabController tabController;
 
   List<Widget> _buildScreens() {
-    g.log.i("_buildScreens");
+    log.i("_buildScreens");
     return [
 //      VCList(),
       DIDList(),
@@ -48,7 +50,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    g.log.i("home build");
+    log.i("home build");
     return PersistentTabView(
       context,
       controller: tabController,

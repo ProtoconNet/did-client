@@ -10,11 +10,13 @@ import 'package:fast_base58/fast_base58.dart';
 import 'package:logger/logger.dart';
 
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class LoginController extends GetxController {
   final logger = Logger(printer: SimplePrinter(colors: false));
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
 
   login(password) async {
     try {
@@ -29,9 +31,9 @@ class LoginController extends GetxController {
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
       final didListStr = await storage.read(key: 'DIDList') as String;
-      g.log.i("didListStr: $didListStr");
+      log.i("didListStr: $didListStr");
       final didList = json.decode(didListStr);
-      g.log.i("did first: $didList, ${didList.runtimeType}");
+      log.i("did first: $didList, ${didList.runtimeType}");
       final privateKey = didList.values.toList()[0];
       final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
 
@@ -48,8 +50,8 @@ class LoginController extends GetxController {
       g.inputDID(did);
       Get.offAllNamed('/');
     } catch (e) {
-      g.log.e(e);
-      // g.log.i("${password} is not correct password");
+      log.e(e);
+      // log.i("${password} is not correct password");
       await Get.defaultDialog(
           title: "incorrectPassword".tr,
           content: Text('incorrectPassword'.tr),

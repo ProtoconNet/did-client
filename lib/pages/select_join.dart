@@ -4,13 +4,15 @@ import 'package:wallet/widgets/background.dart';
 import 'package:get/get.dart';
 
 import 'package:wallet/pages/create_wallet.dart';
+import 'package:wallet/utils/logger.dart';
 
 class SelectJoin extends StatelessWidget {
   final g = Get.put(GlobalVariable());
+  final log = Log();
 
   @override
   Widget build(BuildContext context) {
-    g.log.i('SelectCreateAccount');
+    log.i('SelectCreateAccount');
     return Background(
       child: Form(
 //          key: c._formKey.value,

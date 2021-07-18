@@ -12,6 +12,7 @@ import 'package:wallet/providers/issuer.dart';
 import 'package:wallet/providers/platform.dart';
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/providers/secure_storage.dart';
+import 'package:wallet/utils/logger.dart';
 
 class SchemaController extends GetxController {
   SchemaController({required this.did, required this.name, required this.requestSchema});
@@ -22,6 +23,7 @@ class SchemaController extends GetxController {
 
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final issuer = Issuer();
   final platform = Platform();
 
@@ -96,10 +98,10 @@ class SchemaController extends GetxController {
   }
 
   dynamicFields(String name, String requestSchema) async {
-    g.log.i('dynamicFields: $name : $requestSchema');
+    log.i('dynamicFields: $name : $requestSchema');
     var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
 
-    g.log.i("response.body:${response.body}");
+    log.i("response.body:${response.body}");
 
     var endpoints = json.decode(response.body);
 
@@ -134,7 +136,7 @@ class SchemaController extends GetxController {
       setImageAt(imageBase64, index);
       return pickedFile.path;
     } else {
-      g.log.i('No image selected.');
+      log.i('No image selected.');
     }
   }
 
@@ -150,12 +152,12 @@ class SchemaController extends GetxController {
       setImageAt(imageBase64, index);
       return pickedFile.path;
     } else {
-      g.log.i('No image selected.');
+      log.i('No image selected.');
     }
   }
 
   didAuth(payload, endPoint, token) async {
-    g.log.i('did Auth');
+    log.i('did Auth');
     final passwordBytes = utf8.encode(g.password.value);
     // Generate a random secret key.
     final sink = Sha256().newHashSink();
@@ -185,12 +187,12 @@ class SchemaController extends GetxController {
 
     final response2 = await issuer.responseChallenge(Uri.parse(endPoint), Base58Encode(signature.bytes), token);
     if (response2 == "") {
-      g.longLog.e("Challenge Failed");
+      log.le("Challenge Failed");
     }
   }
 
   submit(name, data) async {
-    g.log.i("submit");
+    log.i("submit");
     var credentialSubject = {};
 
     var imageI = 0;
@@ -201,39 +203,39 @@ class SchemaController extends GetxController {
       final item = data[i];
       switch (item['type']) {
         case 'string':
-          // g.log.i(inputControllerList[j].text.toString());
+          // log.i(inputControllerList[j].text.toString());
           credentialSubject[item['name']] = inputControllerList[j].text.toString();
           j++;
           break;
         case 'number':
-          // g.log.i(inputControllerList[j].text.toString());
+          // log.i(inputControllerList[j].text.toString());
           credentialSubject[item['name']] = inputControllerList[j].text.toString();
           j++;
           break;
         case 'image':
-          // g.log.i(imageList.value[imageI]);
+          // log.i(imageList.value[imageI]);
           credentialSubject[item['name']] = 'image'; //imageList.value[imageI];
           imageI++;
           break;
         case 'datetime':
           final DateTime datetime = getDateTimeAt(datetimeI);
-          // g.log.i(datetime);
+          // log.i(datetime);
           credentialSubject[item['name']] = datetime.toIso8601String();
           datetimeI++;
           break;
       }
     }
 
-    // g.log.i(credentialSubject);
+    // log.i(credentialSubject);
     var body = {"did": g.did.value, "scheme": "vc1", "credentialSubject": credentialSubject};
 
-    g.log.i("body:${json.encode(body)}");
+    log.i("body:${json.encode(body)}");
 
-    g.log.i("uri:${await DIDManager(did: did).getVCFieldByName(name, "requestVC")}");
+    log.i("uri:${await DIDManager(did: did).getVCFieldByName(name, "requestVC")}");
 
     var response = await issuer.requestVC(
         Uri.parse(await DIDManager(did: did).getVCFieldByName(name, "requestVC")), json.encode(body));
-    g.log.i("result of request VC: ${response.body}");
+    log.i("result of request VC: ${response.body}");
 
     if (response.body == 'Error' || json.decode(response.body).containsKey('error')) {
       await Get.dialog(AlertDialog(
