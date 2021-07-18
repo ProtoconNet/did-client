@@ -31,4 +31,4 @@ jobs:
         # The Flutter version to make available on the path
         flutter-version: '2.2.3'
     - run: flutter pub get
-    - run: flutter test
+    - run: flutter run
