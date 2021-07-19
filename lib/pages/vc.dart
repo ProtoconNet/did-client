@@ -7,6 +7,7 @@ import 'package:wallet/pages/schema.dart';
 import 'package:wallet/pages/did_list.dart';
 import 'package:wallet/pages/vp.dart';
 import 'package:wallet/widgets/vc_card.dart';
+import 'package:wallet/utils/logger.dart';
 
 class VC extends StatelessWidget {
   VC(
@@ -19,6 +20,7 @@ class VC extends StatelessWidget {
       required this.jwt})
       : super(key: key);
   final g = Get.put(GlobalVariable());
+  final log = Log();
 
   final String did;
   final int icon;
@@ -29,11 +31,11 @@ class VC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    g.log.i("VCCard build");
+    log.i("VCCard build");
 
     if (vc.isEmpty) {
       if (jwt == "") {
-        // g.log.i('1');
+        // log.i('1');
         return Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: InkWell(
@@ -48,8 +50,8 @@ class VC extends StatelessWidget {
                 child: VCCard(icon: IconData(icon, fontFamily: 'MaterialIcons'), name: name, status: "noVC")));
         // OpenContainer(
         //   openBuilder: (context, closedContainer) {
-        //     g.log.i("noVC openBuilder: ${vc['name']}");
-        //     g.log.i(closedContainer);
+        //     log.i("noVC openBuilder: ${vc['name']}");
+        //     log.i(closedContainer);
         //     return Schema(
         //       name: vc['name'],
         //       requestSchema: vc['schemaRequest'],
@@ -57,7 +59,7 @@ class VC extends StatelessWidget {
         //   },
         //   openColor: Get.theme.cardColor,
         //   onClosed: (success) {
-        //     g.log.i("noVC onClose:${success.toString()}");
+        //     log.i("noVC onClose:${success.toString()}");
         //     Navigator.pushReplacement(
         //         context, MaterialPageRoute(builder: (BuildContext context) => VCList()));
         //   },
@@ -66,7 +68,7 @@ class VC extends StatelessWidget {
         //   closedColor: Get.theme.cardColor,
         //   closedElevation: 0,
         //   closedBuilder: (context, openContainer) {
-        //     g.log.i("noVC closeBuilder: ${vc['name']}");
+        //     log.i("noVC closeBuilder: ${vc['name']}");
         //     return InkWell(
         //         onTap: () => openContainer(),
         //         child: VCCard(
@@ -75,7 +77,7 @@ class VC extends StatelessWidget {
         //             status: "noVC"));
         //     //run: () => openContainer());
         //   }));
-        // g.log.i(vcViewList);
+        // log.i(vcViewList);
       } else {
         return Padding(
             padding: EdgeInsets.only(bottom: 20.0),
@@ -83,17 +85,17 @@ class VC extends StatelessWidget {
       }
     } else {
       // make onPress to Open VC as VP
-      // g.log.i('2');
+      // log.i('2');
       return Padding(
           padding: EdgeInsets.only(bottom: 20.0),
           child: OpenContainer(
               openBuilder: (context, closedContainer) {
-                // g.log.i("VC openBuilder: ${vc['name']}");
+                // log.i("VC openBuilder: ${vc['name']}");
                 return VP(name: name);
               },
               openColor: Get.theme.cardColor,
               onClosed: (success) {
-                g.log.i("VC onClose:${success.toString()}");
+                log.i("VC onClose:${success.toString()}");
               },
               transitionDuration: Duration(milliseconds: 500),
               closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
@@ -102,7 +104,7 @@ class VC extends StatelessWidget {
               closedBuilder: (context, openContainer) {
                 return InkWell(
                     onTap: () {
-                      // g.log.i("VC closedBuilder: ${vc['name']}");
+                      // log.i("VC closedBuilder: ${vc['name']}");
                       openContainer();
                     },
                     child: VCCard(icon: IconData(icon, fontFamily: 'MaterialIcons'), name: name, status: "VC"));

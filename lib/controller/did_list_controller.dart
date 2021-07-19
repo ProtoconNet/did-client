@@ -4,22 +4,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/providers/issuer.dart';
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class DIDListController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final issuer = Issuer();
 
   getDIDList() async {
-    g.log.i("getDIDList");
+    log.i("getDIDList");
 
     var didListStr = await storage.read(key: "DIDList") as String;
 
-    g.log.i(didListStr);
+    log.i(didListStr);
 
     var didList = json.decode(didListStr);
 
-    g.log.i(didList);
+    log.i(didList);
     return didList;
   }
 }

@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/utils/logger.dart';
 
 class VCModel {
   final g = Get.put(GlobalVariable());
+  final log = Log();
   String name = "";
   int icon = 0;
   String schemaRequest = "";
@@ -38,10 +40,11 @@ class VCModel {
 
 class VCManager {
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final storage = FlutterSecureStorage();
 
   setByName(String name, String field, dynamic value) async {
-    // g.log.i("vcList:${await storage.read(key: "VCList") as String}");
+    // log.i("vcList:${await storage.read(key: "VCList") as String}");
     final vcList = json.decode(await storage.read(key: "VCList") as String);
 
     var restoreVCList = [];
@@ -52,7 +55,7 @@ class VCManager {
       restoreVCList.add(vc);
     }
     await storage.write(key: "VCList", value: json.encode(restoreVCList));
-    // g.log.i("vcList2:${await storage.read(key: "VCList") as String}");
+    // log.i("vcList2:${await storage.read(key: "VCList") as String}");
   }
 
   addClaim(String value) async {
@@ -67,7 +70,7 @@ class VCManager {
     if (flag) {
       vcList.add(newVC);
     } else {
-      g.log.i("Same VC exist");
+      log.i("Same VC exist");
     }
 
     await storage.write(key: "VCList", value: json.encode(vcList));
@@ -76,8 +79,8 @@ class VCManager {
   }
 
   getByName(String name, String field) async {
-    // g.log.i("vcList ${await storage.read(key: "VCList") as String}");
-    // g.log.i(name);
+    // log.i("vcList ${await storage.read(key: "VCList") as String}");
+    // log.i(name);
     final vcList = json.decode(await storage.read(key: "VCList") as String);
 
     for (var vc in vcList) {
@@ -92,6 +95,7 @@ class DIDManager {
   DIDManager({required this.did});
   final String did;
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final storage = FlutterSecureStorage();
 
   var vcList = [];
@@ -132,7 +136,7 @@ class DIDManager {
       restoreVCList.add(vc);
     }
     await storage.write(key: did, value: json.encode(restoreVCList));
-    // g.log.i("vcList2:${await storage.read(key: "VCList") as String}");
+    // log.i("vcList2:${await storage.read(key: "VCList") as String}");
   }
 
   getVCByName(String name) async {
@@ -161,7 +165,7 @@ class DIDManager {
 
   getVCFieldByName(String name, String field) async {
     final vc = await getVCByName(name);
-    g.log.i("getVCFieldByName: $vc");
+    log.i("getVCFieldByName: $vc");
     return vc[field];
   }
 }

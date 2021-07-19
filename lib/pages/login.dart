@@ -4,10 +4,12 @@ import 'package:wallet/providers/global_variable.dart';
 
 import 'package:wallet/widgets/background.dart';
 import 'package:wallet/controller/login_controller.dart';
+import 'package:wallet/utils/logger.dart';
 
 class Login extends StatelessWidget {
   final LoginController c = Get.put(LoginController());
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final TextEditingController _pass = TextEditingController();
 
   @override
@@ -24,7 +26,7 @@ class Login extends StatelessWidget {
           enableSuggestions: false,
           autocorrect: false,
           onFieldSubmitted: (test) async {
-            g.log.i("submit with $test");
+            log.i("submit with $test");
             await c.login(_pass.text);
           },
         ),

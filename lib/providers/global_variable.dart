@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:logger/logger.dart';
 
 import 'package:wallet/config/translations.dart';
 
@@ -11,9 +10,6 @@ class GlobalVariable extends GetxController {
   var password = ''.obs;
   var did = ''.obs;
   var tabController = PersistentTabController(initialIndex: 0).obs;
-  final log = Logger(printer: SimplePrinter(colors: false));
-  // final log = Logger(printer: PrettyPrinter(methodCount: 2, colors: false));
-  final longLog = Logger(printer: PrettyPrinter(methodCount: 3, colors: false));
 
   final themeModeList = {"system": ThemeMode.system, "light": ThemeMode.light, "dark": ThemeMode.dark};
 

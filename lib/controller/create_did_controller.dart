@@ -9,16 +9,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/providers/platform.dart';
+import 'package:wallet/utils/logger.dart';
 
 class CreateDIDController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final platform = Platform();
   String publicKey = "";
 
-  Future<String> createDID(String password) async {
-    final passwordBytes = utf8.encode(password);
-
+  generateKeyPair() async {
     final seeds = encrypt.SecureRandom(32).bytes;
 
     final algorithm = Ed25519();
@@ -26,6 +26,16 @@ class CreateDIDController extends GetxController {
 
     var encodedPriv = Base58Encode(await keyPair.extractPrivateKeyBytes());
     var encodedPub = Base58Encode((await keyPair.extractPublicKey()).bytes);
+
+    return [encodedPriv, encodedPub];
+  }
+
+  Future<String> createDID(String password) async {
+    final passwordBytes = utf8.encode(password);
+
+    var keyPair = generateKeyPair();
+    var encodedPriv = keyPair[0];
+    var encodedPub = keyPair[1];
 
     final did = 'did:mtm:' + encodedPub;
     g.inputDID(did);
@@ -41,41 +51,42 @@ class CreateDIDController extends GetxController {
 
     final encrypted = encrypter.encrypt(encodedPriv, iv: iv);
 
+    writeDID(did, encrypted.bytes);
+
+    return did;
+  }
+
+  writeDID(did, encryptedPK) async {
     if (!await storage.containsKey(key: 'DIDList')) {
       await storage.write(key: 'DIDList', value: '{}');
     }
     var didListStr = await storage.read(key: 'DIDList') as String;
     var didList = json.decode(didListStr);
-    didList[did] = Base58Encode(encrypted.bytes);
+    didList[did] = Base58Encode(encryptedPK);
     await storage.write(key: 'DIDList', value: json.encode(didList));
     // await storage.write(key: did, value: Base58Encode(encrypted.bytes));
-
-    return did;
   }
 
   registerDidDocument(did) async {
     var response = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
     if (json.decode(response.body)['message'] == "success") {
-      g.log.i("DID Already Exist");
+      log.i("DID Already Exist");
       return;
     } else {
-      g.log.i("DID Not Found. Let's Register");
+      log.i("DID Not Found. Let's Register");
     }
 
     do {
       response = await platform.setDIDDocument(Uri.parse(dotenv.env['REGISTER_DID_DOCUMENT']!), did);
 
-      // g.log.i(response.body);
-      // g.log.i(response.statusCode);
       if ((response.statusCode / 100).floor() != 2) {
         sleep(Duration(seconds: 10));
       } else {
         var response2 = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
-        // g.log.i("Get DID Document: ${response2.body}");
         if (json.decode(response2.body)['message'] == "success") {
-          g.log.i("DID Registration Success");
+          log.i("DID Registration Success");
         } else {
-          g.log.i("DID Registration Failed");
+          log.i("DID Registration Failed");
         }
       }
     } while ((response.statusCode / 100).floor() != 2);

@@ -5,17 +5,19 @@ import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 import 'package:wallet/widgets/did_card.dart';
 import 'package:wallet/pages/vc.dart';
+import 'package:wallet/utils/logger.dart';
 
 class VCList extends StatelessWidget {
   VCList({key, required this.did}) : super(key: key);
   final String did;
 
   final g = Get.put(GlobalVariable());
-  var c = Get.put(VCListController());
+  final log = Log();
+  final c = Get.put(VCListController());
 
   @override
   Widget build(BuildContext context) {
-    g.log.i("VCList build: $did");
+    log.i("VCList build: $did");
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -24,14 +26,14 @@ class VCList extends StatelessWidget {
           FutureBuilder(
               future: c.getVCList(did),
               builder: (context, snapshot) {
-                g.log.i(snapshot);
+                log.i(snapshot);
                 if (snapshot.connectionState != ConnectionState.done) {
                   return Center(child: CircularProgressIndicator());
                 } else {
                   if (snapshot.hasError) {
                     return Center(child: CircularProgressIndicator());
                   } else {
-                    g.log.i("vcs:${snapshot.data}");
+                    log.i("vcs:${snapshot.data}");
                     final vcs = snapshot.data as List<Map<String, dynamic>>;
 
                     return Column(

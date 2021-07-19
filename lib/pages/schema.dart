@@ -8,10 +8,12 @@ import 'package:wallet/providers/global_variable.dart';
 
 import 'package:wallet/widgets/background.dart';
 import 'package:wallet/controller/schema_controller.dart';
+import 'package:wallet/utils/logger.dart';
 
 class Schema extends StatelessWidget {
   Schema({key, required this.did, required this.name, required this.requestSchema}) : super(key: key);
   final g = Get.put(GlobalVariable());
+  final log = Log();
   final String did;
   final String name;
   final String requestSchema;
@@ -19,8 +21,8 @@ class Schema extends StatelessWidget {
   builder(context, snapshot, name) {
     final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
     c.initInputItems();
-    g.log.i('Schema Builder');
-    g.log.i(snapshot);
+    log.i('Schema Builder');
+    log.i(snapshot);
     if (snapshot.hasData) {
       var datetimeIndex = 0;
       var imageIndex = 0;
@@ -40,8 +42,8 @@ class Schema extends StatelessWidget {
             break;
           case 'image':
             final idx = imageIndex;
-            // g.log.i("imageList idx:${c.imageList.length.toString()}");
-            // g.log.i("image idx:${idx.toString()}");
+            // log.i("imageList idx:${c.imageList.length.toString()}");
+            // log.i("image idx:${idx.toString()}");
             var shortSide = Get.height < Get.width ? Get.height : Get.width;
             c.inputs.add(Column(children: [
               Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
@@ -52,14 +54,14 @@ class Schema extends StatelessWidget {
                 children: [
                   ElevatedButton(
                       onPressed: () async {
-                        // g.log.i('put image in ${idx.toString()}');
+                        // log.i('put image in ${idx.toString()}');
                         await c.takeImage(idx);
                       },
                       child: Text('takePicture'.tr)),
                   Text(' '),
                   ElevatedButton(
                       onPressed: () async {
-                        // g.log.i('put image in ${idx.toString()}');
+                        // log.i('put image in ${idx.toString()}');
                         await c.getImage(idx);
                       },
                       child: Text('pickGallery'.tr)),
@@ -134,7 +136,7 @@ class Schema extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
-    // g.log.i("Schema build");
+    // log.i("Schema build");
     return Background(
         appBar: AppBar(
             title: Text(name,

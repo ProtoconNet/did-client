@@ -5,16 +5,18 @@ import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/widgets/background.dart';
 import 'package:wallet/controller/create_wallet_controller.dart';
 import 'package:wallet/pages/create_did.dart';
+import 'package:wallet/utils/logger.dart';
 
 class CreateWallet extends StatelessWidget {
   final CreateWalletController c = Get.put(CreateWalletController());
   final GlobalVariable g = Get.put(GlobalVariable());
+  final log = Log();
   final TextEditingController pass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    g.log.i('CreateAccountPage');
+    log.i('CreateAccountPage');
     final node = FocusScope.of(context);
     return Background(
       child: Form(
