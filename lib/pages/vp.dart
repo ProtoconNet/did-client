@@ -16,6 +16,6 @@ class VP extends StatelessWidget {
         appBar: AppBar(
           title: Text(name),
         ),
-        child: Center(child: Image.asset("assets/images/driver_license.png")));
+        children: [Center(child: Image.asset("assets/images/driver_license.png"))]);
   }
 }

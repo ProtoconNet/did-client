@@ -46,7 +46,7 @@ class Messages extends Translations {
           'takePicture': '사진 촬영',
           'pickGallery': '갤러리에서 사진 선택',
           'noAccount': 'DID가 없습니다. Mitum DID에 가입하세요',
-          'createWallet': '지갑 생성',
+          'createWallet': '내 지갑 만들기',
           'createAccount': '새로운 DID 생성',
           'importAccount': 'DID Key 가져오기',
           'inputPasswordMsg': '비밀번호를 입력하세요',

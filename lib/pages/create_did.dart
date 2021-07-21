@@ -12,8 +12,9 @@ class CreateDID extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      child: FutureBuilder<String>(
+    print("in createdid : $password");
+    return Background(children: [
+      FutureBuilder<String>(
           future: c.createDID(password),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -35,6 +36,6 @@ class CreateDID extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }
           }),
-    );
+    ]);
   }
 }

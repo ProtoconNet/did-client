@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Background extends StatelessWidget {
-  Background({key, this.appBar, required this.child, this.mainAxisAlignment = MainAxisAlignment.center})
+  Background(
+      {key,
+      this.appBar,
+      required this.children,
+      this.mainAxisAlignment = MainAxisAlignment.center,
+      this.crossAxisAlignment = CrossAxisAlignment.center})
       : super(key: key);
 
   final AppBar? appBar;
-  final Widget child;
+  final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +27,6 @@ class Background extends StatelessWidget {
                     child: Column(
                         mainAxisAlignment: mainAxisAlignment,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [child])))));
+                        children: children)))));
   }
 }

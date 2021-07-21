@@ -142,12 +142,12 @@ class Schema extends StatelessWidget {
             title: Text(name,
                 style: GoogleFonts.roboto(
                     textStyle: Get.theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)))),
-        child: Column(children: [
+        children: [
           FutureBuilder(
               future: c.dynamicFields(name, requestSchema),
               builder: (context, snapshot) {
                 return builder(context, snapshot, name);
               }),
-        ]));
+        ]);
   }
 }

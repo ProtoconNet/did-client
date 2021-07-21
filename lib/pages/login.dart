@@ -14,8 +14,8 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      child: Form(
+    return Background(children: [
+      Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Text('login'.tr, style: Get.theme.textTheme.headline4),
         Text('inputPassword'.tr, style: Get.theme.textTheme.bodyText1),
@@ -37,6 +37,6 @@ class Login extends StatelessWidget {
             child: Text('enter'.tr),
             style: Get.theme.elevatedButtonTheme.style),
       ])),
-    );
+    ]);
   }
 }

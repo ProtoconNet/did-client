@@ -15,17 +15,18 @@ class QRViewer extends StatelessWidget {
             leading:
                 TextButton(onPressed: () => Navigator.pop(context), child: Icon(Icons.arrow_back, color: Colors.white)),
             backgroundColor: Get.theme.appBarTheme.backgroundColor),
-        body: Background(
-            child: Container(
-                child: Column(children: [
-          Text(data, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+        body: Background(children: [
           Container(
-              color: Colors.white,
-              child: QrImage(
-                data: data,
-                version: QrVersions.auto,
-                size: 200.0,
-              )),
-        ]))));
+              child: Column(children: [
+            Text(data, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white)),
+            Container(
+                color: Colors.white,
+                child: QrImage(
+                  data: data,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
+          ]))
+        ]));
   }
 }

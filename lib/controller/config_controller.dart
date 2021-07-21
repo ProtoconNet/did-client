@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/pages/select_join.dart';
+import 'package:wallet/pages/create_wallet.dart';
 import 'package:wallet/utils/logger.dart';
 
 class ConfigController extends GetxController {
@@ -83,6 +83,6 @@ class ConfigController extends GetxController {
     // await deleteCacheDir();
     // await deleteAppDir();
 
-    Get.offAll(SelectJoin());
+    Get.offAll(CreateWallet());
   }
 }

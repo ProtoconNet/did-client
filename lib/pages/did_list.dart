@@ -27,26 +27,23 @@ class DIDList extends StatelessWidget {
                   style: GoogleFonts.kaushanScript(
                       textStyle: Get.theme.textTheme.headline5?.copyWith(color: Colors.white)))),
         ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              FutureBuilder(
-                  future: c.getDIDList(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        log.i("DID : ${json.encode(snapshot.data)}");
-                        final dids = snapshot.data as Map<String, dynamic>;
+        children: [
+          FutureBuilder(
+              future: c.getDIDList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    log.i("DID : ${json.encode(snapshot.data)}");
+                    final dids = snapshot.data as Map<String, dynamic>;
 
-                        return Column(children: dids.keys.map((did) => VCList(did: did)).toList());
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })
-            ]));
+                    return Column(children: dids.keys.map((did) => VCList(did: did)).toList());
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              })
+        ]);
   }
 }

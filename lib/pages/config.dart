@@ -4,13 +4,15 @@ import 'package:wallet/widgets/background.dart';
 
 import 'package:wallet/controller/config_controller.dart';
 
+import 'package:wallet/providers/vp_test.dart';
+
 class Config extends StatelessWidget {
   final ConfigController c = Get.put(ConfigController());
 
   @override
   Widget build(BuildContext context) {
-    return Background(
-      child: Center(
+    return Background(children: [
+      Center(
         child: Column(children: [
           //ElevatedButton(child: Text('json test'), onPressed: () => c.jsonldTest()),
           Row(
@@ -50,9 +52,10 @@ class Config extends StatelessWidget {
             ],
           ),
           ElevatedButton(child: Text('Erase All Data'), onPressed: () => c.eraseAll()),
+          ElevatedButton(child: Text('VP Test'), onPressed: () => VPTest().testVP()),
           Obx(() => Text(c.text.value)),
         ]),
       ),
-    );
+    ]);
   }
 }

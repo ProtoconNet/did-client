@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'package:wallet/pages/select_join.dart';
+import 'package:wallet/pages/create_wallet.dart';
 
 class OnBoarding extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _OnBoardingState extends State<OnBoarding> {
   final introKey = GlobalKey<IntroductionScreenState>();
 
   void _onIntroEnd(context) {
-    Get.offAll(SelectJoin());
+    Get.offAll(CreateWallet());
   }
 
   Widget _buildFullScreenImage() {

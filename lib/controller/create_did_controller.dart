@@ -33,7 +33,7 @@ class CreateDIDController extends GetxController {
   Future<String> createDID(String password) async {
     final passwordBytes = utf8.encode(password);
 
-    var keyPair = generateKeyPair();
+    var keyPair = await generateKeyPair();
     var encodedPriv = keyPair[0];
     var encodedPub = keyPair[1];
 
