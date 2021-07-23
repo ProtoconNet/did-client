@@ -17,11 +17,12 @@ class VPTest {
   final g = Get.put(GlobalVariable());
   final log = Log();
 
-  createVP(String did, String keyLocation, Map<String, dynamic> payload, List<int> pk) {
+  createVP(String did, String keyLocation, List<Map<String, dynamic>> payload, List<int> pk) {
     // payload is vc list
 
     var now = DateTime.now();
 
+    var expire = now.add(Duration(minutes: 1));
     var vp = {
       "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
       "id": did,
@@ -37,21 +38,35 @@ class VPTest {
 
     // Sign it (default with HS256 algorithm)
     print(pk);
-    var token = jwt.sign(EdDSAPrivateKey(pk), algorithm: JWTAlgorithm.EdDSA, expiresIn: Duration(minutes: 1));
+    var token = jwt.sign(EdDSAPrivateKey(pk), algorithm: JWTAlgorithm.EdDSA);
 
     print('Signed token: $token\n');
+
+    final jwt2 = JWT.verify(token, EdDSAPublicKey(pk.sublist(32)));
+
+    print('Payload: ${json.encode(jwt2.payload)}');
 
     var proof = [
       {
         "type": "Ed25519Signature2018",
+        "expire": expire.toIso8601String(),
         "created": now.toIso8601String(),
         "proofPurpose": "authentication",
         "verificationMethod": keyLocation, // "did:example:76e12ec21ebhyu1f712ebc6f1z2/keys/2"
         // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
         // "domain": "test.org", // submit vp domain
-        "jws": ""
+        "jws": token
       }
     ];
+    vp['proof'] = proof;
+
+    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    String prettyPrint = encoder.convert(vp);
+
+    log.i("${prettyPrint.substring(0, 1000)}");
+    log.i("${prettyPrint.substring(900, 1900)}");
+    log.i("${prettyPrint.substring(1800, 2700)}");
+    log.i("${prettyPrint.substring(2600)}");
   }
 
   testVP() async {
@@ -83,9 +98,10 @@ class VPTest {
     final pubKey = await keyPair.extractPublicKey();
     final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
 
-    final vc = await DIDManager(did: did).getVCByName("driver's license");
+    final vc = await DIDManager(did: did).getVCByName("Driver's License");
 
-    createVP(did, did, {"test": "123"}, await keyPair.extractPrivateKeyBytes());
+    log.i(vc);
+    createVP(did, did, [vc['VC']], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
   }
 
   responseCheck(http.Response response) {

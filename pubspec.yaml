@@ -53,6 +53,7 @@ dependencies:
   path_provider: ^2.0.2
   logger: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
+  confetti: ^0.6.0-nullsafety
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:confetti/confetti.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/pages/create_wallet.dart';
@@ -16,6 +17,8 @@ class ConfigController extends GetxController {
 
   var theme = 'system'.obs;
   var language = 'system'.obs;
+
+  var controllerCenter = ConfettiController(duration: const Duration(seconds: 10)).obs;
 
   @override
   onInit() {
@@ -62,6 +65,8 @@ class ConfigController extends GetxController {
       appDir.deleteSync(recursive: true);
     }
   }
+
+  test() {}
 
   eraseAll() async {
     // box.remove('themeMode');

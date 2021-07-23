@@ -23,7 +23,7 @@ initService() async {
   } else {
     await dotenv.load(fileName: "default.env");
   }
-  Logger.level = Level.warning;
+  Logger.level = Level.info;
 
   await GetStorage.init();
 

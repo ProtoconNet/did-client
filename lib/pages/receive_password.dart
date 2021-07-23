@@ -22,7 +22,7 @@ class ReceivePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i('CreateAccountPage');
-    final node = FocusScope.of(context);
+    // final node = FocusScope.of(context);
     return Background(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

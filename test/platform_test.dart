@@ -27,7 +27,7 @@ void main() async {
 
       // final Map<String, dynamic> result = json.decode(response.body);
 
-      // expect(result.containsKey('scheme'), true);
+      // expect(result.containsKey('schema'), true);
     });
 
     test('Set DID Document Test', () async {
@@ -37,7 +37,7 @@ void main() async {
 
       // final Map<String, dynamic> result = json.decode(response.body);
 
-      // expect(result.containsKey('scheme'), true);
+      // expect(result.containsKey('schema'), true);
     });
 
     test('Get DID Document Test', () async {
@@ -47,21 +47,21 @@ void main() async {
 
       // final Map<String, dynamic> result = json.decode(response.body);
 
-      // expect(result.containsKey('scheme'), true);
+      // expect(result.containsKey('schema'), true);
     });
 
     test('Get Schema Test', () async {
       final issuer = Issuer();
       final platform = Platform();
       var response =
-          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCScheme?scheme=driverLicense'));
+          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense'));
 
       expect((response.statusCode / 100).floor(), 2);
 
       Map<String, dynamic> result = json.decode(response.body);
 
-      expect(result.containsKey('scheme'), true);
-      response = await platform.getScheme(Uri.parse(result['scheme']));
+      expect(result.containsKey('schema'), true);
+      response = await platform.getSchema(Uri.parse(result['schema']));
 
       expect((response.statusCode / 100).floor(), 2);
 

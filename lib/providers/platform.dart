@@ -36,8 +36,8 @@ class Platform {
     return responseCheck(response);
   }
 
-  getScheme(schemeUri) async {
-    http.Response response = await http.get(schemeUri);
+  getSchema(schemaUri) async {
+    http.Response response = await http.get(schemaUri);
 
     return responseCheck(response);
   }

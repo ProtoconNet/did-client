@@ -108,7 +108,7 @@ class SchemaController extends GetxController {
     await DIDManager(did: did).setVCFieldByName(name, 'requestVC', endpoints['VCPost']);
     await DIDManager(did: did).setVCFieldByName(name, 'getVC', endpoints['VCGet']);
 
-    response = await platform.getScheme(Uri.parse(endpoints['scheme']));
+    response = await platform.getSchema(Uri.parse(endpoints['schema']));
     if (json.decode(response.body).containsKey('error')) {
       return;
     }
@@ -227,7 +227,7 @@ class SchemaController extends GetxController {
     }
 
     // log.i(credentialSubject);
-    var body = {"did": g.did.value, "scheme": "vc1", "credentialSubject": credentialSubject};
+    var body = {"did": g.did.value, "schema": "vc1", "credentialSubject": credentialSubject};
 
     log.i("body:${json.encode(body)}");
 

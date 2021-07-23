@@ -47,6 +47,7 @@ class Issuer {
   }
 
   getSchemaLocation(schemaLocationUri) async {
+    log.i(schemaLocationUri);
     http.Response response = await http.get(schemaLocationUri);
     return responseCheck(response);
   }

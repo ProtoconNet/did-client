@@ -17,13 +17,13 @@ void main() async {
     test('Get Schema Location Test', () async {
       var issuer = Issuer();
       var response =
-          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCScheme?scheme=driverLicense'));
+          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense'));
 
       expect((response.statusCode / 100).floor(), 2);
 
       final Map<String, dynamic> result = json.decode(response.body);
 
-      expect(result.containsKey('scheme'), true);
+      expect(result.containsKey('schema'), true);
       expect(result.containsKey('VCPost'), true);
       expect(result.containsKey('VCGet'), true);
     });
@@ -36,7 +36,7 @@ void main() async {
 
     //   final Map<String, dynamic> result = json.decode(response.body);
 
-    //   // expect(result.containsKey('scheme'), true);
+    //   // expect(result.containsKey('schema'), true);
     // });
   });
 }
