@@ -1,0 +1,11 @@
+
+@hostname = mitum.securekim.com
+@port = 8080
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+# POST /users
+POST http://{{host}}/v1/schema?id=vc2 HTTP/1.1
+#Content-Type: {{contentType}}
+
+'[{"name":"name","type":"string","required": true,"reason":"vc name"},{"name":"license number","type":"string","required":true,"reason":"driver license number for using it"}, {"name":"license","type":"image","required":true,"reason":"required feature to issue decentralized driver license"}]'

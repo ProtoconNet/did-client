@@ -54,6 +54,10 @@ dependencies:
   logger: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
   confetti: ^0.6.0-nullsafety
+  # try to use
+  awesome_dialog: ^2.1.0
+  # pinput: ^1.2.0
+  # dexecve: ^1.3.0
 
 dev_dependencies:
   flutter_test:

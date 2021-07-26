@@ -60,13 +60,13 @@ class VPTest {
     ];
     vp['proof'] = proof;
 
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    JsonEncoder encoder = JsonEncoder.withIndent('  ');
     String prettyPrint = encoder.convert(vp);
 
-    log.i("${prettyPrint.substring(0, 1000)}");
-    log.i("${prettyPrint.substring(900, 1900)}");
-    log.i("${prettyPrint.substring(1800, 2700)}");
-    log.i("${prettyPrint.substring(2600)}");
+    log.i(prettyPrint.substring(0, 1000));
+    log.i(prettyPrint.substring(900, 1900));
+    log.i(prettyPrint.substring(1800, 2700));
+    log.i(prettyPrint.substring(2600));
   }
 
   testVP() async {
@@ -107,7 +107,7 @@ class VPTest {
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        log.i("${response.body}");
+        log.i(response.body);
         return response;
       default:
         log.lw("Response Error $response");
