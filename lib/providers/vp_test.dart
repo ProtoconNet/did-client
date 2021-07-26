@@ -26,15 +26,19 @@ class VPTest {
       "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
       "id": did,
       "type": ["VerifiablePresentation"],
+      "issuer": did,
+      "issuanceDate": now.toIso8601String(),
+      "expirationDate": expire.toIso8601String(),
       "verifiableCredential": payload,
     };
 
     // Create a json web token
-    final jwt = JWT(vp, issuer: did, audience: audience, jwtId: "test");
+    final jwt = JWT(vp); //, issuer: did, audience: audience, jwtId: "test");
 
     print(pk);
     var token = jwt.sign(EdDSAPrivateKey(pk),
-        algorithm: JWTAlgorithm.EdDSA, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
+        algorithm: JWTAlgorithm.EdDSA,
+        noIssueAt: true); //, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
 
     var splitToken = token.split('.');
     var noPayloadToken = splitToken[0] + ".." + splitToken[2];
@@ -42,7 +46,7 @@ class VPTest {
 
     final jwt2 = JWT.verify(token, EdDSAPublicKey(pk.sublist(32)));
 
-    print('Payload: ${json.encode(jwt2.payload)}');
+    printWrapped('Payload: ${json.encode(jwt2.payload)}');
 
     var proof = [
       {
@@ -67,12 +71,14 @@ class VPTest {
       },
       body: json.encode({"did": did, "vp": vp}),
     );
-    print(response.body);
 
-    JsonEncoder encoder = JsonEncoder.withIndent('  ');
-    String prettyPrint = encoder.convert(vp);
+    log.i("body: ${response.body}");
+    log.i("status Code: ${response.statusCode}");
 
-    printWrapped(prettyPrint);
+    // JsonEncoder encoder = JsonEncoder.withIndent('  ');
+    // String prettyPrint = encoder.convert(vp);
+
+    // printWrapped(prettyPrint);
   }
 
   printWrapped(String text) {

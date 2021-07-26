@@ -35,8 +35,7 @@ class VCListController extends GetxController {
         var response = await issuer.getVC(Uri.parse(vc['getVC']), vc['JWT']);
 
         if (json.decode(response.body).containsKey('error')) {
-          // return;
-          break;
+          continue;
         }
 
         // log.i(response.body);
