@@ -53,7 +53,7 @@ class ReceivePassword extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                      child: Obx(() => c.password == ""
+                      child: Obx(() => c.password.value == ""
                           ? Text('설정할 PIN을 입력하세요',
                               style: Get.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold))
                           : Text('한번 더 입력하세요.',

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:wallet/widgets/background.dart';
 import 'package:confetti/confetti.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -19,11 +20,11 @@ class Config extends StatelessWidget {
           child: ConfettiWidget(
         confettiController: c.controllerCenter.value,
         blastDirection: -pi / 2,
-        maxBlastForce: 2, // set a lower max blast force
-        minBlastForce: 1, // set a lower min blast force
-        emissionFrequency: 0.2,
+        maxBlastForce: 10, // set a lower max blast force
+        minBlastForce: 8, // set a lower min blast force
+        emissionFrequency: 0.1,
         numberOfParticles: 10, // a lot of particles at once
-        gravity: 0.2,
+        gravity: 0.1,
       )),
       Center(
         child: Column(children: [
@@ -89,6 +90,14 @@ class Config extends StatelessWidget {
                   },
                 ).show();
                 print(test);
+              }),
+          ElevatedButton(
+              child: Text('Auth'),
+              onPressed: () async {
+                var localAuth = LocalAuthentication();
+                bool didAuthenticate =
+                    await localAuth.authenticate(localizedReason: 'Please authenticate to show account balance');
+                print(didAuthenticate);
               }),
           Obx(() => Text(c.text.value)),
         ]),
