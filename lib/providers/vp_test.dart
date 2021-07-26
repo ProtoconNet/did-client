@@ -17,9 +17,8 @@ class VPTest {
   final g = Get.put(GlobalVariable());
   final log = Log();
 
-  createVP(String did, String keyLocation, List<Map<String, dynamic>> payload, List<int> pk) {
+  createVP(String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
     // payload is vc list
-
     var now = DateTime.now();
 
     var expire = now.add(Duration(minutes: 1));
@@ -31,16 +30,15 @@ class VPTest {
     };
 
     // Create a json web token
-    final jwt = JWT(
-      vp,
-      // issuer: 'https://github.com/jonasroussel/dart_jsonwebtoken',
-    );
+    final jwt = JWT(vp, issuer: did, audience: audience, jwtId: "test");
 
-    // Sign it (default with HS256 algorithm)
     print(pk);
-    var token = jwt.sign(EdDSAPrivateKey(pk), algorithm: JWTAlgorithm.EdDSA);
+    var token = jwt.sign(EdDSAPrivateKey(pk),
+        algorithm: JWTAlgorithm.EdDSA, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
 
-    print('Signed token: $token\n');
+    var splitToken = token.split('.');
+    var noPayloadToken = splitToken[0] + ".." + splitToken[2];
+    print('no payload token: $token\n');
 
     final jwt2 = JWT.verify(token, EdDSAPublicKey(pk.sublist(32)));
 
@@ -55,22 +53,39 @@ class VPTest {
         "verificationMethod": keyLocation, // "did:example:76e12ec21ebhyu1f712ebc6f1z2/keys/2"
         // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
         // "domain": "test.org", // submit vp domain
-        "jws": token
+        "jws": token // noPayloadToken
       }
     ];
     vp['proof'] = proof;
 
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    var vpSchemaUri = Uri.parse("http://mtm.securekim.com:3082/vp1");
+    http.Response response = await http.post(
+      vpSchemaUri,
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: json.encode({"did": did, "vp": vp}),
+    );
+    print(response.body);
+
+    JsonEncoder encoder = JsonEncoder.withIndent('  ');
     String prettyPrint = encoder.convert(vp);
 
-    log.i("${prettyPrint.substring(0, 1000)}");
-    log.i("${prettyPrint.substring(900, 1900)}");
-    log.i("${prettyPrint.substring(1800, 2700)}");
-    log.i("${prettyPrint.substring(2600)}");
+    printWrapped(prettyPrint);
+  }
+
+  printWrapped(String text) {
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
   testVP() async {
     var password = g.password.value;
+    var vpSchemaUri = Uri.parse("http://mtm.securekim.com:3082/VPSchema?schema=rentCar");
+    http.Response response = await http.get(vpSchemaUri);
+    print(response.body);
+
     final passwordBytes = utf8.encode(password);
     // Generate a random secret key.
     final sink = Sha256().newHashSink();
@@ -101,7 +116,8 @@ class VPTest {
     final vc = await DIDManager(did: did).getVCByName("Driver's License");
 
     log.i(vc);
-    createVP(did, did, [vc['VC']], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
+    log.i("pk: ${Base58Encode(await keyPair.extractPrivateKeyBytes())}");
+    createVP(did, did, did, [vc['VC']], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
   }
 
   responseCheck(http.Response response) {

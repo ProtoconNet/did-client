@@ -54,6 +54,7 @@ dependencies:
   logger: ^1.0.0
   dart_jsonwebtoken: ^2.3.2
   confetti: ^0.6.0-nullsafety
+  local_auth: ^1.1.6
 
 dev_dependencies:
   flutter_test:
