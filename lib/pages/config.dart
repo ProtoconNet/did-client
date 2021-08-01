@@ -9,6 +9,7 @@ import 'package:wallet/pages/camera.dart';
 import 'package:camera/camera.dart';
 // import 'package:dart_ipify/dart_ipify.dart';
 // import 'package:socket_io/socket_io.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:wallet/controller/config_controller.dart';
 
@@ -162,6 +163,29 @@ class Config extends StatelessWidget {
               child: Text('Camera Test'),
               onPressed: () async {
                 Get.to(TextDetectorView());
+              }),
+          ElevatedButton(
+              child: Text('dialog'),
+              onPressed: () {
+                var test = AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.INFO_REVERSED,
+                  borderSide: BorderSide(color: Colors.green, width: 2),
+                  width: 280,
+                  buttonsBorderRadius: BorderRadius.all(Radius.circular(2)),
+                  headerAnimationLoop: false,
+                  animType: AnimType.BOTTOMSLIDE,
+                  title: 'INFO',
+                  desc: 'Dialog description here...',
+                  showCloseIcon: true,
+                  btnCancelOnPress: () {
+                    return false;
+                  },
+                  btnOkOnPress: () {
+                    return true;
+                  },
+                ).show();
+                print(test);
               }),
           ElevatedButton(
               child: Text('Local Auth'),

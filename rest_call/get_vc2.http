@@ -1,0 +1,8 @@
+
+@hostname = mitum.securekim.com
+@port = 8080
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+// GET /schema
+GET http://{{host}}/v1/schema?id=vc2 HTTP/1.1
