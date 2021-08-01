@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:confetti/confetti.dart';
+import 'package:camera/camera.dart';
 
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/pages/create_wallet.dart';
@@ -15,6 +16,13 @@ class ConfigController extends GetxController {
   final g = Get.put(GlobalVariable());
   final log = Log();
 
+  final cameras = [].obs;
+
+  final controller = CameraController(
+          CameraDescription(name: 'test', lensDirection: CameraLensDirection.front, sensorOrientation: 0),
+          ResolutionPreset.max)
+      .obs;
+
   var theme = 'system'.obs;
   var language = 'system'.obs;
 
@@ -25,6 +33,13 @@ class ConfigController extends GetxController {
     language.value = g.language;
 
     theme.value = g.theme;
+
+    // WidgetsFlutterBinding.ensureInitialized();
+    availableCameras().then((ca) {
+      cameras.value = ca;
+      controller.value = CameraController(cameras[0], ResolutionPreset.max);
+    });
+
     super.onInit();
   }
 

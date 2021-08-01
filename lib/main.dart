@@ -3,13 +3,18 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
+import 'package:camera/camera.dart';
 
 import 'package:wallet/config/translations.dart';
 import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/config/theme.dart';
 import 'package:wallet/routes/wallet_route.dart';
 
+List<CameraDescription> cameras = [];
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
   await initService();
   runApp(WigglerWallet());
 }

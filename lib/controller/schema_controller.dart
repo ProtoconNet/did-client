@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as Img;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -40,13 +42,15 @@ class SchemaController extends GetxController {
 
   var schema = ''.obs;
 
-  initInputItems() {
+  onInit() async {
     inputControllerList = <TextEditingController>[];
     inputs = <Widget>[];
 
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
+
+    await dynamicFields(name, requestSchema);
   }
 
   setImageFile(File _new) {
@@ -99,6 +103,7 @@ class SchemaController extends GetxController {
 
   dynamicFields(String name, String requestSchema) async {
     log.i('dynamicFields: $name : $requestSchema');
+    log.i('*' * 200);
     var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
 
     log.i("response.body:${response.body}");
@@ -114,9 +119,9 @@ class SchemaController extends GetxController {
     }
 
     schema.value = json.decode(response.body)['data'];
-    final schemaList = json.decode(json.decode(response.body)['data']);
+    // final schemaList = json.decode(json.decode(response.body)['data']);
 
-    return schemaList;
+    // return schemaList;
     // } else {
     //   final schemaList = json.decode(schema.value);
 
@@ -147,9 +152,33 @@ class SchemaController extends GetxController {
     if (pickedFile != null) {
       setImageFile(File(pickedFile.path));
 
-      var imageBytes = await File(pickedFile.path).readAsBytes();
+      var isHEIC = '${pickedFile.path.substring(pickedFile.path.length - 4, pickedFile.path.length)}';
+
+      log.i(isHEIC);
+
+      var imageBytes = await pickedFile.readAsBytes();
       var imageBase64 = base64Encode(imageBytes);
-      setImageAt(imageBase64, index);
+
+      // long 320
+      var imageTemp = Img.decodeImage(imageBytes) as Img.Image;
+      var resizedImg;
+      if (imageTemp.height > imageTemp.width) {
+        resizedImg = Img.copyResize(imageTemp, height: 320);
+      } else {
+        resizedImg = Img.copyResize(imageTemp, width: 320);
+      }
+
+      log.i("Org : height:${imageTemp.height}, width:${imageTemp.width}");
+      log.i("reSized : height:${resizedImg.height}, width:${resizedImg.width}");
+
+      var jpg = Img.encodeJpg(resizedImg, quality: 95);
+      var jpgBase64 = base64Encode(jpg);
+      log.i("jpgBase64:${jpgBase64.length}, $jpgBase64");
+
+      log.i("org Size: ${imageBase64.length}");
+      log.i("resized : ${jpgBase64.length}");
+
+      setImageAt(jpgBase64, index);
       return pickedFile.path;
     } else {
       log.i('No image selected.');
@@ -214,7 +243,7 @@ class SchemaController extends GetxController {
           break;
         case 'image':
           // log.i(imageList.value[imageI]);
-          credentialSubject[item['name']] = 'image'; //imageList.value[imageI];
+          credentialSubject[item['name']] = imageList[imageI];
           imageI++;
           break;
         case 'datetime':

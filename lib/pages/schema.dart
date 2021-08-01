@@ -18,16 +18,17 @@ class Schema extends StatelessWidget {
   final String name;
   final String requestSchema;
 
-  builder(context, snapshot, name) {
+  builder(context, name) {
     final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
-    c.initInputItems();
+
     log.i('Schema Builder');
-    log.i(snapshot);
-    if (snapshot.hasData) {
+    log.i(c.schema.value);
+    if (c.schema.value != "") {
+      final schemaList = json.decode(c.schema.value);
       var datetimeIndex = 0;
       var imageIndex = 0;
 
-      for (var item in snapshot.data) {
+      for (var item in schemaList) {
         switch (item['type']) {
           case 'string':
             final TextEditingController ctrl = TextEditingController();
@@ -123,7 +124,7 @@ class Schema extends StatelessWidget {
           ElevatedButton(
               child: Text('Submit'),
               onPressed: () async {
-                await c.submit(name, snapshot.data);
+                await c.submit(name, schemaList);
                 Navigator.pop(context);
               })
         ])
@@ -143,11 +144,12 @@ class Schema extends StatelessWidget {
                 style: GoogleFonts.roboto(
                     textStyle: Get.theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)))),
         children: [
-          FutureBuilder(
-              future: c.dynamicFields(name, requestSchema),
-              builder: (context, snapshot) {
-                return builder(context, snapshot, name);
-              }),
+          // FutureBuilder(
+          //     future: c.dynamicFields(name, requestSchema),
+          //     builder: (context, snapshot) {
+          // return builder(context, snapshot, name);
+          Obx(() => builder(context, name))
+          //     }),
         ]);
   }
 }

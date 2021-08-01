@@ -55,6 +55,14 @@ dependencies:
   dart_jsonwebtoken: ^2.3.2
   confetti: ^0.6.0-nullsafety
   local_auth: ^1.1.6
+  image: ^3.0.2
+  dart_ipify: ^1.1.0
+  socket_io: ^1.0.0
+  biometric_storage: ^2.0.3
+  camera: ^0.8.1+7
+  video_player: ^2.1.12
+  google_ml_kit: ^0.7.0
+  firebase_core: ^1.4.0
 
 dev_dependencies:
   flutter_test:
