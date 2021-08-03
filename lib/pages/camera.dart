@@ -96,10 +96,11 @@ class _CameraViewState extends State<CameraView> {
 
   Widget _body() {
     Widget body;
-    if (_mode == ScreenMode.liveFeed)
+    if (_mode == ScreenMode.liveFeed) {
       body = _liveFeedBody();
-    else
+    } else {
       body = _galleryBody();
+    }
     return body;
   }
 
@@ -155,7 +156,7 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future _getImage(ImageSource source) async {
-    final pickedFile = await _imagePicker?.getImage(source: source);
+    final pickedFile = await _imagePicker?.pickImage(source: source);
     if (pickedFile != null) {
       _processPickedFile(pickedFile);
     } else {
@@ -198,15 +199,16 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future _switchLiveCamera() async {
-    if (_cameraIndex == 0)
+    if (_cameraIndex == 0) {
       _cameraIndex = 1;
-    else
+    } else {
       _cameraIndex = 0;
+    }
     await _stopLiveFeed();
     await _startLiveFeed();
   }
 
-  Future _processPickedFile(PickedFile pickedFile) async {
+  Future _processPickedFile(XFile pickedFile) async {
     setState(() {
       _image = File(pickedFile.path);
     });

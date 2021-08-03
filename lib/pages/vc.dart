@@ -90,7 +90,7 @@ class VC extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 20.0),
           child: OpenContainer(
               openBuilder: (context, closedContainer) {
-                log.i("VC openBuilder: ${vc}");
+                log.i("VC openBuilder: $vc");
                 return VP(name: name, vc: vc);
               },
               openColor: Get.theme.cardColor,

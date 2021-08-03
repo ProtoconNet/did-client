@@ -47,7 +47,7 @@ class TextDetectorPainter extends CustomPainter {
         ParagraphStyle(textAlign: TextAlign.left, fontSize: 16, textDirection: TextDirection.ltr),
       );
       builder.pushStyle(ui.TextStyle(color: Colors.lightGreenAccent, background: background));
-      builder.addText('${textBlock.text}');
+      builder.addText('$textBlock.text');
       builder.pop();
 
       final left = translateX(textBlock.rect.left, rotation, size, absoluteImageSize);

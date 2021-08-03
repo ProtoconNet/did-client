@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -15,6 +16,23 @@ class LoginController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();
+
+  @override
+  onInit() async {
+    log.i("biometric: ${g.biometric}");
+    if (g.biometric) {
+      var _noConfirmation = await BiometricStorage().getStorage('login',
+          options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+          androidPromptInfo: const AndroidPromptInfo(
+            confirmationRequired: false,
+          ));
+      var pass = await _noConfirmation.read();
+      log.i("pass: $pass");
+
+      await login(pass);
+    }
+    super.onInit();
+  }
 
   login(password) async {
     try {
@@ -46,6 +64,16 @@ class LoginController extends GetxController {
       final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
       g.inputPassword(password);
       g.inputDID(did);
+
+      if (g.biometric) {
+        var _noConfirmation = await BiometricStorage().getStorage('login',
+            options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+            androidPromptInfo: const AndroidPromptInfo(
+              confirmationRequired: false,
+            ));
+        _noConfirmation.write(password);
+      }
+
       Get.offAllNamed('/');
     } catch (e) {
       log.e(e);

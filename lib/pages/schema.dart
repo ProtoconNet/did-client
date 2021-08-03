@@ -136,7 +136,7 @@ class Schema extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
+    // final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
     // log.i("Schema build");
     return Background(
         appBar: AppBar(

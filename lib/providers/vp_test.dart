@@ -54,10 +54,10 @@ class VPTest {
         "expire": expire.toIso8601String(),
         "created": now.toIso8601String(),
         "proofPurpose": "authentication",
-        "verificationMethod": keyLocation, // "did:example:76e12ec21ebhyu1f712ebc6f1z2/keys/2"
+        "verificationMethod": keyLocation,
         // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
         // "domain": "test.org", // submit vp domain
-        "jws": token // noPayloadToken
+        "jws": noPayloadToken // token
       }
     ];
     vp['proof'] = proof;

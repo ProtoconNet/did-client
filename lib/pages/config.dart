@@ -203,7 +203,7 @@ class Config extends StatelessWidget {
                     androidPromptInfo: const AndroidPromptInfo(
                       confirmationRequired: false,
                     ));
-                _noConfirmation.write('ASDFASDFasdfasdf');
+                _noConfirmation.write('Biometric Storage Test String');
                 var test = await _noConfirmation.read();
 
                 c.setText(test);

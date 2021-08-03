@@ -12,7 +12,7 @@ class CreateDID extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("in createdid : $password");
+    print("in create did : $password");
     return Background(children: [
       FutureBuilder<String>(
           future: c.createDID(password),

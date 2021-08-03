@@ -7,7 +7,7 @@ class Issuer {
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        log.i("${response.body}");
+        log.i("$response.body");
         return response;
       default:
         log.lw("Response Error $response");

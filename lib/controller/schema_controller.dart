@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
-import 'dart:math';
+// import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as Img;
+import 'package:image/image.dart' as img;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -42,6 +42,7 @@ class SchemaController extends GetxController {
 
   var schema = ''.obs;
 
+  @override
   onInit() async {
     inputControllerList = <TextEditingController>[];
     inputs = <Widget>[];
@@ -51,6 +52,7 @@ class SchemaController extends GetxController {
     imageList.value = [];
 
     await dynamicFields(name, requestSchema);
+    super.onInit();
   }
 
   setImageFile(File _new) {
@@ -131,7 +133,7 @@ class SchemaController extends GetxController {
 
   Future takeImage(index) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
       setImageFile(File(pickedFile.path));
@@ -147,12 +149,12 @@ class SchemaController extends GetxController {
 
   Future getImage(index) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setImageFile(File(pickedFile.path));
 
-      var isHEIC = '${pickedFile.path.substring(pickedFile.path.length - 4, pickedFile.path.length)}';
+      var isHEIC = pickedFile.path.substring(pickedFile.path.length - 4, pickedFile.path.length);
 
       log.i(isHEIC);
 
@@ -160,18 +162,18 @@ class SchemaController extends GetxController {
       var imageBase64 = base64Encode(imageBytes);
 
       // long 320
-      var imageTemp = Img.decodeImage(imageBytes) as Img.Image;
-      var resizedImg;
+      var imageTemp = img.decodeImage(imageBytes) as img.Image;
+      img.Image resizedImg;
       if (imageTemp.height > imageTemp.width) {
-        resizedImg = Img.copyResize(imageTemp, height: 320);
+        resizedImg = img.copyResize(imageTemp, height: 320);
       } else {
-        resizedImg = Img.copyResize(imageTemp, width: 320);
+        resizedImg = img.copyResize(imageTemp, width: 320);
       }
 
       log.i("Org : height:${imageTemp.height}, width:${imageTemp.width}");
       log.i("reSized : height:${resizedImg.height}, width:${resizedImg.width}");
 
-      var jpg = Img.encodeJpg(resizedImg, quality: 95);
+      var jpg = img.encodeJpg(resizedImg, quality: 95);
       var jpgBase64 = base64Encode(jpg);
       log.i("jpgBase64:${jpgBase64.length}, $jpgBase64");
 

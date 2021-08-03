@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wallet/providers/global_variable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 
+import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/widgets/background.dart';
+import 'package:wallet/widgets/gradient_icon.dart';
 import 'package:wallet/controller/login_controller.dart';
 import 'package:wallet/utils/logger.dart';
 
@@ -17,25 +20,60 @@ class Login extends StatelessWidget {
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text('login'.tr, style: Get.theme.textTheme.headline4),
-        Text('inputPassword'.tr, style: Get.theme.textTheme.bodyText1),
-        TextFormField(
-          autofocus: true,
-          controller: _pass,
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          onFieldSubmitted: (test) async {
-            log.i("submit with $test");
-            await c.login(_pass.text);
-          },
+        GradientIcon(
+          FontAwesomeIcons.wallet,
+          80,
+          LinearGradient(
+            colors: [Get.theme.primaryColor, Get.theme.accentColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-        ElevatedButton(
-            onPressed: () async {
-              await c.login(_pass.text);
-            },
-            child: Text('enter'.tr),
-            style: Get.theme.elevatedButtonTheme.style),
+        Text('login'.tr, style: Get.theme.textTheme.headline4),
+        // Text('inputPassword'.tr, style: Get.theme.textTheme.bodyText1),
+        Padding(
+            padding: EdgeInsets.all(8),
+            child: SizedBox(
+                height: 50,
+                width: Get.width * 0.8, // <-- match_parent
+                child: TextFormField(
+                  autofocus: true,
+                  controller: _pass,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  onFieldSubmitted: (test) async {
+                    log.i("submit with $test");
+                    await c.login(_pass.text);
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Password',
+                    // prefixIcon: Icon(Icons.perm_identity),
+                  ),
+                ))),
+        Padding(
+            padding: EdgeInsets.all(8),
+            child: SizedBox(
+                height: 50,
+                width: Get.width * 0.8, // <-- match_parent
+                child: ElevatedButton(
+                    onPressed: () async {
+                      await c.login(_pass.text);
+                    },
+                    child: Text('enter'.tr),
+                    style: Get.theme.elevatedButtonTheme.style))),
+
+        Padding(
+            padding: EdgeInsets.all(8),
+            child: CheckboxListTile(
+              title: Text("다음부터 생체인식 사용하기"),
+              value: g.biometric,
+              onChanged: (newValue) async {
+                g.setBiometric(newValue!);
+              },
+              controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
+            )),
       ])),
     ]);
   }
