@@ -28,13 +28,13 @@ class CreateWallet extends StatelessWidget {
                   blurRadius: 1.5,
                 ),
               ]),
-              child: Center(
-                  child: Text('M I T U M', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))))),
+              child: Center(child: Text('MITUM', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))))),
       Center(
           child: Text('Wallet',
               style: Get.textTheme.headline2?.copyWith(color: Colors.black, fontWeight: FontWeight.w900))),
       SizedBox(height: 30),
-      Column(
+      Center(
+          child: Column(
         children: [
           Padding(
               padding: EdgeInsets.only(left: 30, right: 30, top: 30),
@@ -106,7 +106,7 @@ class CreateWallet extends StatelessWidget {
                 ],
               ))
         ],
-      ),
+      )),
       SizedBox(height: 30),
       Column(children: [
         Center(child: Text('소셜인프라테크는 사용자의 개인정보를 수집하지 않습니다.', style: Get.textTheme.caption)),
