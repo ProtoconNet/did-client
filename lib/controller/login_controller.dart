@@ -54,7 +54,13 @@ class LoginController extends GetxController {
       final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
 
       final iv = encrypt.IV.fromLength(16);
-      final decrypted = encrypter.decrypt(encrypted, iv: iv);
+      var decrypted = encrypter.decrypt(encrypted, iv: iv);
+
+      if (decrypted.substring(0, 7) != "WIGGLER") {
+        throw Error();
+      }
+
+      decrypted = decrypted.substring(7);
 
       final clearText = Base58Decode(decrypted);
 

@@ -49,7 +49,7 @@ class CreateDIDController extends GetxController {
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
     final iv = encrypt.IV.fromLength(16);
 
-    final encrypted = encrypter.encrypt(encodedPriv, iv: iv);
+    final encrypted = encrypter.encrypt("WIGGLER" + encodedPriv, iv: iv);
 
     writeDID(did, encrypted.bytes);
 
