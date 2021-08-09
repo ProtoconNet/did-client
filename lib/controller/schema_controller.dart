@@ -103,6 +103,16 @@ class SchemaController extends GetxController {
         dateList[i].year, dateList[i].month, dateList[i].day, timeList[i].hour, timeList[i].minute, timeList[i].second);
   }
 
+  getRequestVC(String requestSchema) async {
+    var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
+
+    log.i("response.body:${response.body}");
+
+    var endpoints = json.decode(response.body);
+
+    return endpoints['VCPost'];
+  }
+
   dynamicFields(String name, String requestSchema) async {
     log.i('dynamicFields: $name : $requestSchema');
     log.i('*' * 200);
@@ -111,9 +121,6 @@ class SchemaController extends GetxController {
     log.i("response.body:${response.body}");
 
     var endpoints = json.decode(response.body);
-
-    await DIDManager(did: did).setVCFieldByName(name, 'requestVC', endpoints['VCPost']);
-    await DIDManager(did: did).setVCFieldByName(name, 'getVC', endpoints['VCGet']);
 
     response = await platform.getSchema(Uri.parse(endpoints['schema']));
     if (json.decode(response.body).containsKey('error')) {
@@ -268,10 +275,8 @@ class SchemaController extends GetxController {
 
     log.i("body:${json.encode(body)}");
 
-    log.i("uri:${await DIDManager(did: did).getVCFieldByName(name, "requestVC")}");
+    var response = await issuer.requestVC(Uri.parse(await getRequestVC(requestSchema)), json.encode(body));
 
-    var response = await issuer.requestVC(
-        Uri.parse(await DIDManager(did: did).getVCFieldByName(name, "requestVC")), json.encode(body));
     log.i("result of request VC: ${response.body}");
 
     if (response.body == 'Error' || json.decode(response.body).containsKey('error')) {

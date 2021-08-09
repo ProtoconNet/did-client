@@ -15,6 +15,8 @@ class VC extends StatelessWidget {
       required this.did,
       required this.icon,
       required this.name,
+      required this.description,
+      required this.type,
       required this.schemaRequest,
       required this.vc,
       required this.jwt})
@@ -25,6 +27,8 @@ class VC extends StatelessWidget {
   final String did;
   final int icon;
   final String name;
+  final String description;
+  final String type;
   final String schemaRequest;
   final Map<String, dynamic> vc;
   final String jwt;
@@ -47,7 +51,12 @@ class VC extends StatelessWidget {
                   ));
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DIDList()));
                 },
-                child: VCCard(icon: IconData(icon, fontFamily: 'MaterialIcons'), name: name, status: "noVC")));
+                child: VCCard(
+                    name: name,
+                    description: description,
+                    type: type,
+                    icon: IconData(icon, fontFamily: 'MaterialIcons'),
+                    status: "noVC")));
         // OpenContainer(
         //   openBuilder: (context, closedContainer) {
         //     log.i("noVC openBuilder: ${vc['name']}");
@@ -81,7 +90,12 @@ class VC extends StatelessWidget {
       } else {
         return Padding(
             padding: EdgeInsets.only(bottom: 20.0),
-            child: VCCard(icon: IconData(icon, fontFamily: 'MaterialIcons'), name: name, status: "wait"));
+            child: VCCard(
+                name: name,
+                description: description,
+                type: type,
+                icon: IconData(icon, fontFamily: 'MaterialIcons'),
+                status: "wait"));
       }
     } else {
       // make onPress to Open VC as VP
@@ -107,7 +121,12 @@ class VC extends StatelessWidget {
                       // log.i("VC closedBuilder: ${vc['name']}");
                       openContainer();
                     },
-                    child: VCCard(icon: IconData(icon, fontFamily: 'MaterialIcons'), name: name, status: "VC"));
+                    child: VCCard(
+                        name: name,
+                        description: description,
+                        type: type,
+                        icon: IconData(icon, fontFamily: 'MaterialIcons'),
+                        status: "VC"));
               }));
     }
   }
