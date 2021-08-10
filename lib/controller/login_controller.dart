@@ -19,6 +19,8 @@ class LoginController extends GetxController {
 
   @override
   onInit() async {
+    super.onInit();
+
     log.i("biometric: ${g.biometric}");
     if (g.biometric) {
       var _noConfirmation = await BiometricStorage().getStorage('login',
@@ -31,7 +33,6 @@ class LoginController extends GetxController {
 
       await login(pass);
     }
-    super.onInit();
   }
 
   login(password) async {

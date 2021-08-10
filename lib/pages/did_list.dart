@@ -36,6 +36,8 @@ class DIDList extends StatelessWidget {
                     log.i("DID : ${json.encode(snapshot.data)}");
                     final dids = snapshot.data as Map<String, dynamic>;
 
+                    log.i("dids: ${dids.keys}");
+
                     return Column(children: dids.keys.map((did) => VCList(did: did)).toList());
                   } else {
                     return Center(child: CircularProgressIndicator());

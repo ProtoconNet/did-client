@@ -25,7 +25,7 @@ class ScanQRController extends GetxController {
       switch (val['type']) {
         case "issue":
           // add claim to secure storage
-          final saveResult = await VCManager().addClaim(json.encode(val['claim']));
+          final saveResult = await VCManager(g.did.value).setVC(json.encode(val['claim']));
           // execute schema page
           if (saveResult) {
             await Get.to(Schema(

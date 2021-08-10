@@ -17,7 +17,6 @@ class Home extends StatelessWidget {
   List<Widget> _buildScreens() {
     log.i("_buildScreens");
     return [
-//      VCList(),
       DIDList(),
       ScanQR(),
       Config(),

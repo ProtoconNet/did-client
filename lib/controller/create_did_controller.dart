@@ -30,15 +30,8 @@ class CreateDIDController extends GetxController {
     return [encodedPriv, encodedPub];
   }
 
-  Future<String> createDID(String password) async {
+  encryptPK(password, encodedPriv) async {
     final passwordBytes = utf8.encode(password);
-
-    var keyPair = await generateKeyPair();
-    var encodedPriv = keyPair[0];
-    var encodedPub = keyPair[1];
-
-    final did = 'did:mtm:' + encodedPub;
-    g.inputDID(did);
 
     final sink = Sha256().newHashSink();
     sink.add(passwordBytes);
@@ -51,7 +44,20 @@ class CreateDIDController extends GetxController {
 
     final encrypted = encrypter.encrypt("WIGGLER" + encodedPriv, iv: iv);
 
-    writeDID(did, encrypted.bytes);
+    return encrypted.bytes;
+  }
+
+  Future<String> createDID(String password) async {
+    var keyPair = await generateKeyPair();
+    var encodedPriv = keyPair[0];
+    var encodedPub = keyPair[1];
+
+    final did = 'did:mtm:' + encodedPub;
+    g.inputDID(did);
+
+    final encrypted = await encryptPK(password, encodedPriv);
+
+    await writeDID(did, encrypted);
 
     return did;
   }

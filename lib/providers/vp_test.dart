@@ -125,11 +125,11 @@ class VPTest {
     final pubKey = await keyPair.extractPublicKey();
     final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
 
-    final vc = await DIDManager(did: did).getVCByName("Driver's License");
+    final vc = await VCManager(did).getByName("Driver's License", "vc");
 
     log.i(vc);
     log.i("pk: ${Base58Encode(await keyPair.extractPrivateKeyBytes())}");
-    createVP(did, did, did, [vc['VC']], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
+    createVP(did, did, did, [vc], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
   }
 
   responseCheck(http.Response response) {

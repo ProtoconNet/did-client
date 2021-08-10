@@ -128,14 +128,6 @@ class SchemaController extends GetxController {
     }
 
     schema.value = json.decode(response.body)['data'];
-    // final schemaList = json.decode(json.decode(response.body)['data']);
-
-    // return schemaList;
-    // } else {
-    //   final schemaList = json.decode(schema.value);
-
-    //   return schemaList;
-    // }
   }
 
   Future takeImage(index) async {
@@ -177,15 +169,15 @@ class SchemaController extends GetxController {
         resizedImg = img.copyResize(imageTemp, width: 320);
       }
 
-      log.i("Org : height:${imageTemp.height}, width:${imageTemp.width}");
-      log.i("reSized : height:${resizedImg.height}, width:${resizedImg.width}");
+      // log.i("Org : height:${imageTemp.height}, width:${imageTemp.width}");
+      // log.i("reSized : height:${resizedImg.height}, width:${resizedImg.width}");
 
       var jpg = img.encodeJpg(resizedImg, quality: 95);
       var jpgBase64 = base64Encode(jpg);
-      log.i("jpgBase64:${jpgBase64.length}, $jpgBase64");
+      // log.i("jpgBase64:${jpgBase64.length}, $jpgBase64");
 
-      log.i("org Size: ${imageBase64.length}");
-      log.i("resized : ${jpgBase64.length}");
+      // log.i("org Size: ${imageBase64.length}");
+      // log.i("resized : ${jpgBase64.length}");
 
       setImageAt(jpgBase64, index);
       return pickedFile.path;
@@ -297,7 +289,7 @@ class SchemaController extends GetxController {
       return;
     }
 
-    await DIDManager(did: did).setVCFieldByName(name, 'JWT', response.headers['authorization']);
+    await VCManager(did).setByName(name, 'JWT', response.headers['authorization']);
 
     final challenge = jsonDecode(response.body);
 
