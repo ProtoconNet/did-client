@@ -10,8 +10,11 @@ import 'package:wallet/providers/global_variable.dart';
 import 'package:wallet/utils/logger.dart';
 
 class Issuer {
+  Issuer(this.schemaLocation);
   final log = Log();
   final g = Get.put(GlobalVariable());
+
+  final String schemaLocation;
 
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
@@ -25,9 +28,10 @@ class Issuer {
     }
   }
 
-  getVC(getVCUri, token) async {
+  getVC(token) async {
+    final locations = await getSchemaLocation();
     http.Response response = await http.get(
-      getVCUri,
+      Uri.parse(locations['VCGet']),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -37,16 +41,29 @@ class Issuer {
     return responseCheck(response);
   }
 
-  requestVC(requestVCUri, body) async {
+  postVC(body, privateKey) async {
+    final locations = await getSchemaLocation();
+    print("locations: $locations");
     http.Response response = await http.post(
-      requestVCUri,
+      Uri.parse(locations['VCPost']),
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
       body: body,
     );
-    return responseCheck(response);
+    final result = responseCheck(response);
+
+    final challenge = jsonDecode(result.body);
+
+    if (challenge.containsKey('payload')) {
+      final challengeResult =
+          await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization'], privateKey);
+      if (challengeResult) {
+        return response.headers['authorization'];
+      }
+    }
+    return false;
   }
 
   responseChallenge(challengeUri, encodedSignatureBytes, token) async {
@@ -55,10 +72,11 @@ class Issuer {
     return responseCheck(response);
   }
 
-  getSchemaLocation(schemaLocationUri) async {
-    log.i(schemaLocationUri);
-    http.Response response = await http.get(schemaLocationUri);
-    return responseCheck(response);
+  getSchemaLocation() async {
+    log.i(schemaLocation);
+    http.Response response = await http.get(Uri.parse(schemaLocation));
+    final vcLocation = responseCheck(response);
+    return json.decode(vcLocation.body);
   }
 
   didAuth(payload, endPoint, token, privateKey) async {
@@ -73,7 +91,6 @@ class Issuer {
     final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
 
-    // final privateKey = await storage.read(key: 'privateKey') as String;
     final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
 
     final iv = encrypt.IV.fromLength(16);
@@ -99,6 +116,8 @@ class Issuer {
     final response2 = await responseChallenge(Uri.parse(endPoint), Base58Encode(signature.bytes), token);
     if (response2 == "") {
       log.le("Challenge Failed");
+      return false;
     }
+    return true;
   }
 }

@@ -17,7 +17,10 @@ import 'package:wallet/providers/secure_storage.dart';
 import 'package:wallet/utils/logger.dart';
 
 class SchemaController extends GetxController {
-  SchemaController({required this.did, required this.name, required this.requestSchema});
+  SchemaController(
+      {required this.did,
+      required this.name,
+      required this.requestSchema}); //:this.issuer = Issuer(this.requestSchema);
 
   final String did;
   final String name;
@@ -26,7 +29,7 @@ class SchemaController extends GetxController {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();
-  final issuer = Issuer();
+  Issuer? issuer;
   final platform = Platform();
 
   var inputControllerList = <TextEditingController>[];
@@ -50,6 +53,7 @@ class SchemaController extends GetxController {
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
+    issuer = Issuer(requestSchema);
 
     await dynamicFields(name, requestSchema);
     super.onInit();
@@ -103,26 +107,12 @@ class SchemaController extends GetxController {
         dateList[i].year, dateList[i].month, dateList[i].day, timeList[i].hour, timeList[i].minute, timeList[i].second);
   }
 
-  getRequestVC(String requestSchema) async {
-    var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
-
-    log.i("response.body:${response.body}");
-
-    var endpoints = json.decode(response.body);
-
-    return endpoints['VCPost'];
-  }
-
   dynamicFields(String name, String requestSchema) async {
     log.i('dynamicFields: $name : $requestSchema');
     log.i('*' * 200);
-    var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
+    var locations = await issuer!.getSchemaLocation();
 
-    log.i("response.body:${response.body}");
-
-    var endpoints = json.decode(response.body);
-
-    response = await platform.getSchema(Uri.parse(endpoints['schema']));
+    var response = await platform.getSchema(Uri.parse(locations['schema']));
     if (json.decode(response.body).containsKey('error')) {
       return;
     }
@@ -186,47 +176,6 @@ class SchemaController extends GetxController {
     }
   }
 
-  didAuth(payload, endPoint, token) async {
-    log.i('did Auth');
-    final passwordBytes = utf8.encode(g.password.value);
-    // Generate a random secret key.
-    final sink = Sha256().newHashSink();
-    sink.add(passwordBytes);
-    sink.close();
-    final passwordHash = await sink.hash();
-
-    final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
-    final encrypter = encrypt.Encrypter(encrypt.AES(key));
-
-    final privateKey = await storage.read(key: 'privateKey') as String;
-    final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
-
-    final iv = encrypt.IV.fromLength(16);
-    var decrypted = encrypter.decrypt(encrypted, iv: iv);
-
-    if (decrypted.substring(0, 7) != "WIGGLER") {
-      throw Error();
-    }
-
-    decrypted = decrypted.substring(7);
-
-    final clearText = Base58Decode(decrypted);
-
-    final algorithm = Ed25519();
-    final keyPair = await algorithm.newKeyPairFromSeed(clearText);
-    // final pubKey = await keyPair.extractPublicKey();
-    // final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
-
-    final challengeBytes = utf8.encode(payload);
-
-    final signature = await algorithm.sign(challengeBytes, keyPair: keyPair);
-
-    final response2 = await issuer.responseChallenge(Uri.parse(endPoint), Base58Encode(signature.bytes), token);
-    if (response2 == "") {
-      log.le("Challenge Failed");
-    }
-  }
-
   submit(name, data) async {
     log.i("submit");
     var credentialSubject = {};
@@ -263,15 +212,17 @@ class SchemaController extends GetxController {
     }
 
     // log.i(credentialSubject);
+    // TODO: change static vc1
     var body = {"did": g.did.value, "schema": "vc1", "credentialSubject": credentialSubject};
 
     log.i("body:${json.encode(body)}");
 
-    var response = await issuer.requestVC(Uri.parse(await getRequestVC(requestSchema)), json.encode(body));
+    var response =
+        await issuer!.postVC(json.encode(body), await g.didManager.value.getDIDPK(g.did.value, g.password.value));
 
-    log.i("result of request VC: ${response.body}");
-
-    if (response.body == 'Error' || json.decode(response.body).containsKey('error')) {
+    if (response != false) {
+      await VCManager(did).setByName(name, 'jwt', response);
+    } else {
       await Get.dialog(AlertDialog(
           content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -287,14 +238,6 @@ class SchemaController extends GetxController {
         ],
       )));
       return;
-    }
-
-    await VCManager(did).setByName(name, 'JWT', response.headers['authorization']);
-
-    final challenge = jsonDecode(response.body);
-
-    if (challenge.containsKey('payload')) {
-      didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']);
     }
   }
 }

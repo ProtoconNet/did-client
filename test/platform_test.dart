@@ -51,23 +51,9 @@ void main() async {
     });
 
     test('Get Schema Test', () async {
-      final issuer = Issuer();
+      final issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
       final platform = Platform();
-      var response =
-          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense'));
-
-      expect((response.statusCode / 100).floor(), 2);
-
-      Map<String, dynamic> result = json.decode(response.body);
-
-      expect(result.containsKey('schema'), true);
-      response = await platform.getSchema(Uri.parse(result['schema']));
-
-      expect((response.statusCode / 100).floor(), 2);
-
-      result = json.decode(response.body);
-
-      expect(result['message'], 'success');
+      var response = await issuer.getSchemaLocation();
     });
   });
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
+import 'package:wallet/providers/secure_storage.dart';
 import 'package:wallet/config/translations.dart';
 
 class GlobalVariable extends GetxController {
@@ -11,6 +12,8 @@ class GlobalVariable extends GetxController {
   var did = ''.obs;
   // var biometric = false.obs;
   var tabController = PersistentTabController(initialIndex: 0).obs;
+
+  var didManager = DIDManager().obs;
 
   final themeModeList = {"system": ThemeMode.system, "light": ThemeMode.light, "dark": ThemeMode.dark};
 
@@ -35,6 +38,8 @@ class GlobalVariable extends GetxController {
     box.listenKey('language', (value) {
       Get.updateLocale(languageMode(value));
     });
+
+    didManager.value.init();
 
     super.onInit();
   }
