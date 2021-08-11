@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:wallet/pages/introduction.dart';
@@ -12,11 +11,10 @@ import 'package:wallet/utils/logger.dart';
 class WalletRoute extends StatelessWidget {
   final g = Get.put(GlobalVariable());
   final log = Log();
-  final storage = FlutterSecureStorage();
 
   init() async {
     await Permission.camera.request();
-    return await storage.containsKey(key: 'DIDList');
+    return g.didManager.value.dids;
   }
 
   @override
@@ -25,10 +23,11 @@ class WalletRoute extends StatelessWidget {
     return FutureBuilder(
         future: init(),
         builder: (context, snapshot) {
+          log.i('snapshot: ${snapshot.data}');
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          if (!(snapshot.data as bool)) {
+          if ((snapshot.data as Map<String, dynamic>).keys.isEmpty) {
             return OnBoarding();
           } else {
             if (g.password.value == "") {

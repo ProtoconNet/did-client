@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -12,7 +11,6 @@ import 'package:wallet/providers/platform.dart';
 import 'package:wallet/utils/logger.dart';
 
 class CreateDIDController extends GetxController {
-  final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();
   final platform = Platform();
@@ -55,22 +53,17 @@ class CreateDIDController extends GetxController {
     final did = 'did:mtm:' + encodedPub;
     g.inputDID(did);
 
+    log.i("@encodedPriv: $encodedPriv");
+
     final encrypted = await encryptPK(password, encodedPriv);
 
-    await writeDID(did, encrypted);
+    log.i("@encrypted: $encrypted");
+
+    await g.didManager.value.setDID(did, Base58Encode(encrypted), password);
+
+    log.i("aa");
 
     return did;
-  }
-
-  writeDID(did, encryptedPK) async {
-    if (!await storage.containsKey(key: 'DIDList')) {
-      await storage.write(key: 'DIDList', value: '{}');
-    }
-    var didListStr = await storage.read(key: 'DIDList') as String;
-    var didList = json.decode(didListStr);
-    didList[did] = Base58Encode(encryptedPK);
-    await storage.write(key: 'DIDList', value: json.encode(didList));
-    // await storage.write(key: did, value: Base58Encode(encrypted.bytes));
   }
 
   registerDidDocument(did) async {

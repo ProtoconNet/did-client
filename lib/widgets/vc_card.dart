@@ -36,45 +36,23 @@ class VCCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, color: Colors.grey),
-                  Text(type),
-                  SizedBox(height: 10),
-                  Text(description),
-                  SizedBox(height: 10),
-                  TextButton(onPressed: () {}, child: Text(name + ' 추가하기'))
-                ],
-              )
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.start,
-              //   children: <Widget>[
-              //     Padding(
-              //       padding: EdgeInsets.only(left: 5.0, right: 15.0),
-              //       child: Icon(icon, color: Colors.grey),
-              //     ),
-              //     Expanded(
-              //       child: Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: <Widget>[
-              //           Row(
-              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //             children: <Widget>[
-              //               Text(
-              //                 name,
-              //                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              //               ),
-              //               status == "noVC"
-              //                   ? Text("issue".tr)
-              //                   : (status == "wait" ? CircularProgressIndicator() : Text(' '))
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //       flex: 3,
-              //     ),
-              //   ],
-              // ),
-              ),
+                children: status == "noVC"
+                    ? [
+                        Icon(icon, color: Colors.grey),
+                        Text(type),
+                        SizedBox(height: 10),
+                        Text(description),
+                        SizedBox(height: 10),
+                        TextButton(onPressed: () {}, child: Text(name + ' 추가하기'))
+                      ]
+                    : [
+                        Icon(icon, color: Colors.grey),
+                        Text(type),
+                        SizedBox(height: 10),
+                        SizedBox(height: 10),
+                        TextButton(onPressed: () {}, child: Text(name))
+                      ],
+              )),
         ));
   }
 }

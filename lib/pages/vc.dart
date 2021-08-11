@@ -39,7 +39,7 @@ class VC extends StatelessWidget {
 
     if (vc.isEmpty) {
       if (jwt == "") {
-        // log.i('1');
+        log.i('1');
         return Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: InkWell(
@@ -57,37 +57,8 @@ class VC extends StatelessWidget {
                     type: type,
                     icon: IconData(icon, fontFamily: 'MaterialIcons'),
                     status: "noVC")));
-        // OpenContainer(
-        //   openBuilder: (context, closedContainer) {
-        //     log.i("noVC openBuilder: ${vc['name']}");
-        //     log.i(closedContainer);
-        //     return Schema(
-        //       name: vc['name'],
-        //       requestSchema: vc['schemaRequest'],
-        //     );
-        //   },
-        //   openColor: Get.theme.cardColor,
-        //   onClosed: (success) {
-        //     log.i("noVC onClose:${success.toString()}");
-        //     Navigator.pushReplacement(
-        //         context, MaterialPageRoute(builder: (BuildContext context) => VCList()));
-        //   },
-        //   transitionDuration: Duration(milliseconds: 500),
-        //   closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        //   closedColor: Get.theme.cardColor,
-        //   closedElevation: 0,
-        //   closedBuilder: (context, openContainer) {
-        //     log.i("noVC closeBuilder: ${vc['name']}");
-        //     return InkWell(
-        //         onTap: () => openContainer(),
-        //         child: VCCard(
-        //             icon: IconData(vc['icon'], fontFamily: 'MaterialIcons'),
-        //             name: vc['name'],
-        //             status: "noVC"));
-        //     //run: () => openContainer());
-        //   }));
-        // log.i(vcViewList);
       } else {
+        log.i('2');
         return Padding(
             padding: EdgeInsets.only(bottom: 20.0),
             child: VCCard(
@@ -99,7 +70,7 @@ class VC extends StatelessWidget {
       }
     } else {
       // make onPress to Open VC as VP
-      // log.i('2');
+      log.i('3');
       return Padding(
           padding: EdgeInsets.only(bottom: 20.0),
           child: OpenContainer(

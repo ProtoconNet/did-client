@@ -19,6 +19,9 @@ class GlobalVariable extends GetxController {
 
   @override
   onInit() {
+    super.onInit();
+    didManager.value.init();
+
     if (!box.hasData('themeMode')) {
       changeTheme('system');
     }
@@ -38,10 +41,6 @@ class GlobalVariable extends GetxController {
     box.listenKey('language', (value) {
       Get.updateLocale(languageMode(value));
     });
-
-    didManager.value.init();
-
-    super.onInit();
   }
 
   String get theme => box.read('themeMode');

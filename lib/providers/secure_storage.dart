@@ -20,6 +20,7 @@ class DIDManager {
     }
     if (uninitialized) {
       var didListStr = await storage.read(key: "DIDList") as String;
+      log.i("didListStr: $didListStr");
       dids = json.decode(didListStr);
     }
     uninitialized = false;
@@ -55,17 +56,17 @@ class DIDManager {
   }
 
   setDID(did, encodedPriv, password) async {
-    await init();
+    log.i("$did : $encodedPriv : $password");
+    dids[did] = encodedPriv;
 
-    final encryptedPK = encryptPK(password, encodedPriv);
-
-    dids[did] = Base58Encode(encryptedPK);
     await storage.write(key: 'DIDList', value: json.encode(dids));
   }
 
-  getDIDPK(did, password) async {
-    await init();
+  getFirstDID() {
+    return dids.keys.first;
+  }
 
+  getDIDPK(did, password) async {
     try {
       final passwordBytes = utf8.encode(password);
       // Generate a random secret key.
@@ -74,6 +75,7 @@ class DIDManager {
       sink.close();
       final passwordHash = await sink.hash();
 
+      log.i('dids[did]: ${dids[did]}');
       final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(dids[did])));
 
       final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
@@ -86,9 +88,7 @@ class DIDManager {
         throw Error();
       }
 
-      decrypted = decrypted.substring(7);
-
-      return decrypted;
+      return decrypted.substring(7);
     } catch (e) {
       log.e(e);
     }
@@ -105,29 +105,21 @@ class VCManager {
   bool uninitialized = true;
 
   init() async {
-    log.i('a');
     if (uninitialized) {
       uninitialized = false;
       if (await storage.containsKey(key: did)) {
-        log.i('b');
         final vcList = json.decode(await storage.read(key: did) as String);
-        log.i('b');
 
         for (var vc in vcList) {
-          log.i('c');
           vcs.add(VCModel.fromJson(vc));
         }
       } else if (vcs.isEmpty) {
-        log.i('d');
         setVC(json.encode(VCModel("운전면허증", "모바일 운전면허증을 등록하면 다양한 인증을 간편하게 처리할 수 있고 오프라인에서도 신분증처럼 사용할 수 있어요", "신분증",
             57815, "http://mtm.securekim.com:3333/VCSchema?schema=driverLicense", "", {}).toJson()));
-        log.i('d');
         setVC(json.encode(VCModel("제주패스", "렌터카, 맛집, 숙소 등 제주여행에 필요한 다양한 서비스의 혜택을 받아보세요", "멤버십", 59004,
             "http://mtm.securekim.com:3333/VCSchema?schema=jejuPass", "", {}).toJson()));
-        log.i('d');
       }
     }
-    log.i('a');
   }
 
   setVC(String value) async {

@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/providers/issuer.dart';
 import 'package:wallet/providers/platform.dart';
@@ -26,7 +22,6 @@ class SchemaController extends GetxController {
   final String name;
   final String requestSchema;
 
-  final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();
   Issuer? issuer;
@@ -217,8 +212,9 @@ class SchemaController extends GetxController {
 
     log.i("body:${json.encode(body)}");
 
-    var response =
-        await issuer!.postVC(json.encode(body), await g.didManager.value.getDIDPK(g.did.value, g.password.value));
+    final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
+    log.i('pk: $pk');
+    var response = await issuer!.postVC(json.encode(body), pk);
 
     if (response != false) {
       await VCManager(did).setByName(name, 'jwt', response);

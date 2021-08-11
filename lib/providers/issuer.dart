@@ -43,7 +43,6 @@ class Issuer {
 
   postVC(body, privateKey) async {
     final locations = await getSchemaLocation();
-    print("locations: $locations");
     http.Response response = await http.post(
       Uri.parse(locations['VCPost']),
       headers: {
@@ -81,28 +80,10 @@ class Issuer {
 
   didAuth(payload, endPoint, token, privateKey) async {
     log.i('did Auth');
-    final passwordBytes = utf8.encode(g.password.value);
-    // Generate a random secret key.
-    final sink = Sha256().newHashSink();
-    sink.add(passwordBytes);
-    sink.close();
-    final passwordHash = await sink.hash();
 
-    final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
-    final encrypter = encrypt.Encrypter(encrypt.AES(key));
+    final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
 
-    final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
-
-    final iv = encrypt.IV.fromLength(16);
-    var decrypted = encrypter.decrypt(encrypted, iv: iv);
-
-    if (decrypted.substring(0, 7) != "WIGGLER") {
-      throw Error();
-    }
-
-    decrypted = decrypted.substring(7);
-
-    final clearText = Base58Decode(decrypted);
+    final clearText = Base58Decode(pk);
 
     final algorithm = Ed25519();
     final keyPair = await algorithm.newKeyPairFromSeed(clearText);

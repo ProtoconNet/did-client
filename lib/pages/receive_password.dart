@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 
 import 'package:wallet/providers/global_variable.dart';
@@ -56,93 +55,6 @@ class ReceivePassword extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Center(
-                    //     child: Obx(() => c.password.value == ""
-                    //         ? Text('설정할 PIN을 입력하세요',
-                    //             style: Get.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold))
-                    //         : Text('한번 더 입력하세요.',
-                    //             style: Get.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold)))),
-                    // Container(
-                    //   width: Get.width * 0.7,
-                    //   child: PinCodeTextField(
-                    //     appContext: context,
-                    //     // pastedTextStyle: TextStyle(
-                    //     //   color: Colors.green.shade600,
-                    //     //   fontWeight: FontWeight.bold,
-                    //     // ),
-                    //     length: 6,
-                    //     obscureText: true,
-                    //     // blinkWhenObscuring: true,
-                    //     animationType: AnimationType.fade,
-                    //     // validator: (v) {
-                    //     //   if (v!.length < 3) {
-                    //     //     return "I'm from validator";
-                    //     //   } else {
-                    //     //     return null;
-                    //     //   }
-                    //     // },
-                    //     pinTheme: PinTheme(
-                    //       shape: PinCodeFieldShape.box,
-                    //       borderRadius: BorderRadius.circular(5),
-                    //       fieldHeight: 40,
-                    //       fieldWidth: 40,
-                    //       activeFillColor: Colors.white,
-                    //     ),
-                    //     cursorColor: Colors.black,
-                    //     animationDuration: Duration(milliseconds: 300),
-                    //     enableActiveFill: false,
-                    //     errorAnimationController: errorController,
-                    //     controller: textEditingController,
-                    //     keyboardType: TextInputType.number,
-                    //     boxShadows: [
-                    //       BoxShadow(
-                    //         offset: Offset(0, 1),
-                    //         color: Colors.black12,
-                    //         blurRadius: 10,
-                    //       )
-                    //     ],
-                    //     onCompleted: (v) {
-                    //       print("Completed: $v");
-                    //       if (c.password.value == "") {
-                    //         c.setPassword(v);
-                    //         textEditingController.text = '';
-                    //       } else if (v == c.password.value) {
-                    //         print(v);
-                    //         Get.to(CreateDID(password: v));
-                    //       } else {
-                    //         Get.defaultDialog(
-                    //             title: "incorrectPassword".tr,
-                    //             content: Text('incorrectPassword'.tr),
-                    //             confirm: ElevatedButton(
-                    //               child: Text('ok'.tr),
-                    //               style: Get.theme.textButtonTheme.style,
-                    //               onPressed: () {
-                    //                 Get.back();
-                    //               },
-                    //             ));
-                    //         c.setPassword('');
-                    //         textEditingController.text = '';
-                    //       }
-                    //     },
-                    //     // onTap: () {
-                    //     //   print("Pressed");
-                    //     // },
-                    //     onChanged: (value) {
-                    //       print(value);
-                    //       // setState(() {
-                    //       //   currentText = value;
-                    //       // });
-                    //     },
-                    //     beforeTextPaste: (text) {
-                    //       print("Allowing to paste $text");
-                    //       //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                    //       //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                    //       return true;
-                    //     },
-                    //   ),
-                    // ),
-                    // Text('createWallet'.tr, style: Get.theme.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
-                    // Text('inputPasswordMsg'.tr),
                     TextFormField(
                         autofocus: true,
                         controller: pass,
@@ -157,7 +69,7 @@ class ReceivePassword extends StatelessWidget {
                           return null;
                         },
                         onChanged: (value) {
-                          c.setStatus(value.isNotEmpty && pass.text == confirmPass.text);
+                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text);
                         },
                         onEditingComplete: () => node.nextFocus()),
                     TextFormField(
@@ -173,7 +85,7 @@ class ReceivePassword extends StatelessWidget {
                         },
                         onChanged: (value) {
                           c.formKey.value.currentState!.validate();
-                          c.setStatus(value.isNotEmpty && pass.text == confirmPass.text);
+                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text);
                         },
                         onEditingComplete: () => node.nextFocus(),
                         onFieldSubmitted: (test) async {

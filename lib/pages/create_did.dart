@@ -4,16 +4,18 @@ import 'package:get/get.dart';
 
 import 'package:wallet/widgets/gradient_button.dart';
 import 'package:wallet/controller/create_did_controller.dart';
+import 'package:wallet/utils/logger.dart';
 
 class CreateDID extends StatelessWidget {
   CreateDID({key, required this.password}) : super(key: key);
 
   final String password;
   final CreateDIDController c = Get.put(CreateDIDController());
+  final log = Log();
 
   @override
   Widget build(BuildContext context) {
-    print("in create did : $password");
+    log.i("CreateDID build");
     return Background(children: [
       FutureBuilder<String>(
           future: c.createDID(password),
