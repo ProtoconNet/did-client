@@ -35,7 +35,9 @@ class Crypto {
     return signature.bytes;
   }
 
-  Future<List<int>> encryptPK(String password, String encodedPriv) async {
+  verify(signature, pubKey) {}
+
+  Future<List<int>> encryptPK(String encodedPriv, String password) async {
     final passwordBytes = utf8.encode(password);
 
     final sink = Sha256().newHashSink();

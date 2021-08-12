@@ -39,7 +39,7 @@ class VC extends StatelessWidget {
 
     if (vc.isEmpty) {
       if (jwt == "") {
-        log.i('1');
+        log.i('no VC');
         return Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: InkWell(
@@ -58,7 +58,7 @@ class VC extends StatelessWidget {
                     icon: IconData(icon, fontFamily: 'MaterialIcons'),
                     status: "noVC")));
       } else {
-        log.i('2');
+        log.i('wait VC');
         return Padding(
             padding: EdgeInsets.only(bottom: 20.0),
             child: VCCard(
@@ -70,7 +70,7 @@ class VC extends StatelessWidget {
       }
     } else {
       // make onPress to Open VC as VP
-      log.i('3');
+      log.i('have VC');
       return Padding(
           padding: EdgeInsets.only(bottom: 20.0),
           child: OpenContainer(

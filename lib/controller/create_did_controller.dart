@@ -27,7 +27,7 @@ class CreateDIDController extends GetxController {
 
     log.i("encodedPriv: $encodedPriv");
 
-    final encrypted = await crypto.encryptPK(password, encodedPriv);
+    final encrypted = await crypto.encryptPK(encodedPriv, password);
 
     log.i("encrypted: $encrypted");
 
