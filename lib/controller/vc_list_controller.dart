@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:wallet/provider/issuer.dart';
-import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 

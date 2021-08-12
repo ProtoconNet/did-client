@@ -1,9 +1,12 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:wallet/util/logger.dart';
+import 'package:wallet/util/did_document.dart';
 
 class Platform {
   final log = Log();
+
+  final didDocument = DIDDocument();
 
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
@@ -25,12 +28,12 @@ class Platform {
   }
 
   setDIDDocument(setDIDDocumentUri, did) async {
-    var didDocument = createDIDDocument(did);
+    var document = didDocument.createDIDDocument(did);
 
     var response = await http.post(
       setDIDDocumentUri,
       headers: {"Content-Type": "application/json", "Accept": "application/json"},
-      body: didDocument,
+      body: document,
     );
 
     return responseCheck(response);
@@ -40,25 +43,5 @@ class Platform {
     http.Response response = await http.get(schemaUri);
 
     return responseCheck(response);
-  }
-
-  createDIDDocument(did) {
-    final didExample = {
-      "@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1"],
-      "id": did,
-      "authentication": [
-        {
-          "id": did + "#z" + did.substring(8),
-          "type": "Ed25519VerificationKey2018",
-          "controller": did,
-          "publicKeyMultibase": "z" + did.substring(8)
-        }
-      ],
-      "verificationMethod": [
-        {"id": did, "type": "Ed25519VerificationKey2018", "controller": did, "publicKeyBase58": did.substring(8)},
-      ]
-    };
-
-    return json.encode(didExample);
   }
 }

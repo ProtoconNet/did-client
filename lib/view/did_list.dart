@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'package:animations/animations.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/controller/did_list_controller.dart';
@@ -21,12 +21,19 @@ class DIDList extends StatelessWidget {
     return Background(
         mainAxisAlignment: MainAxisAlignment.start,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Center(
-              child: Text('Mitum DID',
-                  style: GoogleFonts.kaushanScript(
-                      textStyle: Get.theme.textTheme.headline5?.copyWith(color: Colors.white)))),
-        ),
+            backgroundColor: Get.theme.scaffoldBackgroundColor,
+            elevation: 0,
+            leading: Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor),
+            // automaticallyImplyLeading: false,
+            title: Text('내 지갑', style: TextStyle(color: Get.theme.primaryColor)),
+            // Center(
+            //     child: Text('Mitum DID',
+            //         style: GoogleFonts.kaushanScript(
+            //             textStyle: Get.theme.textTheme.headline5?.copyWith(color: Colors.white)))),
+            actions: [
+              IconButton(onPressed: () {}, icon: Icon(Icons.add, color: Get.theme.primaryColor)),
+              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert, color: Get.theme.primaryColor))
+            ]),
         children: [
           FutureBuilder(
               future: c.getDIDList(),

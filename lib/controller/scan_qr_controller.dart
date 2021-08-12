@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/view/schema.dart';
-import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/util/logger.dart';
 
 class ScanQRController extends GetxController {

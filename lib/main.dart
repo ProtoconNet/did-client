@@ -8,7 +8,7 @@ import 'package:camera/camera.dart';
 import 'package:wallet/config/translations.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/config/theme.dart';
-import 'package:wallet/routes/wallet_route.dart';
+import 'package:wallet/wallet_route.dart';
 
 List<CameraDescription> cameras = [];
 

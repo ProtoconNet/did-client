@@ -2,24 +2,24 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
+import 'package:wallet/util/crypto.dart';
 
 class Issuer {
   Issuer(this.schemaLocation);
   final log = Log();
   final g = Get.put(GlobalVariable());
+  final crypto = Crypto();
 
   final String schemaLocation;
 
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
-        log.i("$response.body");
+        log.i("response: ${response.body}");
         return response;
       default:
         log.lw("Response Error $response");
@@ -82,19 +82,11 @@ class Issuer {
     log.i('did Auth');
 
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
-
-    final clearText = Base58Decode(pk);
-
-    final algorithm = Ed25519();
-    final keyPair = await algorithm.newKeyPairFromSeed(clearText);
-    // final pubKey = await keyPair.extractPublicKey();
-    // final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
-
     final challengeBytes = utf8.encode(payload);
 
-    final signature = await algorithm.sign(challengeBytes, keyPair: keyPair);
+    final signature = await crypto.sign(challengeBytes, pk);
 
-    final response2 = await responseChallenge(Uri.parse(endPoint), Base58Encode(signature.bytes), token);
+    final response2 = await responseChallenge(Uri.parse(endPoint), Base58Encode(signature), token);
     if (response2 == "") {
       log.le("Challenge Failed");
       return false;

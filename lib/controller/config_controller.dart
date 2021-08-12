@@ -45,12 +45,12 @@ class ConfigController extends GetxController {
 
   setTheme(val) {
     theme.value = val;
-    g.changeTheme(val);
+    g.theme = val;
   }
 
   setLanguage(val) {
     language.value = val;
-    g.changeLanguage(val);
+    g.language = val;
   }
 
   var text = "".obs;

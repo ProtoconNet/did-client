@@ -4,7 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:wallet/view/introduction.dart';
 import 'package:wallet/view/login.dart';
-import 'package:wallet/view/home.dart';
+import 'package:wallet/home.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 

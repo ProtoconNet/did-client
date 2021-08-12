@@ -9,7 +9,7 @@ import 'package:image/image.dart' as img;
 import 'package:wallet/provider/issuer.dart';
 import 'package:wallet/provider/platform.dart';
 import 'package:wallet/provider/global_variable.dart';
-import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/util/logger.dart';
 
 class SchemaController extends GetxController {
@@ -57,18 +57,6 @@ class SchemaController extends GetxController {
   setImageFile(File _new) {
     imageFile = _new;
     update();
-  }
-
-  setDate(val) {
-    date.value = val;
-  }
-
-  setTime(val) {
-    time.value = val;
-  }
-
-  setImage(val) {
-    image.value = val;
   }
 
   getDateTime() {
@@ -143,7 +131,7 @@ class SchemaController extends GetxController {
       log.i(isHEIC);
 
       var imageBytes = await pickedFile.readAsBytes();
-      var imageBase64 = base64Encode(imageBytes);
+      // var imageBase64 = base64Encode(imageBytes);
 
       // long 320
       var imageTemp = img.decodeImage(imageBytes) as img.Image;
@@ -154,15 +142,8 @@ class SchemaController extends GetxController {
         resizedImg = img.copyResize(imageTemp, width: 320);
       }
 
-      // log.i("Org : height:${imageTemp.height}, width:${imageTemp.width}");
-      // log.i("reSized : height:${resizedImg.height}, width:${resizedImg.width}");
-
       var jpg = img.encodeJpg(resizedImg, quality: 95);
       var jpgBase64 = base64Encode(jpg);
-      // log.i("jpgBase64:${jpgBase64.length}, $jpgBase64");
-
-      // log.i("org Size: ${imageBase64.length}");
-      // log.i("resized : ${jpgBase64.length}");
 
       setImageAt(jpgBase64, index);
       return pickedFile.path;

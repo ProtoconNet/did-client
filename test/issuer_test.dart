@@ -9,15 +9,14 @@
 import 'dart:convert';
 import 'package:test/test.dart';
 
-import 'package:wallet/providers/issuer.dart';
+import 'package:wallet/provider/issuer.dart';
 // import 'package:wallet/providers/platform.dart';
 
 void main() async {
   group('issuer test', () {
     test('Get Schema Location Test', () async {
-      var issuer = Issuer();
-      var response =
-          await issuer.getSchemaLocation(Uri.parse('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense'));
+      var issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
+      var response = await issuer.getSchemaLocation();
 
       expect((response.statusCode / 100).floor(), 2);
 

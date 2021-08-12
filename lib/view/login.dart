@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:biometric_storage/biometric_storage.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/widget/background.dart';
@@ -70,7 +69,7 @@ class Login extends StatelessWidget {
               title: Text("다음부터 생체인식 사용하기"),
               value: g.biometric,
               onChanged: (newValue) async {
-                g.setBiometric(newValue!);
+                g.biometric = newValue!;
               },
               controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
             )),

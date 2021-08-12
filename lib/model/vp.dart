@@ -9,10 +9,10 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/provider/global_variable.dart';
-import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/util/logger.dart';
 
-class VPTest {
+class VP {
   final storage = FlutterSecureStorage();
   final g = Get.put(GlobalVariable());
   final log = Log();

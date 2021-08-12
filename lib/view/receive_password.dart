@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,15 +5,13 @@ import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/widget/background.dart';
 import 'package:wallet/controller/receive_password_controller.dart';
 import 'package:wallet/view/create_did.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:wallet/util/logger.dart';
 
 class ReceivePassword extends StatelessWidget {
-  final ReceivePasswordController c = Get.put(ReceivePasswordController());
   final GlobalVariable g = Get.put(GlobalVariable());
+  final ReceivePasswordController c = Get.put(ReceivePasswordController());
   final log = Log();
-  final StreamController<ErrorAnimationType>? errorController = StreamController<ErrorAnimationType>();
-  final TextEditingController textEditingController = TextEditingController();
+
   final TextEditingController pass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 

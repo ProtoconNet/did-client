@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/model/did_manager.dart';
 import 'package:wallet/config/translations.dart';
+
+const themeModeList = {"system": ThemeMode.system, "light": ThemeMode.light, "dark": ThemeMode.dark};
 
 class GlobalVariable extends GetxController {
   final box = GetStorage();
@@ -15,19 +17,17 @@ class GlobalVariable extends GetxController {
 
   var didManager = DIDManager().obs;
 
-  final themeModeList = {"system": ThemeMode.system, "light": ThemeMode.light, "dark": ThemeMode.dark};
-
   @override
   onInit() {
     super.onInit();
     didManager.value.init();
 
     if (!box.hasData('themeMode')) {
-      changeTheme('system');
+      theme = 'system';
     }
 
     if (!box.hasData('language')) {
-      changeLanguage('system');
+      language = 'system';
     }
 
     if (!box.hasData('biometric')) {
@@ -45,37 +45,26 @@ class GlobalVariable extends GetxController {
 
   String get theme => box.read('themeMode');
 
+  set theme(String val) {
+    if (themeModeList.containsKey(val)) box.write('themeMode', val);
+  }
+
   ThemeMode themeMode(val) {
     return themeModeList[val]!;
   }
 
-  void changeTheme(String val) {
-    if (themeModeList.containsKey(val)) box.write('themeMode', val);
-  }
-
   String get language => box.read('language');
+
+  set language(String val) {
+    if (languageModeList.containsKey(val)) box.write('language', val);
+  }
 
   Locale languageMode(val) {
     return languageModeList[val]!;
   }
 
-  void changeLanguage(String val) {
-    if (languageModeList.containsKey(val)) box.write('language', val);
-  }
-
   bool get biometric => box.read('biometric');
-
-  void setBiometric(bool val) {
-    box.write('biometric', val);
-  }
-
-  void inputPassword(String param) {
-    password.value = param;
-  }
-
-  void inputDID(String param) {
-    did.value = param;
-  }
+  set biometric(bool val) => box.write('biometric', val);
 
   void setPage(i) {
     tabController.value.jumpToTab(i);

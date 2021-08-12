@@ -7,14 +7,14 @@
 
 // import 'package:flutter/material.dart';
 // import 'dart:convert';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:test/test.dart';
 // import 'package:flutter_test/flutter_test.dart';
 
-import 'package:wallet/controller/create_did_controller.dart';
-import 'package:wallet/pages/create_did.dart';
-// import 'package:wallet/providers/issuer.dart';
-// import 'package:wallet/providers/platform.dart';
+// import 'package:wallet/controller/create_did_controller.dart';
+// import 'package:wallet/view/create_did.dart';
+// import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/util/crypto.dart';
 
 void main() async {
   // group('create did test', () {
@@ -39,10 +39,10 @@ void main() async {
   });
 
   test('Generate KeyPair Test', () async {
-    var createDID = Get.put(CreateDIDController());
+    var crypto = Crypto();
 
-    var key1 = await createDID.generateKeyPair();
-    var key2 = await createDID.generateKeyPair();
+    var key1 = await crypto.generateKeyPair();
+    var key2 = await crypto.generateKeyPair();
 
     print("key1:${key1[0]}");
     print("key2:${key2[0]}");

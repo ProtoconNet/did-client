@@ -6,22 +6,24 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 // import 'package:flutter/material.dart';
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:test/test.dart';
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/platform.dart';
+// import 'package:wallet/provider/issuer.dart';
+// import 'package:wallet/provider/platform.dart';
+import 'package:wallet/util/did_document.dart';
 
 void main() async {
   group('platform test', () {
     final did = "did:mtm:A5KirmUHQPbm1m7nPob35k3p6gxPxFE64cogoq1Tv5c8";
 
     test('Create DID Document Test', () async {
-      final platform = Platform();
+      // final platform = Platform();
+      final didDocument = DIDDocument();
 
-      final didDocument = platform.createDIDDocument(did);
+      final document = didDocument.createDIDDocument(did);
 
-      print(didDocument);
+      print(document);
 
       // expect((response.statusCode / 100).floor(), 2);
 
@@ -31,7 +33,7 @@ void main() async {
     });
 
     test('Set DID Document Test', () async {
-      final platform = Platform();
+      // final platform = Platform();
 
       // expect((response.statusCode / 100).floor(), 2);
 
@@ -41,7 +43,7 @@ void main() async {
     });
 
     test('Get DID Document Test', () async {
-      final platform = Platform();
+      // final platform = Platform();
 
       // expect((response.statusCode / 100).floor(), 2);
 
@@ -51,9 +53,9 @@ void main() async {
     });
 
     test('Get Schema Test', () async {
-      final issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
-      final platform = Platform();
-      var response = await issuer.getSchemaLocation();
+      // final issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
+      // final platform = Platform();
+      // var response = await issuer.getSchemaLocation();
     });
   });
 }

@@ -13,7 +13,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:wallet/controller/config_controller.dart';
 
-import 'package:wallet/provider/vp_test.dart';
+import 'package:wallet/model/vp.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 // import 'package:wallet/pages/camera.dart';
@@ -130,7 +130,7 @@ class Config extends StatelessWidget {
             ],
           ),
           ElevatedButton(child: Text('Erase All Data'), onPressed: () => c.eraseAll()),
-          ElevatedButton(child: Text('VP Test'), onPressed: () => VPTest().testVP()),
+          ElevatedButton(child: Text('VP Test'), onPressed: () => VP().testVP()),
           ElevatedButton(child: Text('confetti'), onPressed: () => c.controllerCenter.value.play()),
           // ElevatedButton(
           //     child: Text('getIP'),

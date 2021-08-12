@@ -1,11 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:biometric_storage/biometric_storage.dart';
-
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
@@ -34,14 +29,11 @@ class LoginController extends GetxController {
 
   login(password) async {
     try {
-      final pk = await g.didManager.value.getDIDPK(g.didManager.value.getFirstDID(), password);
+      final did = g.didManager.value.getFirstDID();
+      await g.didManager.value.getDIDPK(did, password);
 
-      final algorithm = Ed25519();
-      final keyPair = await algorithm.newKeyPairFromSeed(Base58Decode(pk));
-      final pubKey = await keyPair.extractPublicKey();
-      final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
-      g.inputPassword(password);
-      g.inputDID(did);
+      g.password.value = password;
+      g.did.value = did;
 
       if (g.biometric) {
         var _noConfirmation = await BiometricStorage().getStorage('login',
@@ -57,8 +49,8 @@ class LoginController extends GetxController {
       log.e(e);
       // log.i("${password} is not correct password");
       await Get.defaultDialog(
-          title: "incorrectPassword".tr,
-          content: Text('incorrectPassword'.tr),
+          title: "incorrectPasswordTitle".tr,
+          content: Text('incorrectPasswordContent'.tr),
           confirm: ElevatedButton(
             child: Text('ok'.tr),
             style: Get.theme.textButtonTheme.style,
