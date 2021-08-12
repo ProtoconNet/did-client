@@ -27,6 +27,8 @@ class SchemaController extends GetxController {
   Issuer? issuer;
   final platform = Platform();
 
+  VCManager? vcManager;
+
   var inputControllerList = <TextEditingController>[];
   var inputs = <Widget>[];
 
@@ -42,6 +44,11 @@ class SchemaController extends GetxController {
 
   @override
   onInit() async {
+    super.onInit();
+
+    vcManager = VCManager(did);
+    await vcManager!.init();
+
     inputControllerList = <TextEditingController>[];
     inputs = <Widget>[];
 
@@ -51,7 +58,6 @@ class SchemaController extends GetxController {
     issuer = Issuer(requestSchema);
 
     await dynamicFields(name, requestSchema);
-    super.onInit();
   }
 
   setImageFile(File _new) {
@@ -197,8 +203,10 @@ class SchemaController extends GetxController {
     log.i('pk: $pk');
     var response = await issuer!.postVC(json.encode(body), pk);
 
+    log.i("postVC Response: $response");
+
     if (response != false) {
-      await VCManager(did).setByName(name, 'jwt', response);
+      await vcManager!.setByName(name, 'jwt', response);
     } else {
       await Get.dialog(AlertDialog(
           content: Row(

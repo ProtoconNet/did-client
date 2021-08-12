@@ -29,6 +29,7 @@ class VCListController extends GetxController {
     log.i("getVCList");
 
     for (var vc in vcManager!.vcs) {
+      log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
       if (vc.vc.isEmpty && vc.jwt != "") {
         log.i("getVC from issuer");
 
