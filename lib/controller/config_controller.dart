@@ -6,9 +6,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:camera/camera.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/pages/create_wallet.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/view/create_wallet.dart';
+import 'package:wallet/util/logger.dart';
 
 class ConfigController extends GetxController {
   final box = GetStorage();

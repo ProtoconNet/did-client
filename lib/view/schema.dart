@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/provider/global_variable.dart';
 
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/widget/background.dart';
 import 'package:wallet/controller/schema_controller.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/util/logger.dart';
 
 class Schema extends StatelessWidget {
   Schema({key, required this.did, required this.name, required this.requestSchema}) : super(key: key);

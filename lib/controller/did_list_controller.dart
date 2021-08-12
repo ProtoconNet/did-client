@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class DIDListController extends GetxController {
   final g = Get.put(GlobalVariable());

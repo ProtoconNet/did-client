@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 //import 'package:animations/animations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/controller/did_list_controller.dart';
-import 'package:wallet/widgets/background.dart';
-import 'package:wallet/pages/vc_list.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/widget/background.dart';
+import 'package:wallet/view/vc_list.dart';
+import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
   final g = Get.put(GlobalVariable());

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/widget/background.dart';
 // import 'package:wallet/global/variable.dart';
 // import 'package:google_fonts/google_fonts.dart';
 

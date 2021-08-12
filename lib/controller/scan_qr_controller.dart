@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/pages/schema.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/view/schema.dart';
+import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/util/logger.dart';
 
 class ScanQRController extends GetxController {
   final storage = FlutterSecureStorage();

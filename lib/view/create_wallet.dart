@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/widget/background.dart';
 import 'package:get/get.dart';
 
-import 'package:wallet/pages/receive_password.dart';
-import 'package:wallet/widgets/gradient_button.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/view/receive_password.dart';
+import 'package:wallet/widget/gradient_button.dart';
+import 'package:wallet/util/logger.dart';
 
 class CreateWallet extends StatelessWidget {
   final g = Get.put(GlobalVariable());

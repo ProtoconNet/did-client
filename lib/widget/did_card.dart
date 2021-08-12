@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animations/animations.dart';
 
-import 'package:wallet/pages/qr_viewer.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/view/qr_viewer.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class DIDCard extends StatelessWidget {
   DIDCard({key, required this.did, required this.children}) : super(key: key);

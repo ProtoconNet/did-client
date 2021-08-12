@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/widget/background.dart';
 import 'package:get/get.dart';
 
-import 'package:wallet/widgets/gradient_button.dart';
+import 'package:wallet/widget/gradient_button.dart';
 import 'package:wallet/controller/create_did_controller.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/util/logger.dart';
 
 class CreateDID extends StatelessWidget {
   CreateDID({key, required this.password}) : super(key: key);

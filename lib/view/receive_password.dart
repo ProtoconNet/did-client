@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/widget/background.dart';
 import 'package:wallet/controller/receive_password_controller.dart';
-import 'package:wallet/pages/create_did.dart';
+import 'package:wallet/view/create_did.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/util/logger.dart';
 
 class ReceivePassword extends StatelessWidget {
   final ReceivePasswordController c = Get.put(ReceivePasswordController());

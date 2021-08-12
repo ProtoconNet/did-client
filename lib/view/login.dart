@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/widgets/background.dart';
-import 'package:wallet/widgets/gradient_icon.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/widget/background.dart';
+import 'package:wallet/widget/gradient_icon.dart';
 import 'package:wallet/controller/login_controller.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/util/logger.dart';
 
 class Login extends StatelessWidget {
   final LoginController c = Get.put(LoginController());

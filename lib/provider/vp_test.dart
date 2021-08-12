@@ -8,9 +8,9 @@ import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/util/logger.dart';
 
 class VPTest {
   final storage = FlutterSecureStorage();

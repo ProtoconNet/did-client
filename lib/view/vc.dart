@@ -2,12 +2,12 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/pages/schema.dart';
-import 'package:wallet/pages/did_list.dart';
-import 'package:wallet/pages/vp.dart';
-import 'package:wallet/widgets/vc_card.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/view/schema.dart';
+import 'package:wallet/view/did_list.dart';
+import 'package:wallet/view/vp.dart';
+import 'package:wallet/widget/vc_card.dart';
+import 'package:wallet/util/logger.dart';
 
 class VC extends StatelessWidget {
   VC(

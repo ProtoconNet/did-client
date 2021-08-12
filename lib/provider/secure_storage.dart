@@ -4,8 +4,8 @@ import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
 
-import 'package:wallet/models/vc.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/model/vc.dart';
+import 'package:wallet/util/logger.dart';
 
 class DIDManager {
   final log = Log();

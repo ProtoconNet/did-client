@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:get/get.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class VCListController extends GetxController {
   VCListController(this.did);

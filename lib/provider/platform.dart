@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/util/logger.dart';
 
 class Platform {
   final log = Log();

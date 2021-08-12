@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/controller/vc_list_controller.dart';
 // import 'package:wallet/widgets/did_card.dart';
-import 'package:wallet/models/vc.dart';
-import 'package:wallet/pages/vc.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/model/vc.dart';
+import 'package:wallet/view/vc.dart';
+import 'package:wallet/util/logger.dart';
 
 class VCList extends StatelessWidget {
   VCList({key, required this.did}) : super(key: key);
@@ -19,7 +19,6 @@ class VCList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i('test');
     final c = Get.put(VCListController(did));
 
     log.i("VCList build: $did && $c");

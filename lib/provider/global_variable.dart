@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-import 'package:wallet/providers/secure_storage.dart';
+import 'package:wallet/provider/secure_storage.dart';
 import 'package:wallet/config/translations.dart';
 
 class GlobalVariable extends GetxController {

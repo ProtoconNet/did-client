@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:get/get.dart';
-import 'package:wallet/widgets/background.dart';
+import 'package:wallet/widget/background.dart';
 
 class QRViewer extends StatelessWidget {
   QRViewer({key, required this.data}) : super(key: key);

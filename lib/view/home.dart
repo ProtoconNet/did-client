@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-import 'package:wallet/pages/did_list.dart';
-import 'package:wallet/pages/config.dart';
-import 'package:wallet/pages/scan_qr.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/view/did_list.dart';
+import 'package:wallet/view/config.dart';
+import 'package:wallet/view/scan_qr.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class Home extends StatelessWidget {
   Home({key, required this.tabController}) : super(key: key);

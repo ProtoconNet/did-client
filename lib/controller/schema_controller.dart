@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/platform.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/provider/platform.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/provider/secure_storage.dart';
+import 'package:wallet/util/logger.dart';
 
 class SchemaController extends GetxController {
   SchemaController(
