@@ -127,7 +127,7 @@ class VPController extends GetxController {
     return vp;
   }
 
-  testVP() async {
+  testVP(vcs) async {
     var password = g.password.value;
     var vpSchemaUri = Uri.parse("http://mtm.securekim.com:3082/VPSchema?schema=rentCar");
     http.Response response = await http.get(vpSchemaUri);
@@ -166,11 +166,9 @@ class VPController extends GetxController {
     final pubKey = await keyPair.extractPublicKey();
     final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
 
-    final vc = await VCManager(did).getByName("Driver's License", "vc");
-
-    log.i(vc);
+    log.i(vcs);
     log.i("pk: ${Base58Encode(await keyPair.extractPrivateKeyBytes())}");
-    var vp = await createVP(did, did, did, [vc], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
+    var vp = await createVP(did, did, did, vcs, [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
 
     var vp1SchemaUri = Uri.parse("http://mtm.securekim.com:3082/vp1");
     response = await http.post(
@@ -184,6 +182,8 @@ class VPController extends GetxController {
 
     log.i("body: ${response.body}");
     log.i("status Code: ${response.statusCode}");
+
+    return response.statusCode;
 
     // JsonEncoder encoder = JsonEncoder.withIndent('  ');
     // String prettyPrint = encoder.convert(vp);

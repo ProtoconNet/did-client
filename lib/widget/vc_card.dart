@@ -35,13 +35,18 @@ class VCCard extends StatelessWidget {
   }
 
   Widget getCardByName(String name) {
-    const double height = 190;
+    const double height = 200;
+
     if (name == "drivers license" || name == "운전면허증") {
-      return Image.asset('assets/images/drivers_license.png', height: height);
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Image.asset('assets/images/drivers_license.png', height: height));
     } else if (name == "jejupass" || name == "제주패스") {
-      return Image.asset('assets/images/jejupass.png', height: height);
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(15), child: Image.asset('assets/images/jejupass.png', height: height));
     } else {
-      return Image.asset('assets/icons/flutter.png', height: height);
+      return ClipRRect(
+          borderRadius: BorderRadius.circular(15), child: Image.asset('assets/icons/flutter.png', height: height));
     }
   }
 
@@ -87,18 +92,18 @@ class VCCard extends StatelessWidget {
         width: Get.width * 0.75,
         child: Stack(children: [
           Card(
-            color: Get.theme.cardColor,
+            color: Colors.red, //Get.theme.cardColor,
             elevation: 1,
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 color: Colors.grey,
                 width: 0.5,
               ),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(15),
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomRight,

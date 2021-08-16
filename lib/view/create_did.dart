@@ -60,7 +60,7 @@ class CreateDID extends StatelessWidget {
                               // ElevatedButton(
                               // style: ButtonStyle(
                               //     shape: MaterialStateProperty.all(
-                              //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))),
+                              //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))),
                               // onPressed: () async {
                               //   await c.registerDidDocument(snapshot.data);
                               //   Get.offAllNamed('/');

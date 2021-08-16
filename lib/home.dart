@@ -62,7 +62,7 @@ class Home extends StatelessWidget {
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(15.0),
         colorBehindNavBar: Get.theme.bottomAppBarColor,
       ),
       popAllScreensOnTapOfSelectedTab: true,

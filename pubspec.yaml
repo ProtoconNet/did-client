@@ -108,6 +108,8 @@ flutter:
     - assets/images/drivers_license_template.png
     - assets/images/jejupass_logo.png
     - assets/images/jejupass.png
+    - assets/images/car_box.png
+    - assets/images/sk_rentacar_logo.png
 
     - assets/images/fullscreen.jpeg
     - assets/images/img1.jpeg

@@ -17,14 +17,15 @@ class Schema extends StatelessWidget {
   final String did;
   final String name;
   final String requestSchema;
+  SchemaController? c;
 
   builder(context, name) {
-    final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
+    c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
 
     log.i('Schema Builder');
-    log.i(c.schema.value);
-    if (c.schema.value != "") {
-      final schemaList = json.decode(c.schema.value);
+    log.i(c!.schema.value);
+    if (c!.schema.value != "") {
+      final schemaList = json.decode(c!.schema.value);
       var datetimeIndex = 0;
       var imageIndex = 0;
 
@@ -32,8 +33,8 @@ class Schema extends StatelessWidget {
         switch (item['type']) {
           case 'string':
             final TextEditingController ctrl = TextEditingController();
-            c.inputControllerList.add(ctrl);
-            c.inputs.add(TextFormField(
+            c!.inputControllerList.add(ctrl);
+            c!.inputs.add(TextFormField(
               decoration: InputDecoration(hintText: item['name']),
               controller: ctrl,
               enableSuggestions: false,
@@ -46,9 +47,9 @@ class Schema extends StatelessWidget {
             // log.i("imageList idx:${c.imageList.length.toString()}");
             // log.i("image idx:${idx.toString()}");
             var shortSide = Get.height < Get.width ? Get.height : Get.width;
-            c.inputs.add(Column(children: [
-              Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
-                  ? Image.memory(base64Decode(c.imageList[idx]), height: shortSide / 2)
+            c!.inputs.add(Column(children: [
+              Obx(() => c!.imageList.length > idx && c!.imageList[idx] != ""
+                  ? Image.memory(base64Decode(c!.imageList[idx]), height: shortSide / 2)
                   : Text('image')),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,26 +57,26 @@ class Schema extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () async {
                         // log.i('put image in ${idx.toString()}');
-                        await c.takeImage(idx);
+                        await c!.takeImage(idx);
                       },
                       child: Text('takePicture'.tr)),
                   Text(' '),
                   ElevatedButton(
                       onPressed: () async {
                         // log.i('put image in ${idx.toString()}');
-                        await c.getImage(idx);
+                        await c!.getImage(idx);
                       },
                       child: Text('pickGallery'.tr)),
                 ],
               )
             ]));
-            c.addImageField();
+            c!.addImageField();
             imageIndex++;
             break;
           case 'number':
             final TextEditingController ctrl = TextEditingController();
-            c.inputControllerList.add(ctrl);
-            c.inputs.add(TextFormField(
+            c!.inputControllerList.add(ctrl);
+            c!.inputs.add(TextFormField(
               decoration: InputDecoration(hintText: item['name']),
               controller: ctrl,
               enableSuggestions: false,
@@ -85,15 +86,15 @@ class Schema extends StatelessWidget {
             break;
           case 'datetime':
             final idx = datetimeIndex;
-            c.inputs.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            c!.inputs.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(item['name'].toString().toUpperCase() + " : "),
               TextButton(onPressed: () {
                 DatePicker.showDatePicker(Get.context!, showTitleActions: true, onConfirm: (date) {
-                  c.setDateAt(date, idx);
-                }, currentTime: c.date.value, locale: LocaleType.ko);
+                  c!.setDateAt(date, idx);
+                }, currentTime: c!.date.value, locale: LocaleType.ko);
               }, child: Obx(() {
                 var formatter = DateFormat('yyyy-MM-dd');
-                String formattedDate = formatter.format(c.date.value);
+                String formattedDate = formatter.format(c!.date.value);
                 return Text(
                   formattedDate,
                   style: TextStyle(color: Colors.blue),
@@ -101,18 +102,18 @@ class Schema extends StatelessWidget {
               })),
               TextButton(onPressed: () {
                 DatePicker.showTimePicker(Get.context!, showTitleActions: true, onConfirm: (time) {
-                  c.setTimeAt(time, idx);
-                }, currentTime: c.time.value, locale: LocaleType.ko);
+                  c!.setTimeAt(time, idx);
+                }, currentTime: c!.time.value, locale: LocaleType.ko);
               }, child: Obx(() {
                 var formatter = DateFormat('HH:mm:ss');
-                String formattedTime = formatter.format(c.time.value);
+                String formattedTime = formatter.format(c!.time.value);
                 return Text(
                   formattedTime,
                   style: TextStyle(color: Colors.blue),
                 );
               }))
             ]));
-            c.addDateTimeField();
+            c!.addDateTimeField();
             datetimeIndex++;
             break;
         }
@@ -120,11 +121,11 @@ class Schema extends StatelessWidget {
 
       return ListView(shrinkWrap: true, children: [
         Column(children: [
-          ...c.inputs,
+          ...c!.inputs,
           ElevatedButton(
               child: Text('Submit'),
               onPressed: () async {
-                await c.submit(name, schemaList);
+                await c!.submit(name, schemaList);
                 Navigator.pop(context);
               })
         ])
