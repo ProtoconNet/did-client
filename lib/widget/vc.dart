@@ -35,9 +35,10 @@ class VC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i("VCCard build");
+    log.i("VC build");
 
     if (vc.isEmpty) {
+      log.i('vc empty');
       if (jwt == "") {
         log.i('no VC');
         return Padding(

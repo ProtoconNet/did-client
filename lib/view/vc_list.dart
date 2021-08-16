@@ -21,7 +21,7 @@ class VCList extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.put(VCListController(did));
 
-    log.i("VCList build: $did && $c");
+    log.i("VCList build: $did");
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,15 +29,14 @@ class VCList extends StatelessWidget {
         FutureBuilder(
             future: c.getVCList(did),
             builder: (context, snapshot) {
-              log.i(snapshot);
               if (snapshot.connectionState != ConnectionState.done) {
                 return Center(child: CircularProgressIndicator());
               } else {
                 if (snapshot.hasError) {
                   return Center(child: CircularProgressIndicator());
                 } else {
-                  log.i("vcs:${snapshot.data}");
                   final vcs = snapshot.data as List<VCModel>;
+                  log.i("vcs:${vcs.map((vc) => vc.name)}");
 
                   return Column(
                       children: vcs.map((vc) {

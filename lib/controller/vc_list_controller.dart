@@ -42,8 +42,8 @@ class VCListController extends GetxController {
 
         var data = json.decode(response.body)['VC'];
 
-        await VCManager(did).setByName(vc.name, 'vc', data);
-        await VCManager(did).setByName(vc.name, 'jwt', "");
+        await vcManager!.setByName(vc.name, 'vc', data);
+        await vcManager!.setByName(vc.name, 'jwt', "");
       }
     }
     return vcManager!.vcs;

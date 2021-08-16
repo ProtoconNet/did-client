@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:convert';
 import 'package:test/test.dart';
 import 'package:fast_base58/fast_base58.dart';
 
@@ -21,10 +22,8 @@ void main() async {
     expect(key1[1], isNot(equals(key2[1])));
   });
 
-  test('decrypt encrypted text', () async {
+  test('decrypt encrypted test', () async {
     var crypto = Crypto();
-
-    // var key = crypto.generateKeyPair();
 
     var plainText = "raynear_Work-In.Wiggler?";
 
@@ -32,5 +31,19 @@ void main() async {
     var decrypted = await crypto.decryptPK(Base58Encode(encrypted), 'password');
 
     expect(plainText, equals(decrypted));
+  });
+  test('sign test', () async {
+    var crypto = Crypto();
+
+    var plainText = "raynear_Work-In.Wiggler?";
+    var key = await crypto.generateKeyPair();
+
+    final plainTextBytes = utf8.encode(plainText);
+
+    final signature = await crypto.sign(plainTextBytes, key[0]);
+
+    final result = await crypto.verify(plainTextBytes, signature, Base58Decode(key[1]));
+
+    expect(result, equals(true));
   });
 }

@@ -27,15 +27,20 @@ class Crypto {
 
     final algorithm = Ed25519();
     final keyPair = await algorithm.newKeyPairFromSeed(clearText);
-    // final pubKey = await keyPair.extractPublicKey();
-    // final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
 
     final signature = await algorithm.sign(payload, keyPair: keyPair);
 
     return signature.bytes;
   }
 
-  verify(signature, pubKey) {}
+  verify(List<int> payload, List<int> signature, List<int> pubKey) async {
+    final algorithm = Ed25519();
+
+    final result = await algorithm.verify(payload,
+        signature: Signature(signature, publicKey: SimplePublicKey(pubKey, type: KeyPairType.ed25519)));
+
+    return result;
+  }
 
   Future<List<int>> encryptPK(String encodedPriv, String password) async {
     final passwordBytes = utf8.encode(password);

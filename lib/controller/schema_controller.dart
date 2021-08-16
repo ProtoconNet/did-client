@@ -9,8 +9,8 @@ import 'package:image/image.dart' as img;
 import 'package:wallet/provider/issuer.dart';
 import 'package:wallet/provider/platform.dart';
 import 'package:wallet/provider/global_variable.dart';
-import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/util/logger.dart';
+import 'package:wallet/controller/vc_list_controller.dart';
 
 class SchemaController extends GetxController {
   SchemaController(
@@ -26,8 +26,6 @@ class SchemaController extends GetxController {
   final log = Log();
   Issuer? issuer;
   final platform = Platform();
-
-  VCManager? vcManager;
 
   var inputControllerList = <TextEditingController>[];
   var inputs = <Widget>[];
@@ -45,9 +43,6 @@ class SchemaController extends GetxController {
   @override
   onInit() async {
     super.onInit();
-
-    vcManager = VCManager(did);
-    await vcManager!.init();
 
     inputControllerList = <TextEditingController>[];
     inputs = <Widget>[];
@@ -206,7 +201,9 @@ class SchemaController extends GetxController {
     log.i("postVC Response: $response");
 
     if (response != false) {
-      await vcManager!.setByName(name, 'jwt', response);
+      VCListController c = Get.find();
+      await c.vcManager!.setByName(name, 'jwt', response);
+      // await c.vcManager!.init();
     } else {
       await Get.dialog(AlertDialog(
           content: Row(
