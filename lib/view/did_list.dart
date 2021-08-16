@@ -11,7 +11,7 @@ import 'package:wallet/view/vc_list.dart';
 import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final c = Get.put(DIDListController());
 

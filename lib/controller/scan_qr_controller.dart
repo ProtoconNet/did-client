@@ -11,7 +11,7 @@ import 'package:wallet/util/logger.dart';
 
 class ScanQRController extends GetxController {
   final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final GlobalKey qrKey = GlobalKey();
   QRViewController? controller;

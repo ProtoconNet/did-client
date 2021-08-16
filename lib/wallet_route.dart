@@ -9,7 +9,7 @@ import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
 class WalletRoute extends StatelessWidget {
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
 
   init() async {

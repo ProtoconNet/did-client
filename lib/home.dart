@@ -10,7 +10,7 @@ import 'package:wallet/util/logger.dart';
 
 class Home extends StatelessWidget {
   Home({key, required this.tabController}) : super(key: key);
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final PersistentTabController tabController;
 

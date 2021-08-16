@@ -8,7 +8,7 @@ import 'package:wallet/widget/gradient_button.dart';
 import 'package:wallet/util/logger.dart';
 
 class CreateWallet extends StatelessWidget {
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
 
   @override

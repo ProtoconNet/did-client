@@ -10,7 +10,7 @@ import 'package:wallet/util/logger.dart';
 
 class Login extends StatelessWidget {
   final LoginController c = Get.put(LoginController());
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final TextEditingController _pass = TextEditingController();
 

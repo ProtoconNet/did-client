@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 final theme = ThemeData(
   brightness: Brightness.light,
-  fontFamily: GoogleFonts.roboto().fontFamily,
+  fontFamily: GoogleFonts.notoSans().fontFamily,
   primarySwatch: Colors.deepPurple,
   primaryColor: Colors.purple,
   primaryColorLight: Colors.purple,
@@ -12,7 +12,7 @@ final theme = ThemeData(
 );
 final darkTheme = ThemeData(
   brightness: Brightness.dark,
-  fontFamily: GoogleFonts.roboto().fontFamily,
+  fontFamily: GoogleFonts.notoSans().fontFamily,
   primarySwatch: Colors.purple,
   primaryColor: Colors.deepPurple,
   primaryColorLight: Colors.purple,

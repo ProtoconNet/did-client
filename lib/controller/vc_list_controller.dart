@@ -10,7 +10,7 @@ import 'package:wallet/util/logger.dart';
 class VCListController extends GetxController {
   VCListController(this.did);
 
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
 
   final String did;

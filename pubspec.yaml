@@ -98,12 +98,21 @@ flutter:
     - default.env
     - development.env
     - production.env
+
+    - assets/icons/flutter.png
+    - assets/images/cardGlow.png
+
     - assets/images/driver_license.png
+    - assets/images/drivers_license.png
+    - assets/images/drivers_license_logo.png
+    - assets/images/drivers_license_template.png
+    - assets/images/jejupass_logo.png
+    - assets/images/jejupass.png
+
     - assets/images/fullscreen.jpeg
     - assets/images/img1.jpeg
     - assets/images/img2.webp
     - assets/images/img3.jpeg
-    - assets/icons/flutter.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

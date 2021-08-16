@@ -12,7 +12,7 @@ import 'package:wallet/util/logger.dart';
 
 class Schema extends StatelessWidget {
   Schema({key, required this.did, required this.name, required this.requestSchema}) : super(key: key);
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final String did;
   final String name;

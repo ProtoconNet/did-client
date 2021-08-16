@@ -8,7 +8,7 @@ import 'package:wallet/util/logger.dart';
 
 class DIDCard extends StatelessWidget {
   DIDCard({key, required this.did, required this.children}) : super(key: key);
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final String did;
   final List<Widget> children;

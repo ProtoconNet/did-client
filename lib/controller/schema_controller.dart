@@ -22,7 +22,7 @@ class SchemaController extends GetxController {
   final String name;
   final String requestSchema;
 
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   Issuer? issuer;
   final platform = Platform();

@@ -10,7 +10,7 @@ import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/crypto.dart';
 
 class CreateDIDController extends GetxController {
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
   final platform = Platform();
   final crypto = Crypto();

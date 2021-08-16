@@ -11,7 +11,7 @@ import 'package:wallet/util/crypto.dart';
 class Issuer {
   Issuer(this.schemaLocation);
   final log = Log();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final crypto = Crypto();
 
   final String schemaLocation;

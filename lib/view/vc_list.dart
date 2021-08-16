@@ -13,7 +13,7 @@ class VCList extends StatelessWidget {
   final String did;
 
   final log = Log();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   // final c = Get.putAsync(VCListController(did));
   // final c = Get.put(VCListController());
 

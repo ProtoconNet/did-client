@@ -13,7 +13,7 @@ import 'package:wallet/util/logger.dart';
 class ConfigController extends GetxController {
   final box = GetStorage();
   final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
 
   final cameras = [].obs;
@@ -30,8 +30,9 @@ class ConfigController extends GetxController {
 
   @override
   onInit() {
-    language.value = g.language;
+    super.onInit();
 
+    language.value = g.language;
     theme.value = g.theme;
 
     // WidgetsFlutterBinding.ensureInitialized();
@@ -39,8 +40,6 @@ class ConfigController extends GetxController {
       cameras.value = ca;
       controller.value = CameraController(cameras[0], ResolutionPreset.max);
     });
-
-    super.onInit();
   }
 
   setTheme(val) {

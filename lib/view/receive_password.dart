@@ -8,7 +8,7 @@ import 'package:wallet/view/create_did.dart';
 import 'package:wallet/util/logger.dart';
 
 class ReceivePassword extends StatelessWidget {
-  final GlobalVariable g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final ReceivePasswordController c = Get.put(ReceivePasswordController());
   final log = Log();
 
