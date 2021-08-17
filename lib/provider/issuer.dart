@@ -1,17 +1,14 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
-import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/crypto.dart';
 
 class Issuer {
   Issuer(this.schemaLocation);
   final log = Log();
-  final GlobalVariable g = Get.find();
   final crypto = Crypto();
 
   final String schemaLocation;
@@ -81,10 +78,9 @@ class Issuer {
   didAuth(payload, endPoint, token, privateKey) async {
     log.i('did Auth');
 
-    final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
     final challengeBytes = utf8.encode(payload);
 
-    final signature = await crypto.sign(challengeBytes, pk);
+    final signature = await crypto.sign(challengeBytes, privateKey);
 
     final response2 = await responseChallenge(Uri.parse(endPoint), Base58Encode(signature), token);
     if (response2 == "") {

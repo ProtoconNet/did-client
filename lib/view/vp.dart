@@ -54,7 +54,7 @@ class VP extends StatelessWidget {
                     children: [
                       ...credentialSubjectList(vc['credentialSubject']),
                       FutureBuilder(
-                          future: c.getVP(vc),
+                          future: c.getVP([vc]),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return QrImage(data: snapshot.data.toString(), version: QrVersions.auto, size: 300.0);

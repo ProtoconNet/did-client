@@ -101,6 +101,8 @@ class SchemaController extends GetxController {
       return;
     }
 
+    log.i("schema: ${json.decode(response.body)['data']}");
+
     schema.value = json.decode(response.body)['data'];
   }
 

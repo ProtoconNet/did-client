@@ -9,7 +9,6 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/provider/global_variable.dart';
-import 'package:wallet/model/vc_manager.dart';
 import 'package:wallet/util/logger.dart';
 
 class VPController extends GetxController {
@@ -21,10 +20,8 @@ class VPController extends GetxController {
   createVP(String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
     // payload is vc list
     var now = DateTime.now();
-    log.i('a');
 
     var expire = now.add(Duration(minutes: 1));
-    log.i('a');
     var vp = {
       "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
       "id": did,
@@ -34,27 +31,16 @@ class VPController extends GetxController {
       "expirationDate": expire.toIso8601String(),
       "verifiableCredential": payload,
     };
-    log.i('a');
 
     // Create a json web token
     final jwt = JWT(vp); //, issuer: did, audience: audience, jwtId: "test");
-    log.i('a');
 
-    print(pk);
     var token = jwt.sign(EdDSAPrivateKey(pk),
         algorithm: JWTAlgorithm.EdDSA,
         noIssueAt: true); //, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
-    log.i('a');
 
     var splitToken = token.split('.');
-    log.i('a');
     var noPayloadToken = splitToken[0] + ".." + splitToken[2];
-    print('no payload token: $token\n');
-
-    final jwt2 = JWT.verify(token, EdDSAPublicKey(pk.sublist(32)));
-    log.i('a');
-
-    // printWrapped('Payload: ${json.encode(jwt2.payload)}');
 
     var proof = [
       {
@@ -68,7 +54,6 @@ class VPController extends GetxController {
         "jws": noPayloadToken // token
       }
     ];
-    log.i('a');
     vp['proof'] = proof;
     printWrapped('vp:$vp');
 
@@ -80,7 +65,7 @@ class VPController extends GetxController {
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
-  getVP(vc) async {
+  getVP(vcs) async {
     var password = g.password.value;
     var vpSchemaUri = Uri.parse("http://mtm.securekim.com:3082/VPSchema?schema=rentCar");
     http.Response response = await http.get(vpSchemaUri);
@@ -119,9 +104,9 @@ class VPController extends GetxController {
     final pubKey = await keyPair.extractPublicKey();
     final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
 
-    log.i(vc);
+    log.i(vcs);
     log.i("pk: ${Base58Encode(await keyPair.extractPrivateKeyBytes())}");
-    var vp = await createVP(did, did, did, [vc], [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
+    var vp = await createVP(did, did, did, vcs, [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
     log.i(vp);
 
     return vp;
