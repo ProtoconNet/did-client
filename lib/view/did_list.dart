@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 //import 'package:animations/animations.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:wallet/provider/global_variable.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/controller/did_list_controller.dart';
 import 'package:wallet/widget/background.dart';
@@ -14,6 +15,7 @@ class DIDList extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
   final c = Get.put(DIDListController());
+  final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +25,35 @@ class DIDList extends StatelessWidget {
         appBar: AppBar(
             backgroundColor: Get.theme.scaffoldBackgroundColor,
             elevation: 0,
-            leading: Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor),
+            leading: Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor, size: 30),
+            // leading: Image.asset("assets/icons/walletIcon.png", width: 20, height: 20),
             // automaticallyImplyLeading: false,
-            title: Text('내 지갑', style: TextStyle(color: Get.theme.primaryColor)),
-            // Center(
-            //     child: Text('Mitum DID',
-            //         style: GoogleFonts.kaushanScript(
-            //             textStyle: Get.theme.textTheme.headline5?.copyWith(color: Colors.white)))),
+            title: Text('MITUM Wallet', style: Get.textTheme.headline6),
             actions: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.add, color: Get.theme.primaryColor)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert, color: Get.theme.primaryColor))
+              IconButton(
+                icon: Icon(Icons.delete, color: Get.theme.primaryColor),
+                onPressed: () async {
+                  // box.remove('themeMode');
+                  // box.remove('language');
+                  if (await storage.containsKey(key: "DIDList")) {
+                    String didList = await storage.read(key: "DIDList") as String;
+
+                    log.i("erase ${json.decode(didList)}");
+
+                    for (var did in json.decode(didList).keys.toList()) {
+                      //var didVC = storage.read(key: did) as String;
+                      if (await storage.containsKey(key: did)) {
+                        await storage.delete(key: did);
+                      }
+                    }
+                    await storage.delete(key: "DIDList");
+                  }
+                  g.biometric.value = false;
+
+                  // await deleteCacheDir();
+                  // await deleteAppDir();
+                },
+              ),
             ]),
         children: [
           FutureBuilder(

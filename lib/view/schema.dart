@@ -28,11 +28,12 @@ class Schema extends StatelessWidget {
     log.i('Schema Builder');
     log.i("${c.schema.value}:${c.inputs.length}");
 
-    final schemaList = json.decode(c.schema.value);
-
     if (c.schema.value == "") {
       return Center(child: CircularProgressIndicator());
-    } else if (c.inputs.isEmpty) {
+    } else {
+      c.inputs = [];
+
+      final schemaList = json.decode(c.schema.value);
       var datetimeIndex = 0;
       var imageIndex = 0;
 
@@ -57,25 +58,30 @@ class Schema extends StatelessWidget {
             c.inputs.add(Column(children: [
               Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
                   ? Image.memory(base64Decode(c.imageList[idx]), height: shortSide / 2)
-                  : Text('image')),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      onPressed: () async {
-                        // log.i('put image in ${idx.toString()}');
-                        await c.takeImage(idx);
-                      },
-                      child: Text('takePicture'.tr)),
-                  Text(' '),
-                  ElevatedButton(
-                      onPressed: () async {
-                        // log.i('put image in ${idx.toString()}');
-                        await c.getImage(idx);
-                      },
-                      child: Text('pickGallery'.tr)),
-                ],
-              )
+                  : Image.asset('assets/images/visualAid.png')),
+              SizedBox(height: 30),
+              SizedBox(
+                  width: Get.width * 0.8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          width: Get.width * 0.39,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                await c.takeImage(idx);
+                              },
+                              child: Text('takePicture'.tr))),
+                      Text(' '),
+                      SizedBox(
+                          width: Get.width * 0.39,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                await c.getImage(idx);
+                              },
+                              child: Text('pickGallery'.tr))),
+                    ],
+                  ))
             ]));
             c.addImageField();
             imageIndex++;
@@ -125,32 +131,37 @@ class Schema extends StatelessWidget {
             break;
         }
       }
-    }
 
-    return ListView(shrinkWrap: true, children: [
-      Column(children: [
-        ...c.inputs,
-        ElevatedButton(
-            child: Text('Submit'),
-            onPressed: () async {
-              await c.submit(name, schemaList);
-              Navigator.pop(context);
-            })
-      ])
-    ]);
+      return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        SizedBox(
+            height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 80,
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ...c.inputs,
+            ])),
+        SizedBox(
+            width: Get.width * 0.8,
+            height: 50,
+            child: ElevatedButton(
+                child: Text('Submit'),
+                onPressed: () async {
+                  await c.submit(name, schemaList);
+                  Get.back();
+                }))
+      ]);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // final SchemaController c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema));
-    // log.i("Schema build");
     return Background(
         appBar: AppBar(
             title: Text(name,
-                style: GoogleFonts.roboto(
-                    textStyle: Get.theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)))),
+                style: GoogleFonts.roboto(textStyle: Get.theme.textTheme.headline6?.copyWith(color: Colors.white)))),
         children: [
-          Obx(() => Container(alignment: Alignment.center, height: Get.height * 0.8, child: builder(context, name)))
+          Obx(() => Container(
+              alignment: Alignment.center,
+              height: Get.height - Get.statusBarHeight - Get.bottomBarHeight,
+              child: builder(context, name)))
         ]);
   }
 }

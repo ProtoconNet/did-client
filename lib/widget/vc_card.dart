@@ -67,7 +67,7 @@ class VCCard extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [getLogoByName(name)]),
             Text(description, style: Get.textTheme.bodyText1),
-            Text(name + ' 추가하기', style: Get.textTheme.subtitle1!.copyWith(color: Get.theme.accentColor)),
+            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
           ]));
     } else if (status == "VC") {
       return getCardByName(name);

@@ -14,6 +14,12 @@ class Home extends StatelessWidget {
   final log = Log();
   final PersistentTabController tabController;
 
+  @override
+  Widget build(BuildContext context) {
+    log.i("home build");
+    return DIDList();
+  }
+
   List<Widget> _buildScreens() {
     log.i("_buildScreens");
     return [
@@ -47,36 +53,36 @@ class Home extends StatelessWidget {
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    log.i("home build");
-    return PersistentTabView(
-      context,
-      controller: tabController,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: Get.theme.bottomAppBarColor,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        colorBehindNavBar: Get.theme.bottomAppBarColor,
-      ),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: ItemAnimationProperties(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: ScreenTransitionAnimation(
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-      navBarStyle: NavBarStyle.style15, // Choose the nav bar style with this property.
-    );
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   log.i("home build");
+  //   return PersistentTabView(
+  //     context,
+  //     controller: tabController,
+  //     screens: _buildScreens(),
+  //     items: _navBarsItems(),
+  //     confineInSafeArea: true,
+  //     backgroundColor: Get.theme.bottomAppBarColor,
+  //     handleAndroidBackButtonPress: true,
+  //     resizeToAvoidBottomInset: true,
+  //     stateManagement: true,
+  //     hideNavigationBarWhenKeyboardShows: true,
+  //     decoration: NavBarDecoration(
+  //       borderRadius: BorderRadius.circular(15.0),
+  //       colorBehindNavBar: Get.theme.bottomAppBarColor,
+  //     ),
+  //     popAllScreensOnTapOfSelectedTab: true,
+  //     popActionScreens: PopActionScreensType.all,
+  //     itemAnimationProperties: ItemAnimationProperties(
+  //       duration: Duration(milliseconds: 200),
+  //       curve: Curves.ease,
+  //     ),
+  //     screenTransitionAnimation: ScreenTransitionAnimation(
+  //       animateTabTransition: true,
+  //       curve: Curves.ease,
+  //       duration: Duration(milliseconds: 200),
+  //     ),
+  //     navBarStyle: NavBarStyle.style15, // Choose the nav bar style with this property.
+  //   );
+  // }
 }

@@ -12,7 +12,8 @@ class GlobalVariable extends GetxController {
   final box = GetStorage();
   var password = ''.obs;
   var did = ''.obs;
-  // var biometric = false.obs;
+  var biometric = false.obs;
+
   var tabController = PersistentTabController(initialIndex: 0).obs;
 
   var didManager = DIDManager().obs;
@@ -32,7 +33,14 @@ class GlobalVariable extends GetxController {
 
     if (!box.hasData('biometric')) {
       box.write('biometric', false);
+      biometric.value = false;
+    } else {
+      biometric.value = box.read('biometric');
     }
+
+    ever(biometric, (val) {
+      box.write('biometric', val);
+    });
 
     box.listenKey('themeMode', (value) {
       Get.changeThemeMode(themeMode(value));
@@ -63,8 +71,8 @@ class GlobalVariable extends GetxController {
     return languageModeList[val]!;
   }
 
-  bool get biometric => box.read('biometric');
-  set biometric(bool val) => box.write('biometric', val);
+  // bool get biometric => box.read('biometric');
+  // set biometric(bool val) => box.write('biometric', val);
 
   void setPage(i) {
     tabController.value.jumpToTab(i);

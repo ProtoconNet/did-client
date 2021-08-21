@@ -26,7 +26,7 @@ class Background extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Column(
                         mainAxisAlignment: mainAxisAlignment,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: children)))));
+                        crossAxisAlignment: crossAxisAlignment,
+                        children: [...children, SizedBox(width: Get.width)])))));
   }
 }

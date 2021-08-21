@@ -101,6 +101,7 @@ flutter:
 
     - assets/icons/flutter.png
     - assets/images/cardGlow.png
+    - assets/images/visualAid.png
 
     - assets/images/driver_license.png
     - assets/images/drivers_license.png
@@ -110,6 +111,11 @@ flutter:
     - assets/images/jejupass.png
     - assets/images/car_box.png
     - assets/images/sk_rentacar_logo.png
+
+    - assets/icons/benefitAuthIcon.png
+    - assets/icons/benefitChainIcon.png
+    - assets/icons/benefitFilletIcon.png
+    - assets/icons/walletIcon.png
 
     - assets/images/fullscreen.jpeg
     - assets/images/img1.jpeg

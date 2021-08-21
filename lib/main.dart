@@ -41,7 +41,7 @@ class WigglerWallet extends StatelessWidget {
     return GetMaterialApp(
       title: 'Wiggler Wallet',
       theme: theme,
-      darkTheme: darkTheme,
+      darkTheme: theme, // darkTheme,
       themeMode: GlobalVariable().themeMode(GlobalVariable().theme),
       translations: Messages(),
       locale: GlobalVariable().languageMode(GlobalVariable().language),

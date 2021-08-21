@@ -13,10 +13,8 @@ import 'package:wallet/util/logger.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 
 class SchemaController extends GetxController {
-  SchemaController(
-      {required this.did,
-      required this.name,
-      required this.requestSchema}); //:this.issuer = Issuer(this.requestSchema);
+  SchemaController({required this.did, required this.name, required this.requestSchema})
+      : issuer = Issuer(requestSchema);
 
   final String did;
   final String name;
@@ -24,11 +22,11 @@ class SchemaController extends GetxController {
 
   final GlobalVariable g = Get.find();
   final log = Log();
-  Issuer? issuer;
+  final Issuer issuer;
   final platform = Platform();
 
-  var inputControllerList = <TextEditingController>[];
-  var inputs = <Widget>[];
+  var inputControllerList = [];
+  var inputs = [];
 
   var dateList = [].obs;
   var timeList = [].obs;
@@ -44,13 +42,12 @@ class SchemaController extends GetxController {
   onInit() async {
     super.onInit();
 
-    inputControllerList = <TextEditingController>[];
-    inputs = <Widget>[];
+    inputControllerList = [];
+    inputs = [];
 
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
-    issuer = Issuer(requestSchema);
 
     await dynamicFields(name, requestSchema);
   }
@@ -94,7 +91,7 @@ class SchemaController extends GetxController {
   dynamicFields(String name, String requestSchema) async {
     log.i('dynamicFields: $name : $requestSchema');
     log.i('*' * 200);
-    var locations = await issuer!.getSchemaLocation();
+    var locations = await issuer.getSchemaLocation();
 
     var response = await platform.getSchema(Uri.parse(locations['schema']));
     if (json.decode(response.body).containsKey('error')) {
@@ -198,7 +195,7 @@ class SchemaController extends GetxController {
 
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
     log.i('pk: $pk');
-    var response = await issuer!.postVC(json.encode(body), pk);
+    var response = await issuer.postVC(json.encode(body), pk);
 
     log.i("postVC Response: $response");
 

@@ -19,17 +19,8 @@ class Login extends StatelessWidget {
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        GradientIcon(
-          FontAwesomeIcons.wallet,
-          80,
-          LinearGradient(
-            colors: [Get.theme.primaryColor, Get.theme.accentColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        Text('login'.tr, style: Get.theme.textTheme.headline4),
-        // Text('inputPassword'.tr, style: Get.theme.textTheme.bodyText1),
+        Image.asset("assets/icons/walletIcon.png", width: 100, height: 100),
+        SizedBox(height: 30),
         Padding(
             padding: EdgeInsets.all(8),
             child: SizedBox(
@@ -62,17 +53,24 @@ class Login extends StatelessWidget {
                     },
                     child: Text('enter'.tr),
                     style: Get.theme.elevatedButtonTheme.style))),
-
         Padding(
             padding: EdgeInsets.all(8),
-            child: CheckboxListTile(
-              title: Text("다음부터 생체인식 사용하기"),
-              value: g.biometric,
-              onChanged: (newValue) async {
-                g.biometric = newValue!;
-              },
-              controlAffinity: ListTileControlAffinity.leading, //  <-- leading Checkbox
-            )),
+            child: SizedBox(
+                height: 30,
+                width: Get.width * 0.8, // <-- match_parent
+                child: Row(children: [
+                  Obx(
+                    () => Checkbox(
+                        checkColor: Colors.white,
+                        activeColor: Get.theme.primaryColor,
+                        value: g.biometric.value,
+                        onChanged: (value) {
+                          g.biometric.value = value!;
+                        },
+                        shape: CircleBorder()),
+                  ),
+                  Text("다음부터 생체인식 사용하기")
+                ]))),
       ])),
     ]);
   }

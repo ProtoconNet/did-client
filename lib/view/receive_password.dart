@@ -29,19 +29,23 @@ class ReceivePassword extends StatelessWidget {
               // Icon(Icons.account_balance_wallet_rounded, size: 40, color: Colors.deepPurple),
               Padding(
                   padding: EdgeInsets.all(10),
-                  child: Text('비밀번호 설정', style: Get.textTheme.headline5?.copyWith(fontWeight: FontWeight.bold)))
+                  child: Text('비밀번호 설정', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.w700)))
             ],
           ),
           Column(children: [
-            Icon(Icons.error_outline, size: 40, color: Get.theme.errorColor),
-            SizedBox(height: 20),
-            Center(child: Text('지금 설정한 PIN을 꼭 기억하세요!', style: Get.textTheme.headline5?.copyWith(color: Colors.red))),
+            Icon(Icons.error_outline, size: 35, color: Get.theme.accentColor),
+            SizedBox(height: 3),
+            Center(
+                child: Text('지금 설정한 PIN을 꼭 기억하세요!',
+                    style: Get.textTheme.subtitle1?.copyWith(color: Get.theme.accentColor))),
             SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                  width: Get.width * 0.7,
-                  child: Text('설정한 PIN은 어떤 서버에도 저장되지 않으며, 잊어버리면, 모든 DID를 재발급 해야합니다',
-                      style: Get.textTheme.bodyText2?.copyWith(color: Colors.grey)))
+                  width: Get.width * 0.8,
+                  child: Column(children: [
+                    Text('설정한 PIN은 어떤 서버에도 저장되지 않으며,', style: Get.textTheme.bodyText2),
+                    Text('잊어버리면, 모든 DID를 재발급 해야합니다', style: Get.textTheme.bodyText2)
+                  ]))
             ]),
           ]),
           SizedBox(
@@ -59,13 +63,28 @@ class ReceivePassword extends StatelessWidget {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: '비밀번호 입력(영문, 숫자, 특수기호 조합 8자리 이상)'), //, labelText: 'Password'),
+                          border: OutlineInputBorder(),
+                          hintText: '비밀번호 입력(영문, 숫자, 특수기호 조합 8자리 이상)',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              pass.clear();
+                              confirmPass.clear();
+                            },
+                            icon: Icon(Icons.clear),
+                          ),
+                        ), //, labelText: 'Password'),
                         validator: (value) {
-                          if (value != confirmPass.text) return ' ';
+                          RegExp regExp = RegExp(r"[a-zA-Z]");
+                          if (!regExp.hasMatch(value!)) return 'password should have lowercase alphabet';
+                          regExp = RegExp(r"[0-9]");
+                          if (!regExp.hasMatch(value)) return 'password should have number';
+                          regExp = RegExp(r"\W");
+                          if (!regExp.hasMatch(value)) return 'password should have special character';
+                          if (value.length < 8) return 'password should longer than 8';
                           return null;
                         },
                         onChanged: (value) {
+                          c.formKey.value.currentState!.validate();
                           c.status.value = (value.isNotEmpty && pass.text == confirmPass.text);
                         },
                         onEditingComplete: () => node.nextFocus()),
@@ -75,7 +94,16 @@ class ReceivePassword extends StatelessWidget {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(), hintText: '비밀번호 확인'), //, labelText: 'Confirm'),
+                          border: OutlineInputBorder(),
+                          hintText: '비밀번호 확인',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              pass.clear();
+                              confirmPass.clear();
+                            },
+                            icon: Icon(Icons.clear),
+                          ),
+                        ), //, labelText: 'Confirm'),
                         validator: (value) {
                           if (value != pass.text) return 'Error: Password and confirm password have to same';
                           return null;
@@ -89,16 +117,21 @@ class ReceivePassword extends StatelessWidget {
                           Navigator.push(
                               context, MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
                         }),
+                    SizedBox(height: 10),
                     Obx(() => SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
+                          height: 48,
+                          width: double.maxFinite,
+                          child: ElevatedButton(
+                            child: c.status.value ? Text('submit'.tr) : Text('check password'),
                             onPressed: c.status.value
                                 ? () async {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
+                                    Get.to(CreateDID(password: confirmPass.text));
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
                                   }
                                 : null,
-                            child: c.status.value ? Text('submit'.tr) : Text('check password'))))
+                          ),
+                        )),
                   ]),
             ),
           )

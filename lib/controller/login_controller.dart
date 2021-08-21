@@ -14,7 +14,7 @@ class LoginController extends GetxController {
     super.onInit();
 
     log.i("biometric: ${g.biometric}");
-    if (g.biometric) {
+    if (g.biometric.value) {
       var _noConfirmation = await BiometricStorage().getStorage('login',
           options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
           androidPromptInfo: const AndroidPromptInfo(
@@ -35,7 +35,7 @@ class LoginController extends GetxController {
       g.password.value = password;
       g.did.value = did;
 
-      if (g.biometric) {
+      if (g.biometric.value) {
         var _noConfirmation = await BiometricStorage().getStorage('login',
             options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
             androidPromptInfo: const AndroidPromptInfo(
