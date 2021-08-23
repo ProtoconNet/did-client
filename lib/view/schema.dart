@@ -154,13 +154,16 @@ class Schema extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
+        // color: Color.fromARGB(0xff, 61, 61, 61),
         appBar: AppBar(
+            backgroundColor: Color.fromARGB(0xff, 61, 61, 61),
             title: Text(name,
                 style: GoogleFonts.roboto(textStyle: Get.theme.textTheme.headline6?.copyWith(color: Colors.white)))),
         children: [
           Obx(() => Container(
+              margin: EdgeInsets.all(16.0),
               alignment: Alignment.center,
-              height: Get.height - Get.statusBarHeight - Get.bottomBarHeight,
+              height: Get.height - Get.statusBarHeight - 16.0 * 2,
               child: builder(context, name)))
         ]);
   }

@@ -86,7 +86,7 @@ class VCCard extends StatelessWidget {
     log.i("VCCard build");
 
     return Container(
-        margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 20),
+        margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, top: 18, bottom: 18),
         height: 200,
         width: Get.width * 0.75,
         child: Stack(children: [

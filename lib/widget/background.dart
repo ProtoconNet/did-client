@@ -22,11 +22,9 @@ class Background extends StatelessWidget {
         body: SafeArea(
             child: Container(
                 decoration: BoxDecoration(color: Get.theme.canvasColor),
-                child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                        mainAxisAlignment: mainAxisAlignment,
-                        crossAxisAlignment: crossAxisAlignment,
-                        children: [...children, SizedBox(width: Get.width)])))));
+                child: Column(
+                    mainAxisAlignment: mainAxisAlignment,
+                    crossAxisAlignment: crossAxisAlignment,
+                    children: [...children, SizedBox(width: Get.width)]))));
   }
 }

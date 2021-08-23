@@ -20,6 +20,13 @@ class DIDList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i("DIDList build");
+
+    log.i("height:${Get.height}");
+    log.i("width:${Get.width}");
+    log.i("statusBar:${Get.statusBarHeight}");
+    log.i("bottomBar:${Get.bottomBarHeight}");
+    log.i("pixelRatio:${Get.pixelRatio}");
+
     return Background(
         mainAxisAlignment: MainAxisAlignment.start,
         appBar: AppBar(

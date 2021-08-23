@@ -23,7 +23,7 @@ class VCList extends StatelessWidget {
     log.i("VCList build: $did");
     return Container(
         alignment: Alignment.center,
-        height: Get.height - Get.statusBarHeight - Get.bottomBarHeight,
+        height: Get.height - Get.statusBarHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
