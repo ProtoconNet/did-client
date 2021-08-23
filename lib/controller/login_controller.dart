@@ -4,6 +4,7 @@ import 'package:biometric_storage/biometric_storage.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
+import 'package:wallet/view/did_list.dart';
 
 class LoginController extends GetxController {
   final GlobalVariable g = Get.find();
@@ -44,7 +45,8 @@ class LoginController extends GetxController {
         _noConfirmation.write(password);
       }
 
-      Get.offAllNamed('/');
+      Get.offAll(DIDList(), transition: Transition.fade, duration: Duration(seconds: 1));
+      // Get.to(DIDList());
     } catch (e) {
       log.e(e);
       // log.i("${password} is not correct password");

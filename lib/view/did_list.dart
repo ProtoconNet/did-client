@@ -25,7 +25,8 @@ class DIDList extends StatelessWidget {
         appBar: AppBar(
             backgroundColor: Get.theme.scaffoldBackgroundColor,
             elevation: 0,
-            leading: Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor, size: 30),
+            leading: Hero(tag: "Wallet", child: Image.asset("assets/icons/walletIcon.png", width: 20, height: 20)),
+            // Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor, size: 30)
             // leading: Image.asset("assets/icons/walletIcon.png", width: 20, height: 20),
             // automaticallyImplyLeading: false,
             title: Text('MITUM Wallet', style: Get.textTheme.headline6),

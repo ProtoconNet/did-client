@@ -46,8 +46,9 @@ class WigglerWallet extends StatelessWidget {
       translations: Messages(),
       locale: GlobalVariable().languageMode(GlobalVariable().language),
       fallbackLocale: Locale('en', 'US'),
-      initialRoute: '/',
-      getPages: [GetPage(name: '/', page: () => WalletRoute())],
+      home: WalletRoute(),
+      // initialRoute: '/',
+      // getPages: [GetPage(name: '/', page: () => WalletRoute())],
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute<void>(
           settings: settings,

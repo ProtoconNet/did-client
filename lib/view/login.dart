@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/widget/background.dart';
-import 'package:wallet/widget/gradient_icon.dart';
+// import 'package:wallet/widget/gradient_icon.dart';
 import 'package:wallet/controller/login_controller.dart';
 import 'package:wallet/util/logger.dart';
 
@@ -19,7 +19,7 @@ class Login extends StatelessWidget {
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Image.asset("assets/icons/walletIcon.png", width: 100, height: 100),
+        Hero(tag: "Wallet", child: Image.asset("assets/icons/walletIcon.png", width: 100, height: 100)),
         SizedBox(height: 30),
         Padding(
             padding: EdgeInsets.all(8),
