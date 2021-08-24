@@ -14,6 +14,7 @@ class VCManager {
   bool uninitialized = true;
 
   init() async {
+    log.i("vcManager.init");
     if (uninitialized) {
       uninitialized = false;
       if (await storage.containsKey(key: did)) {

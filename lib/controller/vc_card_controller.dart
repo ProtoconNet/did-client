@@ -11,9 +11,10 @@ class VCCardController extends GetxController with SingleGetTickerProviderMixin 
 
     animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
 
-    final curve = CurvedAnimation(parent: animationController!, curve: Curves.easeIn);
+    final curve = CurvedAnimation(parent: animationController!, curve: Curves.elasticOut);
 
-    animationOffset = Tween(begin: const Offset(0.0, 0.0), end: const Offset(0.0, 0.0))
-        .animate(curve); //..addListener(() => update());
+    animationOffset = Tween(begin: const Offset(0.0, 0.4), end: Offset.zero).animate(curve)
+      ..addListener(() => update());
+    animationController!.forward();
   }
 }

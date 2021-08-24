@@ -51,6 +51,10 @@ class GlobalVariable extends GetxController {
     });
   }
 
+  init() async {
+    await didManager.value.init();
+  }
+
   String get theme => box.read('themeMode');
 
   set theme(String val) {

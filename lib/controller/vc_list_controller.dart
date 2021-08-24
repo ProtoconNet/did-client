@@ -22,7 +22,7 @@ class VCListController extends GetxController {
     super.onInit();
 
     vcManager = VCManager(did);
-    vcManager?.init();
+    await vcManager?.init();
   }
 
   getVCList(did) async {

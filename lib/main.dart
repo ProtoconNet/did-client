@@ -32,7 +32,8 @@ initService() async {
 
   await GetStorage.init();
 
-  Get.put(GlobalVariable(), permanent: true);
+  var g = Get.put(GlobalVariable(), permanent: true);
+  await g.init();
 }
 
 class WigglerWallet extends StatelessWidget {

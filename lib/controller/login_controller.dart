@@ -45,7 +45,7 @@ class LoginController extends GetxController {
         _noConfirmation.write(password);
       }
 
-      Get.offAll(DIDList(), transition: Transition.fade, duration: Duration(seconds: 1));
+      Get.offAll(DIDList(), transition: Transition.fadeIn, duration: Duration(milliseconds: 1000));
       // Get.to(DIDList());
     } catch (e) {
       log.e(e);
