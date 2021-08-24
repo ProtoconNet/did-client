@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+final primary = createMaterialColor(Color(0xFF5A24BE));
+final secondary = createMaterialColor(Color(0xFF2D742F));
+
 final theme = ThemeData(
   brightness: Brightness.light,
   fontFamily: GoogleFonts.notoSans().fontFamily,
@@ -19,11 +22,19 @@ final theme = ThemeData(
     overline: TextStyle(fontSize: 10, letterSpacing: 1.5, color: Colors.black),
     button: TextStyle(fontSize: 18, letterSpacing: -0.4, color: Colors.black, fontWeight: FontWeight.w700),
   ),
-  primarySwatch: Colors.deepPurple,
-  primaryColor: Color(0xff5a24be),
-  primaryColorLight: Color(0xff5a24be),
-  primaryColorDark: Color(0xff7032e0),
-  accentColor: Color(0xffed742f),
+  primarySwatch: primary,
+  primaryColor: primary.shade700,
+  primaryColorLight: primary.shade500,
+  primaryColorDark: primary.shade700,
+  accentColor: secondary.shade800,
+  focusColor: primary.shade700,
+  highlightColor: primary.shade700,
+  buttonColor: primary.shade700,
+  // cursorColor: primary.shade700,
+  canvasColor: Color(0xfffafafa),
+  cardColor: Color(0xfffafafa),
+  scaffoldBackgroundColor: Color(0xfffafafa),
+  errorColor: Color(0xffba3183),
 );
 final darkTheme = ThemeData(
   brightness: Brightness.dark,
@@ -43,9 +54,33 @@ final darkTheme = ThemeData(
     overline: TextStyle(fontSize: 10, letterSpacing: 1.5, color: Colors.white),
     button: TextStyle(fontSize: 18, letterSpacing: -0.4, color: Colors.white, fontWeight: FontWeight.w700),
   ),
-  primarySwatch: Colors.purple,
-  primaryColor: Color(0xff7032e0),
-  primaryColorLight: Color(0xff5a24be),
-  primaryColorDark: Color(0xff7032e0),
-  accentColor: Color(0xffed742f),
+  primarySwatch: primary,
+  primaryColor: primary.shade700,
+  primaryColorLight: primary.shade500,
+  primaryColorDark: primary.shade700,
+  accentColor: secondary.shade800,
+  focusColor: primary.shade700,
+  highlightColor: primary.shade700,
+  buttonColor: primary.shade700,
 );
+
+MaterialColor createMaterialColor(Color color) {
+  List<double> strengths = [.05];
+  Map<int, Color> swatch = {};
+  final int r = color.red, g = color.green, b = color.blue;
+
+  for (int i = 1; i < 10; i++) {
+    strengths.add(0.1 * i);
+  }
+
+  for (var strength in strengths) {
+    final double ds = 0.5 - strength;
+    swatch[(strength * 1000).round()] = Color.fromRGBO(
+      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+      1,
+    );
+  }
+  return MaterialColor(color.value, swatch);
+}

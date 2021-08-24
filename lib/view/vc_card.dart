@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:wallet/controller/vc_card_controller.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
@@ -15,6 +16,7 @@ class VCCard extends StatelessWidget {
       : super(key: key);
   final GlobalVariable g = Get.find();
   final log = Log();
+  final c = Get.put(VCCardController());
 
   final String name;
   final String description;
@@ -85,37 +87,41 @@ class VCCard extends StatelessWidget {
   Widget build(BuildContext context) {
     log.i("VCCard build");
 
-    return Container(
-        margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, top: 18, bottom: 18),
-        height: 200,
-        width: Get.width * 0.75,
-        child: Stack(children: [
-          Card(
-            color: Colors.red, //Get.theme.cardColor,
-            elevation: 1,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Colors.grey,
-                width: 0.5,
+    if (c.animationOffset == null) return Text('loading');
+
+    return SlideTransition(
+        position: c.animationOffset!,
+        child: Container(
+            margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, top: 18, bottom: 18),
+            height: 200,
+            width: Get.width * 0.75,
+            child: Stack(children: [
+              Card(
+                color: Colors.red, //Get.theme.cardColor,
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.grey,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomRight,
+                            colors: [Colors.white, Colors.grey.shade200])),
+                    child: contentByStatus(name, status)),
               ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.white, Colors.grey.shade200])),
-                child: contentByStatus(name, status)),
-          ),
-          Opacity(
-              opacity: 0.3,
-              child: Image.asset(
-                'assets/images/cardGlow.png',
-                height: 200,
-                width: Get.width * 0.75,
-              )),
-        ]));
+              Opacity(
+                  opacity: 0.3,
+                  child: Image.asset(
+                    'assets/images/cardGlow.png',
+                    height: 200,
+                    width: Get.width * 0.75,
+                  )),
+            ])));
   }
 }

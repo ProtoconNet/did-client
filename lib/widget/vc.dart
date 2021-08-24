@@ -6,7 +6,7 @@ import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/view/schema.dart';
 import 'package:wallet/view/did_list.dart';
 import 'package:wallet/view/vp.dart';
-import 'package:wallet/widget/vc_card.dart';
+import 'package:wallet/view/vc_card.dart';
 import 'package:wallet/util/logger.dart';
 
 class VC extends StatelessWidget {
