@@ -8,27 +8,28 @@ import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
 class VCListController extends GetxController {
-  VCListController(this.did);
+  VCListController(this.did) : vcManager = VCManager(did);
 
   final GlobalVariable g = Get.find();
   final log = Log();
 
   final String did;
 
-  VCManager? vcManager;
+  var vcs = [].obs;
+
+  VCManager vcManager;
 
   @override
   onInit() async {
     super.onInit();
 
-    vcManager = VCManager(did);
-    await vcManager?.init();
+    await vcManager.init();
   }
 
-  getVCList(did) async {
+  setVCList(did) async {
     log.i("getVCList");
 
-    for (var vc in vcManager!.vcs) {
+    for (var vc in vcManager.vcs) {
       log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
       if (vc.vc.isEmpty && vc.jwt != "") {
         log.i("getVC from issuer");
@@ -42,10 +43,10 @@ class VCListController extends GetxController {
 
         var data = json.decode(response)['VC'];
 
-        await vcManager!.setByName(vc.name, 'vc', data);
-        await vcManager!.setByName(vc.name, 'jwt', "");
+        await vcManager.setByName(vc.name, 'vc', data);
+        await vcManager.setByName(vc.name, 'jwt', "");
       }
     }
-    return vcManager!.vcs;
+    vcs.value = vcManager.vcs;
   }
 }

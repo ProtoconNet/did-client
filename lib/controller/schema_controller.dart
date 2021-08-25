@@ -195,7 +195,7 @@ class SchemaController extends GetxController {
 
     if (response != false) {
       VCListController c = Get.put(VCListController(did));
-      await c.vcManager!.setByName(name, 'jwt', response);
+      await c.vcManager.setByName(name, 'jwt', response);
       // await c.vcManager!.init();
     } else {
       await Get.dialog(AlertDialog(

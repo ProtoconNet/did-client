@@ -29,7 +29,7 @@ class VCList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             FutureBuilder(
-                future: c.getVCList(did),
+                future: c.setVCList(did),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return Center(child: CircularProgressIndicator());
@@ -37,21 +37,21 @@ class VCList extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Center(child: CircularProgressIndicator());
                     } else {
-                      final vcs = snapshot.data as List<VCModel>;
-                      log.i("vcs:${vcs.map((vc) => vc.name)}");
+                      // final vcs = snapshot.data as List<VCModel>;
+                      // log.i("vcs:${vcs.map((vc) => vc.name)}");
 
-                      return Column(
-                          children: vcs.map((vc) {
-                        return VC(
-                            did: did,
-                            icon: vc.icon,
-                            name: vc.name,
-                            description: vc.description,
-                            type: vc.type,
-                            schemaRequest: vc.schemaRequest,
-                            vc: vc.vc,
-                            jwt: vc.jwt);
-                      }).toList());
+                      return Obx(() => Column(
+                              children: c.vcs.map((vc) {
+                            return VC(
+                                did: did,
+                                icon: vc.icon,
+                                name: vc.name,
+                                description: vc.description,
+                                type: vc.type,
+                                schemaRequest: vc.schemaRequest,
+                                vc: vc.vc,
+                                jwt: vc.jwt);
+                          }).toList()));
                     }
                   }
                 })

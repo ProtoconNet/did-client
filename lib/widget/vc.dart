@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/controller/vc_list_controller.dart';
 import 'package:wallet/view/schema.dart';
 import 'package:wallet/view/did_list.dart';
 import 'package:wallet/view/vp.dart';
@@ -43,14 +44,18 @@ class VC extends StatelessWidget {
         log.i('no VC');
         return InkWell(
             onTap: () async {
+              log.i("*" * 100 + "Schema" + "*" * 100);
               log.i("schemaRequest: $schemaRequest");
               await Get.to(Schema(
                 did: did,
                 name: name,
                 requestSchema: schemaRequest,
               ));
-              // Get.back();
-              Get.offAll(DIDList());
+              VCListController vcListController = Get.find();
+              await vcListController.setVCList(did);
+              await vcListController.vcManager.readVC();
+              Get.back();
+              // Get.offAll(DIDList());
             },
             child: VCCard(
                 name: name,
