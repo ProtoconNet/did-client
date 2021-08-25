@@ -24,147 +24,150 @@ class Schema extends StatelessWidget {
   final String name;
   final String requestSchema;
 
-  builder(context, name) {
+  builder(name) {
     log.i('Schema Builder');
-    log.i("${c.schema.value}:${c.inputs.length}");
+    log.i("${c.schemaList}: $requestSchema");
 
-    if (c.schema.value == "") {
-      return Center(child: CircularProgressIndicator());
-    } else {
-      c.inputs = [];
+    final schemaList = c.schemaList;
+    var inputs = [];
 
-      final schemaList = json.decode(c.schema.value);
-      var datetimeIndex = 0;
-      var imageIndex = 0;
+    var datetimeIndex = 0;
+    var imageIndex = 0;
 
-      for (var item in schemaList) {
-        switch (item['type']) {
-          case 'string':
-            final TextEditingController ctrl = TextEditingController();
-            c.inputControllerList.add(ctrl);
-            c.inputs.add(TextFormField(
-              decoration: InputDecoration(hintText: item['name']),
-              controller: ctrl,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.text,
-            ));
-            break;
-          case 'image':
-            final idx = imageIndex;
-            // log.i("imageList idx:${c.imageList.length.toString()}");
-            // log.i("image idx:${idx.toString()}");
-            var shortSide = Get.height < Get.width ? Get.height : Get.width;
-            c.inputs.add(Column(children: [
-              Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
-                  ? Image.memory(base64Decode(c.imageList[idx]), height: shortSide / 2)
-                  : Image.asset('assets/images/visualAid.png')),
-              SizedBox(height: 30),
-              SizedBox(
-                  width: Get.width * 0.8,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: Get.width * 0.39,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await c.takeImage(idx);
-                              },
-                              child: Text('takePicture'.tr))),
-                      Text(' '),
-                      SizedBox(
-                          width: Get.width * 0.39,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await c.getImage(idx);
-                              },
-                              child: Text('pickGallery'.tr))),
-                    ],
-                  ))
-            ]));
-            c.addImageField();
-            imageIndex++;
-            break;
-          case 'number':
-            final TextEditingController ctrl = TextEditingController();
-            c.inputControllerList.add(ctrl);
-            c.inputs.add(TextFormField(
-              decoration: InputDecoration(hintText: item['name']),
-              controller: ctrl,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.number,
-            ));
-            break;
-          case 'datetime':
-            final idx = datetimeIndex;
-            c.inputs.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(item['name'].toString().toUpperCase() + " : "),
-              TextButton(onPressed: () {
-                DatePicker.showDatePicker(Get.context!, showTitleActions: true, onConfirm: (date) {
-                  c.setDateAt(date, idx);
-                }, currentTime: c.date.value, locale: LocaleType.ko);
-              }, child: Obx(() {
-                var formatter = DateFormat('yyyy-MM-dd');
-                String formattedDate = formatter.format(c.date.value);
-                return Text(
-                  formattedDate,
-                  style: TextStyle(color: Colors.blue),
-                );
-              })),
-              TextButton(onPressed: () {
-                DatePicker.showTimePicker(Get.context!, showTitleActions: true, onConfirm: (time) {
-                  c.setTimeAt(time, idx);
-                }, currentTime: c.time.value, locale: LocaleType.ko);
-              }, child: Obx(() {
-                var formatter = DateFormat('HH:mm:ss');
-                String formattedTime = formatter.format(c.time.value);
-                return Text(
-                  formattedTime,
-                  style: TextStyle(color: Colors.blue),
-                );
-              }))
-            ]));
-            c.addDateTimeField();
-            datetimeIndex++;
-            break;
-        }
+    for (var item in schemaList) {
+      switch (item['type']) {
+        case 'string':
+          final TextEditingController ctrl = TextEditingController();
+          c.inputControllerList.add(ctrl);
+          inputs.add(TextFormField(
+            decoration: InputDecoration(hintText: item['name']),
+            controller: ctrl,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.text,
+          ));
+          break;
+        case 'image':
+          final idx = imageIndex;
+          // log.i("imageList idx:${c.imageList.length.toString()}");
+          // log.i("image idx:${idx.toString()}");
+          var shortSide = Get.height < Get.width ? Get.height : Get.width;
+          inputs.add(Column(children: [
+            Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
+                ? Image.memory(base64Decode(c.imageList[idx]), height: shortSide / 2)
+                : Image.asset('assets/images/visualAid.png')),
+            SizedBox(height: 30),
+            SizedBox(
+                width: Get.width * 0.8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: Get.width * 0.39,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              await c.takeImage(idx);
+                            },
+                            child: Text('takePicture'.tr))),
+                    Text(' '),
+                    SizedBox(
+                        width: Get.width * 0.39,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              await c.getImage(idx);
+                            },
+                            child: Text('pickGallery'.tr))),
+                  ],
+                ))
+          ]));
+          c.imageList.add('');
+          imageIndex++;
+          break;
+        case 'number':
+          final TextEditingController ctrl = TextEditingController();
+          c.inputControllerList.add(ctrl);
+          inputs.add(TextFormField(
+            decoration: InputDecoration(hintText: item['name']),
+            controller: ctrl,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.number,
+          ));
+          break;
+        case 'datetime':
+          final idx = datetimeIndex;
+          inputs.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(item['name'].toString().toUpperCase() + " : "),
+            TextButton(onPressed: () {
+              DatePicker.showDatePicker(Get.context!, showTitleActions: true, onConfirm: (date) {
+                c.dateList[idx] = date;
+              }, currentTime: c.date.value, locale: LocaleType.ko);
+            }, child: Obx(() {
+              var formatter = DateFormat('yyyy-MM-dd');
+              String formattedDate = formatter.format(c.date.value);
+              return Text(
+                formattedDate,
+                style: TextStyle(color: Colors.blue),
+              );
+            })),
+            TextButton(onPressed: () {
+              DatePicker.showTimePicker(Get.context!, showTitleActions: true, onConfirm: (time) {
+                c.timeList[idx] = time;
+              }, currentTime: c.time.value, locale: LocaleType.ko);
+            }, child: Obx(() {
+              var formatter = DateFormat('HH:mm:ss');
+              String formattedTime = formatter.format(c.time.value);
+              return Text(
+                formattedTime,
+                style: TextStyle(color: Colors.blue),
+              );
+            }))
+          ]));
+          c.addDateTimeField();
+          datetimeIndex++;
+          break;
       }
-
-      return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        SizedBox(
-            height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 80,
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ...c.inputs,
-            ])),
-        SizedBox(
-            width: Get.width * 0.8,
-            height: 50,
-            child: ElevatedButton(
-                child: Text('Submit'),
-                onPressed: () async {
-                  await c.submit(name, schemaList);
-                  Get.back();
-                }))
-      ]);
     }
+
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      SizedBox(
+          height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 80,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ...inputs,
+          ])),
+      SizedBox(
+          width: Get.width * 0.8,
+          height: 50,
+          child: ElevatedButton(
+              child: Text('Submit'),
+              onPressed: () async {
+                await c.submit(schemaList);
+                Get.back();
+              }))
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Background(
-        // color: Color.fromARGB(0xff, 61, 61, 61),
         appBar: AppBar(
             backgroundColor: Color.fromARGB(0xff, 61, 61, 61),
             title: Text(name,
                 style: GoogleFonts.roboto(textStyle: Get.theme.textTheme.headline6?.copyWith(color: Colors.white)))),
         children: [
-          Obx(() => Container(
+          Container(
               margin: EdgeInsets.all(16.0),
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - 16.0 * 2,
-              child: builder(context, name)))
+              child: FutureBuilder(
+                  future: c.dynamicFields(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return builder(name);
+                    }
+                  }))
         ]);
   }
 }

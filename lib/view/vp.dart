@@ -7,11 +7,12 @@ import 'package:wallet/widget/background.dart';
 import 'package:wallet/controller/vp_controller.dart';
 
 class VP extends StatelessWidget {
-  VP({key, required this.name, required this.vc}) : super(key: key);
+  VP({key, required this.did, required this.name, required this.vc}) : super(key: key);
 
   final VPController c = Get.put(VPController());
 
   final Map<String, dynamic> vc;
+  final String did;
   final String name;
   final String thirdPartyName = "SK 렌터카";
 
@@ -20,7 +21,8 @@ class VP extends StatelessWidget {
     for (var key in credentialSubject.keys) {
       ret.add(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(key.toUpperCase(), style: Get.textTheme.subtitle2!.copyWith(color: Get.theme.accentColor)),
-        Text("${credentialSubject[key]}", style: Get.textTheme.headline5!.copyWith(fontWeight: FontWeight.w600))
+        Text("${credentialSubject[key]}",
+            style: Get.textTheme.headline5!.copyWith(fontWeight: FontWeight.w600), maxLines: 3)
       ]));
     }
 
@@ -53,14 +55,16 @@ class VP extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ...credentialSubjectList(vc['credentialSubject']),
-                      FutureBuilder(
-                          future: c.getVP([vc]),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return QrImage(data: snapshot.data.toString(), version: QrVersions.auto, size: 300.0);
-                            }
-                            return CircularProgressIndicator();
-                          })
+                      // FutureBuilder(
+                      //     future: c.getVP([vc]),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.hasData) {
+                      // return
+                      SizedBox(height: 18),
+                      Center(child: QrImage(data: did, version: QrVersions.auto, size: 160.0))
+                      //   }
+                      //   return CircularProgressIndicator();
+                      // })
                     ],
                   )),
             ),

@@ -16,8 +16,8 @@ class VPManager {
   init() async {
     if (uninitialized) {
       uninitialized = false;
-      if (await storage.containsKey(key: did)) {
-        final vpList = json.decode(await storage.read(key: did) as String);
+      if (await storage.containsKey(key: did + ":vp")) {
+        final vpList = json.decode(await storage.read(key: did + ":vp") as String);
 
         for (var vp in vpList) {
           vps.add(VPModel.fromJson(vp));
@@ -47,7 +47,7 @@ class VPManager {
       log.w("Same VP exist");
     }
 
-    await storage.write(key: did, value: json.encode(vps.map((e) => e.toJson()).toList()));
+    await storage.write(key: did + ":vp", value: json.encode(vps.map((e) => e.toJson()).toList()));
 
     return flag;
   }
@@ -68,7 +68,7 @@ class VPManager {
         vp.setField(field, value);
       }
     }
-    await storage.write(key: did, value: json.encode(vps.map((e) => e.toJson()).toList()));
+    await storage.write(key: did + ":vp", value: json.encode(vps.map((e) => e.toJson()).toList()));
   }
 
   getByName(String name, String field) async {

@@ -27,7 +27,7 @@ void main() async {
 
       // expect((response.statusCode / 100).floor(), 2);
 
-      // final Map<String, dynamic> result = json.decode(response.body);
+      // final Map<String, dynamic> result = json.decode(response);
 
       // expect(result.containsKey('schema'), true);
     });
@@ -37,7 +37,7 @@ void main() async {
 
       // expect((response.statusCode / 100).floor(), 2);
 
-      // final Map<String, dynamic> result = json.decode(response.body);
+      // final Map<String, dynamic> result = json.decode(response);
 
       // expect(result.containsKey('schema'), true);
     });
@@ -47,7 +47,7 @@ void main() async {
 
       // expect((response.statusCode / 100).floor(), 2);
 
-      // final Map<String, dynamic> result = json.decode(response.body);
+      // final Map<String, dynamic> result = json.decode(response);
 
       // expect(result.containsKey('schema'), true);
     });

@@ -114,8 +114,9 @@ class ReceivePassword extends StatelessWidget {
                         },
                         onEditingComplete: () => node.nextFocus(),
                         onFieldSubmitted: (test) async {
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
+                          Get.to(CreateDID(password: confirmPass.text));
+                          // Navigator.push(
+                          //     context, MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
                         }),
                     SizedBox(height: 10),
                     Obx(() => SizedBox(

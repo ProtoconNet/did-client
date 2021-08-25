@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final primary = createMaterialColor(Color(0xFF5A24BE));
-final secondary = createMaterialColor(Color(0xFF2D742F));
+final secondary = createMaterialColor(Color(0xFFED742F));
 
 final theme = ThemeData(
   brightness: Brightness.light,

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
+
+// import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
@@ -17,10 +19,10 @@ class Issuer {
     switch ((response.statusCode / 100).floor()) {
       case 2:
         log.i("response: ${response.body}");
-        return response;
+        return response.body;
       default:
-        log.lw("Response Error $response");
-        return response;
+        log.lw("Response Error ${response.statusCode}:${response.body}");
+        return response.body;
       // throw Error();
     }
   }
@@ -46,11 +48,11 @@ class Issuer {
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
-      body: body,
+      body: json.encode(body),
     );
-    final result = responseCheck(response);
+    final challenge = json.decode(responseCheck(response));
 
-    final challenge = jsonDecode(result.body);
+    // final challenge = jsonDecode(result.body);
 
     if (challenge.containsKey('payload')) {
       final challengeResult =
@@ -72,7 +74,7 @@ class Issuer {
     log.i(schemaLocation);
     http.Response response = await http.get(Uri.parse(schemaLocation));
     final vcLocation = responseCheck(response);
-    return json.decode(vcLocation.body);
+    return json.decode(vcLocation);
   }
 
   didAuth(payload, endPoint, token, privateKey) async {
@@ -90,3 +92,104 @@ class Issuer {
     return true;
   }
 }
+
+/*
+  responseCheck(Response<dynamic> response) {
+    switch ((response.statusCode! / 100).floor()) {
+      case 2:
+        log.i("response: ${response.data}");
+        return response;
+      default:
+        log.lw("Response Error $response");
+        return response;
+      // throw Error();
+    }
+  }
+
+  getVC(token) async {
+    final locations = await getSchemaLocation();
+    final response = await Dio().get(
+      locations['VCGet'],
+      options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
+    );
+    return responseCheck(response);
+  }
+
+  postVC(data, privateKey) async {
+    final locations = await getSchemaLocation();
+    log.i('1:${locations['VCPost']}, $data');
+
+    var response = await http.post(
+      Uri.parse(locations['VCPost']),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: json.encode(data),
+    );
+
+    log.i("response body: ${response.body}");
+    var response2 = await Dio()
+        .post(
+      locations['VCPost'],
+      data: data,
+      options: Options(headers: {
+        "content-type": "application/json",
+        "accept": "application/json"
+      }), //contentType: Headers.jsonContentType),
+    )
+        .catchError((onError) {
+      log.e("error:${onError.toString()}");
+    });
+    log.i('a:${response2.data}');
+
+    // final result = responseCheck(response);
+    // log.i('b');
+
+    // final challenge = jsonDecode(result.data);
+    // log.i('c');
+
+    // if (challenge.containsKey('payload')) {
+    //   final challengeResult =
+    //       await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization'], privateKey);
+    //   if (challengeResult) {
+    //     return response.headers['Authorization'];
+    //   }
+    // }
+    // return false;
+  }
+
+  responseChallenge(challengeUri, encodedSignatureBytes, token) async {
+    final response = await Dio().get(
+      challengeUri,
+      queryParameters: {'signature': encodedSignatureBytes},
+      options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
+    );
+
+    return responseCheck(response);
+  }
+
+  getSchemaLocation() async {
+    log.i(schemaLocation);
+
+    final response = await Dio().get(schemaLocation);
+
+    final vcLocation = responseCheck(response);
+    return json.decode(vcLocation.data);
+  }
+
+  didAuth(payload, endPoint, token, privateKey) async {
+    log.i('did Auth');
+
+    final challengeBytes = utf8.encode(payload);
+
+    final signature = await crypto.sign(challengeBytes, privateKey);
+
+    final response2 = await responseChallenge(endPoint, Base58Encode(signature), token);
+    if (response2 == "") {
+      log.le("Challenge Failed");
+      return false;
+    }
+    return true;
+  }
+*/

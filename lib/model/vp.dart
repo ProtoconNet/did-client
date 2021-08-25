@@ -4,7 +4,7 @@ class VPModel {
   String type;
   int icon;
   String schemaRequest;
-  List<String> vc;
+  List<dynamic> vc;
 
   VPModel(this.name, this.description, this.type, this.icon, this.schemaRequest, this.vc);
 

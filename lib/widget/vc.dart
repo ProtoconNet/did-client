@@ -43,12 +43,14 @@ class VC extends StatelessWidget {
         log.i('no VC');
         return InkWell(
             onTap: () async {
+              log.i("schemaRequest: $schemaRequest");
               await Get.to(Schema(
                 did: did,
                 name: name,
                 requestSchema: schemaRequest,
               ));
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => DIDList()));
+              // Get.back();
+              Get.offAll(DIDList());
             },
             child: VCCard(
                 name: name,
@@ -71,7 +73,7 @@ class VC extends StatelessWidget {
       return InkWell(
         onTap: () {
           // log.i("VC closedBuilder: ${vc['name']}");
-          Get.to(VP(name: name, vc: vc));
+          Get.to(VP(did: did, name: name, vc: vc));
         },
         child: VCCard(
             name: name,

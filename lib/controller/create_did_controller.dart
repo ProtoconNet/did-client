@@ -37,27 +37,21 @@ class CreateDIDController extends GetxController {
   }
 
   registerDidDocument(did) async {
-    var response = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
-    if (json.decode(response.body)['message'] == "success") {
+    var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    if (response['message'] == "success") {
       log.i("DID Already Exist");
       return;
     } else {
       log.i("DID Not Found. Let's Register");
     }
 
-    do {
-      response = await platform.setDIDDocument(Uri.parse(dotenv.env['REGISTER_DID_DOCUMENT']!), did);
+    response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
 
-      if ((response.statusCode / 100).floor() != 2) {
-        sleep(Duration(seconds: 10));
-      } else {
-        var response2 = await platform.getDIDDocument(Uri.parse(dotenv.env['GET_DID_DOCUMENT']! + did));
-        if (json.decode(response2.body)['message'] == "success") {
-          log.i("DID Registration Success");
-        } else {
-          log.i("DID Registration Failed");
-        }
-      }
-    } while ((response.statusCode / 100).floor() != 2);
+    var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    if (response2['message'] == "success") {
+      log.i("DID Registration Success");
+    } else {
+      log.i("DID Registration Failed");
+    }
   }
 }

@@ -26,7 +26,6 @@ class SchemaController extends GetxController {
   final platform = Platform();
 
   var inputControllerList = [];
-  var inputs = [];
 
   var dateList = [].obs;
   var timeList = [].obs;
@@ -36,20 +35,24 @@ class SchemaController extends GetxController {
   var image = ''.obs;
   File? imageFile;
 
-  var schema = ''.obs;
+  var schemaList = [];
+  // var schema = ''.obs;
 
   @override
   onInit() async {
     super.onInit();
 
+    await init();
+  }
+
+  init() async {
     inputControllerList = [];
-    inputs = [];
 
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
 
-    await dynamicFields(name, requestSchema);
+    await dynamicFields();
   }
 
   setImageFile(File _new) {
@@ -67,40 +70,28 @@ class SchemaController extends GetxController {
     timeList.add(DateTime.now());
   }
 
-  addImageField() {
-    imageList.add('');
-  }
-
-  setDateAt(val, index) {
-    dateList.add(val);
-  }
-
-  setTimeAt(val, index) {
-    timeList[index] = val;
-  }
-
-  setImageAt(val, index) {
-    imageList[index] = val;
-  }
-
   getDateTimeAt(i) {
     return DateTime(
         dateList[i].year, dateList[i].month, dateList[i].day, timeList[i].hour, timeList[i].minute, timeList[i].second);
   }
 
-  dynamicFields(String name, String requestSchema) async {
-    log.i('dynamicFields: $name : $requestSchema');
+  dynamicFields() async {
+    log.i('dynamicFields:: $requestSchema');
     log.i('*' * 200);
     var locations = await issuer.getSchemaLocation();
 
-    var response = await platform.getSchema(Uri.parse(locations['schema']));
-    if (json.decode(response.body).containsKey('error')) {
+    var response = await platform.getSchema(locations['schema']);
+    log.i("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$response");
+    log.i(response.runtimeType);
+    if (response.containsKey('error')) {
       return;
     }
 
-    log.i("schema: ${json.decode(response.body)['data']}");
+    log.i("schema: ${response['data']}");
 
-    schema.value = json.decode(response.body)['data'];
+    schemaList = json.decode(response['data']);
+
+    return schemaList;
   }
 
   Future takeImage(index) async {
@@ -112,7 +103,9 @@ class SchemaController extends GetxController {
 
       var imageBytes = await File(pickedFile.path).readAsBytes();
       var imageBase64 = base64Encode(imageBytes);
-      setImageAt(imageBase64, index);
+
+      imageList[index] = imageBase64;
+
       return pickedFile.path;
     } else {
       log.i('No image selected.');
@@ -145,14 +138,15 @@ class SchemaController extends GetxController {
       var jpg = img.encodeJpg(resizedImg, quality: 95);
       var jpgBase64 = base64Encode(jpg);
 
-      setImageAt(jpgBase64, index);
+      imageList[index] = jpgBase64;
+
       return pickedFile.path;
     } else {
       log.i('No image selected.');
     }
   }
 
-  submit(name, data) async {
+  submit(data) async {
     log.i("submit");
     var credentialSubject = {};
 
@@ -195,12 +189,12 @@ class SchemaController extends GetxController {
 
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
     log.i('pk: $pk');
-    var response = await issuer.postVC(json.encode(body), pk);
+    var response = await issuer.postVC(body, pk);
 
     log.i("postVC Response: $response");
 
     if (response != false) {
-      VCListController c = Get.find();
+      VCListController c = Get.put(VCListController(did));
       await c.vcManager!.setByName(name, 'jwt', response);
       // await c.vcManager!.init();
     } else {

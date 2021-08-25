@@ -31,7 +31,9 @@ class LoginController extends GetxController {
   login(password) async {
     try {
       final did = g.didManager.value.getFirstDID();
-      await g.didManager.value.getDIDPK(did, password);
+      final pk = await g.didManager.value.getDIDPK(did, password);
+
+      if (pk == "") throw Error();
 
       g.password.value = password;
       g.did.value = did;
