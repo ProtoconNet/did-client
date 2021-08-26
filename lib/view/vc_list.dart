@@ -41,7 +41,7 @@ class VCList extends StatelessWidget {
                       // log.i("vcs:${vcs.map((vc) => vc.name)}");
 
                       return Obx(() => Column(
-                              children: c.vcs.map((vc) {
+                              children: c.vcList.map((vc) {
                             return VC(
                                 did: did,
                                 icon: vc.icon,

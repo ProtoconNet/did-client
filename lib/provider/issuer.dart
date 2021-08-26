@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
-// import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
@@ -14,7 +14,7 @@ class Issuer {
   final crypto = Crypto();
 
   final String schemaLocation;
-
+/*
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
@@ -91,17 +91,15 @@ class Issuer {
     }
     return true;
   }
-}
-
-/*
+  */
   responseCheck(Response<dynamic> response) {
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         log.i("response: ${response.data}");
-        return response;
+        return response.data;
       default:
         log.lw("Response Error $response");
-        return response;
+        return response.data;
       // throw Error();
     }
   }
@@ -119,17 +117,17 @@ class Issuer {
     final locations = await getSchemaLocation();
     log.i('1:${locations['VCPost']}, $data');
 
-    var response = await http.post(
-      Uri.parse(locations['VCPost']),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: json.encode(data),
-    );
+    // var response = await http.post(
+    //   Uri.parse(locations['VCPost']),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //   },
+    //   body: json.encode(data),
+    // );
+    // log.i("response body: ${response.body}");
 
-    log.i("response body: ${response.body}");
-    var response2 = await Dio()
+    var response = await Dio()
         .post(
       locations['VCPost'],
       data: data,
@@ -141,22 +139,25 @@ class Issuer {
         .catchError((onError) {
       log.e("error:${onError.toString()}");
     });
-    log.i('a:${response2.data}');
+    log.i('a:${response.data}');
 
-    // final result = responseCheck(response);
-    // log.i('b');
+    final result = responseCheck(response);
+    log.i('b:$result, ${result.runtimeType}');
 
-    // final challenge = jsonDecode(result.data);
-    // log.i('c');
+    final challenge = jsonDecode(result);
+    log.i('c');
 
-    // if (challenge.containsKey('payload')) {
-    //   final challengeResult =
-    //       await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization'], privateKey);
-    //   if (challengeResult) {
-    //     return response.headers['Authorization'];
-    //   }
-    // }
-    // return false;
+    log.i('${response.headers}');
+    log.i('${response.headers['authorization']}');
+
+    if (challenge.containsKey('payload')) {
+      final challengeResult =
+          await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']![0], privateKey);
+      if (challengeResult) {
+        return response.headers['authorization']![0];
+      }
+    }
+    return false;
   }
 
   responseChallenge(challengeUri, encodedSignatureBytes, token) async {
@@ -175,7 +176,7 @@ class Issuer {
     final response = await Dio().get(schemaLocation);
 
     final vcLocation = responseCheck(response);
-    return json.decode(vcLocation.data);
+    return json.decode(vcLocation);
   }
 
   didAuth(payload, endPoint, token, privateKey) async {
@@ -192,4 +193,4 @@ class Issuer {
     }
     return true;
   }
-*/
+}

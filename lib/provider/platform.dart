@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/did_document.dart';
@@ -9,7 +10,7 @@ class Platform {
   final log = Log();
 
   final didDocument = DIDDocument();
-
+/*
   responseCheck(http.Response response) {
     switch ((response.statusCode / 100).floor()) {
       case 2:
@@ -51,22 +52,15 @@ class Platform {
 
     return responseCheck(response);
   }
-}
-
-/*
-class Platform {
-  final log = Log();
-
-  final didDocument = DIDDocument();
-
+*/
   responseCheck(Response<dynamic> response) {
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         // log.i("${response.body}");
-        return response;
+        return response.data;
       default:
         log.lw("Response Error: $response");
-        return response;
+        return response.data;
       // throw Error();
     }
   }
@@ -93,4 +87,3 @@ class Platform {
     return responseCheck(response);
   }
 }
-*/

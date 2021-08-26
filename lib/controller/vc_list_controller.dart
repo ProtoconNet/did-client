@@ -15,7 +15,7 @@ class VCListController extends GetxController {
 
   final String did;
 
-  var vcs = [].obs;
+  var vcList = [].obs;
 
   VCManager vcManager;
 
@@ -47,6 +47,6 @@ class VCListController extends GetxController {
         await vcManager.setByName(vc.name, 'jwt', "");
       }
     }
-    vcs.value = vcManager.vcs;
+    vcList.value = vcManager.vcs;
   }
 }

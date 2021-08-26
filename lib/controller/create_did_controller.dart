@@ -37,17 +37,21 @@ class CreateDIDController extends GetxController {
   }
 
   registerDidDocument(did) async {
-    var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-    if (response['message'] == "success") {
-      log.i("DID Already Exist");
-      return;
-    } else {
-      log.i("DID Not Found. Let's Register");
-    }
+    log.i("&" * 100);
+    // var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    // if (response['message'] == "success") {
+    //   log.i("DID Already Exist");
+    //   return;
+    // } else {
+    //   log.i("DID Not Found. Let's Register");
+    // }
+    // log.i("&" * 100);
 
-    response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
+    var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
+    log.i("&" * 100);
 
     var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    log.i(response2);
     if (response2['message'] == "success") {
       log.i("DID Registration Success");
     } else {
