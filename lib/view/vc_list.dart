@@ -4,19 +4,20 @@ import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/controller/vc_list_controller.dart';
 // import 'package:wallet/widgets/did_card.dart';
-import 'package:wallet/model/vc.dart';
-import 'package:wallet/widget/vc.dart';
+// import 'package:wallet/model/vc.dart';
+import 'package:wallet/view/vc.dart';
 import 'package:wallet/util/logger.dart';
 
 class VCList extends StatelessWidget {
   VCList({key, required this.did})
       : c = Get.put(VCListController(did)),
         super(key: key);
-  final String did;
 
-  final log = Log();
-  final GlobalVariable g = Get.find();
+  final String did;
   final VCListController c;
+
+  final GlobalVariable g = Get.find();
+  final log = Log();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class VCList extends StatelessWidget {
                       // log.i("vcs:${vcs.map((vc) => vc.name)}");
 
                       return Obx(() => Column(
-                              children: c.vcList.map((vc) {
+                              children: c.vcManager.vcs.map((vc) {
                             return VC(
                                 did: did,
                                 icon: vc.icon,

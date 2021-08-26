@@ -8,11 +8,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/widget/background.dart';
 import 'package:wallet/view/vc_list.dart';
+import 'package:wallet/view/config.dart';
 import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
+
   final storage = FlutterSecureStorage();
 
   @override
@@ -36,6 +38,11 @@ class DIDList extends StatelessWidget {
             // automaticallyImplyLeading: false,
             title: Text('MITUM Wallet', style: Get.textTheme.headline6),
             actions: [
+              // ElevatedButton(
+              //     onPressed: () {
+              //       Get.to(Config());
+              //     },
+              //     child: Text("O")),
               IconButton(
                 icon: Icon(Icons.delete, color: Get.theme.primaryColor),
                 onPressed: () async {

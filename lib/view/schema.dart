@@ -15,14 +15,14 @@ class Schema extends StatelessWidget {
       : c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema)),
         super(key: key);
 
-  final GlobalVariable g = Get.find();
-  final log = Log();
-
-  final SchemaController c;
-
   final String did;
   final String name;
   final String requestSchema;
+
+  final SchemaController c;
+
+  final GlobalVariable g = Get.find();
+  final log = Log();
 
   builder(name) {
     log.i('Schema Builder');
@@ -129,6 +129,8 @@ class Schema extends StatelessWidget {
       }
     }
 
+    log.i("+" * 100);
+
     return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       SizedBox(
           height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 80,
@@ -141,7 +143,7 @@ class Schema extends StatelessWidget {
           child: ElevatedButton(
               child: Text('Submit'),
               onPressed: () async {
-                await c.submit(schemaList);
+                await c.submit(requestSchema, name, schemaList);
                 Get.back();
               }))
     ]);
@@ -160,12 +162,13 @@ class Schema extends StatelessWidget {
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - 16.0 * 2,
               child: FutureBuilder(
-                  future: c.dynamicFields(),
+                  future: c.init(requestSchema),
                   builder: (context, snapshot) {
+                    log.i(snapshot.data);
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());
                     } else {
-                      return builder(name);
+                      return Obx(() => builder(name));
                     }
                   }))
         ]);

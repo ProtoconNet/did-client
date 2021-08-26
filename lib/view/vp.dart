@@ -74,16 +74,30 @@ class VP extends StatelessWidget {
                   onTap: () {
                     Get.defaultDialog(
                       backgroundColor: Colors.grey.shade200,
-                      title: thirdPartyName,
-                      titleStyle: Get.textTheme.headline4!.copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+                      title: "",
+                      titleStyle: TextStyle(fontSize: 0),
+                      // title: "인증 요청",
+                      // titleStyle: Get.textTheme.subtitle2!.copyWith(color: Colors.black, fontWeight: FontWeight.w700),
                       content: Column(children: [
+                        Row(
+                          children: [
+                            Text('인증요청'),
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {},
+                            )
+                          ],
+                        ),
+                        Text(thirdPartyName,
+                            style: Get.textTheme.headline6!.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
+                        SizedBox(height: 27),
                         Text('제주패스 회원 10% 할인', style: Get.textTheme.subtitle1!.copyWith(color: Get.theme.accentColor)),
-                        SizedBox(height: 10),
-                        Text('$thirdPartyName에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
                         SizedBox(height: 20),
+                        Text('$thirdPartyName에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
+                        SizedBox(height: 12),
                         Container(
-                          margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 20),
-                          width: Get.width * 0.75,
+                          margin: EdgeInsets.only(bottom: 8),
+                          width: Get.width * 0.90,
                           child: Card(
                             color: Get.theme.cardColor,
                             elevation: 1,
@@ -95,7 +109,7 @@ class VP extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(15),
                                 child: Column(
                                   children: [
                                     Row(
@@ -103,8 +117,8 @@ class VP extends StatelessWidget {
                                       children: [
                                         Padding(padding: EdgeInsets.all(10), child: Icon(FontAwesomeIcons.addressCard)),
                                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                          Text('  운전면허 정보', style: Get.textTheme.subtitle2),
-                                          Text('  성명, 생년월일, 운전면허번호', style: Get.textTheme.caption)
+                                          Text('  운전면허 정보', style: Get.textTheme.bodyText1),
+                                          Text('  성명, 생년월일, 운전면허번호', style: Get.textTheme.bodyText2)
                                         ])
                                       ],
                                     ),
@@ -113,8 +127,8 @@ class VP extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 5, top: 5),
-                          width: Get.width * 0.75,
+                          margin: EdgeInsets.only(bottom: 8),
+                          width: Get.width * 0.90,
                           child: Card(
                             color: Get.theme.cardColor,
                             elevation: 1,
@@ -126,7 +140,7 @@ class VP extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(15),
                                 child: Column(
                                   children: [
                                     Row(
@@ -134,8 +148,8 @@ class VP extends StatelessWidget {
                                       children: [
                                         Padding(padding: EdgeInsets.all(10), child: Icon(FontAwesomeIcons.ticketAlt)),
                                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                          Text('  제주패스 정보', style: Get.textTheme.subtitle2),
-                                          Text('  성명, 예약번호, 유효기간', style: Get.textTheme.caption)
+                                          Text('  제주패스 정보', style: Get.textTheme.bodyText1),
+                                          Text('  성명, 예약번호, 유효기간', style: Get.textTheme.bodyText2)
                                         ])
                                       ],
                                     ),

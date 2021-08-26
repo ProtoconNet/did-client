@@ -10,20 +10,19 @@ import 'package:wallet/util/logger.dart';
 class VCListController extends GetxController {
   VCListController(this.did) : vcManager = VCManager(did);
 
+  final String did;
+  VCManager vcManager;
+
   final GlobalVariable g = Get.find();
   final log = Log();
-
-  final String did;
-
-  var vcList = [].obs;
-
-  VCManager vcManager;
 
   @override
   onInit() async {
     super.onInit();
 
     await vcManager.init();
+    // await vcManager.value.init();
+    // vcManager.update((t) {});
   }
 
   setVCList(did) async {
@@ -47,6 +46,6 @@ class VCListController extends GetxController {
         await vcManager.setByName(vc.name, 'jwt', "");
       }
     }
-    vcList.value = vcManager.vcs;
+    // vcManager.update((t) {});
   }
 }

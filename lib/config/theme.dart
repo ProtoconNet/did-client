@@ -15,7 +15,7 @@ final theme = ThemeData(
     headline5: TextStyle(fontSize: 24, letterSpacing: 0.0, color: Colors.black),
     headline6: TextStyle(fontSize: 20, letterSpacing: 0.0, color: Colors.black, fontWeight: FontWeight.w900),
     subtitle1: TextStyle(fontSize: 16, letterSpacing: 0.0, color: Colors.black),
-    subtitle2: TextStyle(fontSize: 24, letterSpacing: 0.1, color: Colors.black),
+    subtitle2: TextStyle(fontSize: 14, letterSpacing: 0.1, color: Colors.black),
     bodyText1: TextStyle(fontSize: 16, letterSpacing: 0.1, color: Colors.black),
     bodyText2: TextStyle(fontSize: 14, letterSpacing: 0.1, color: Colors.black),
     caption: TextStyle(fontSize: 13, letterSpacing: 0.0, color: Colors.black),

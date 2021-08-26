@@ -14,15 +14,17 @@ class VCCard extends StatelessWidget {
       required this.icon,
       required this.status})
       : super(key: key);
-  final GlobalVariable g = Get.find();
-  final log = Log();
-  final c = Get.put(VCCardController());
 
   final String name;
   final String description;
   final String type;
   final IconData icon;
   final String status;
+
+  final c = Get.put(VCCardController());
+
+  final GlobalVariable g = Get.find();
+  final log = Log();
 
   Widget getLogoByName(String name) {
     const double height = 20;

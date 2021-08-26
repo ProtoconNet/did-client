@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 import 'package:wallet/view/schema.dart';
-import 'package:wallet/view/did_list.dart';
 import 'package:wallet/view/vp.dart';
 import 'package:wallet/view/vc_card.dart';
 import 'package:wallet/util/logger.dart';
@@ -22,8 +21,6 @@ class VC extends StatelessWidget {
       required this.vc,
       required this.jwt})
       : super(key: key);
-  final GlobalVariable g = Get.find();
-  final log = Log();
 
   final String did;
   final int icon;
@@ -33,6 +30,9 @@ class VC extends StatelessWidget {
   final String schemaRequest;
   final Map<String, dynamic> vc;
   final String jwt;
+
+  final GlobalVariable g = Get.find();
+  final log = Log();
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class VC extends StatelessWidget {
               VCListController vcListController = Get.find();
               await vcListController.setVCList(did);
               await vcListController.vcManager.readVC();
+              // vcListController.vcManager.update((t) {});
               Get.back();
               // Get.offAll(DIDList());
             },

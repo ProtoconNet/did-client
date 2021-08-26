@@ -11,6 +11,7 @@ class CreateDID extends StatelessWidget {
 
   final String password;
   final CreateDIDController c = Get.put(CreateDIDController());
+
   final log = Log();
 
   @override

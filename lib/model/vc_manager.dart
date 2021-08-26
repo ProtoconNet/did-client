@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/model/vc.dart';
@@ -10,7 +11,7 @@ class VCManager {
   final storage = FlutterSecureStorage();
 
   final String did;
-  List<VCModel> vcs = [];
+  RxList<VCModel> vcs = <VCModel>[].obs;
   bool uninitialized = true;
 
   init() async {
@@ -33,7 +34,7 @@ class VCManager {
   readVC() async {
     final vcList = json.decode(await storage.read(key: did) as String);
     log.i("vcList: $vcList");
-    vcs = [];
+    vcs.value = [];
 
     for (var vc in vcList) {
       vcs.add(VCModel.fromJson(vc));
@@ -41,8 +42,7 @@ class VCManager {
   }
 
   setVC(String value) async {
-    await init();
-
+    // await init();
     final newVC = VCModel.fromJson(json.decode(value));
 
     var flag = true;
@@ -64,7 +64,7 @@ class VCManager {
   }
 
   getVC(String name) async {
-    await init();
+    // await init();
     for (var vc in vcs) {
       if (vc.name == name) {
         return vc;
@@ -73,21 +73,17 @@ class VCManager {
   }
 
   setByName(String name, String field, dynamic value) async {
-    await init();
-    print("vcs:${vcs[0].vc}:${vcs[0].jwt}");
-    print("vcs:${vcs[1].vc}:${vcs[1].jwt}");
+    // await init();
     for (var vc in vcs) {
       if (vc.name == name) {
         vc.setField(field, value);
       }
     }
-    print("vcs:${vcs[0].vc}:${vcs[0].jwt}");
-    print("vcs:${vcs[1].vc}:${vcs[1].jwt}");
     await storage.write(key: did, value: json.encode(vcs.map((e) => e.toJson()).toList()));
   }
 
   getByName(String name, String field) async {
-    await init();
+    // await init();
     for (var vc in vcs) {
       if (vc.name == name) {
         return vc.getField(field);

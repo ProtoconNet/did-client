@@ -38,24 +38,26 @@ class CreateDIDController extends GetxController {
 
   registerDidDocument(did) async {
     log.i("&" * 100);
-    // var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-    // if (response['message'] == "success") {
-    //   log.i("DID Already Exist");
-    //   return;
-    // } else {
-    //   log.i("DID Not Found. Let's Register");
-    // }
-    // log.i("&" * 100);
+    try {
+      var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    } catch (e) {
+      log.i("DID Not Found. Let's Register");
 
-    var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
-    log.i("&" * 100);
+      log.i("&" * 100);
 
-    var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-    log.i(response2);
-    if (response2['message'] == "success") {
-      log.i("DID Registration Success");
-    } else {
-      log.i("DID Registration Failed");
+      var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
+      log.i("&" * 100);
+      log.i("set did document response: $response");
+
+      var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+      log.i(response2);
+      if (response2['message'] == "success") {
+        log.i("DID Registration Success");
+      } else {
+        log.i("DID Registration Failed");
+      }
+    } finally {
+      log.i("DID Already Exist");
     }
   }
 }
