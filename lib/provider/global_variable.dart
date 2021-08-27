@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+// import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'package:wallet/model/did_manager.dart';
 import 'package:wallet/config/translations.dart';
@@ -14,7 +14,7 @@ class GlobalVariable extends GetxController {
   var did = ''.obs;
   var biometric = false.obs;
 
-  var tabController = PersistentTabController(initialIndex: 0).obs;
+  // var tabController = PersistentTabController(initialIndex: 0).obs;
 
   var didManager = DIDManager().obs;
 
@@ -78,7 +78,7 @@ class GlobalVariable extends GetxController {
   // bool get biometric => box.read('biometric');
   // set biometric(bool val) => box.write('biometric', val);
 
-  void setPage(i) {
-    tabController.value.jumpToTab(i);
-  }
+  // void setPage(i) {
+  //   tabController.value.jumpToTab(i);
+  // }
 }

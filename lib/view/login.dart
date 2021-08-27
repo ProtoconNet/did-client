@@ -69,8 +69,7 @@ class Login extends StatelessWidget {
                     onPressed: () async {
                       await c.login(_pass.text);
                     },
-                    child: Text('enter'.tr),
-                    style: Get.theme.elevatedButtonTheme.style))),
+                    child: Text('enter'.tr)))),
         Padding(
             padding: EdgeInsets.all(8),
             child: SizedBox(

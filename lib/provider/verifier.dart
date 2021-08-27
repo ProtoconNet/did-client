@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+// import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/util/logger.dart';
@@ -14,6 +15,7 @@ class Verifier {
   final String schemaLocation;
 
   getVPSchema() async {
+    log.i("getVPSchema");
     final locations = await getSchemaLocation();
 
     final response = await Dio().get(locations['schema']);
@@ -22,13 +24,27 @@ class Verifier {
   }
 
   postVP(data, privateKey) async {
+    log.i("Verifier:postVP");
+    log.i("params:$data");
     final locations = await getSchemaLocation();
 
+    // final response = await http.post(
+    //   Uri.parse(locations["VPPost"]),
+    //   body: json.encode(data),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //   },
+    // );
+    // log.i("${response.body}:${response.statusCode}");
+
+    log.i("locations['VPPost']:${locations['VPPost']}");
     final response = await Dio().post(
       locations["VPPost"],
       data: data,
-      options: Options(contentType: Headers.jsonContentType),
+      options: Options(headers: {"content-type": "application/json", "accept": "application/json"}),
     );
+    log.i("1");
 
     final result = responseCheck(response);
     log.i('b:$result, ${result.runtimeType}');
@@ -50,7 +66,8 @@ class Verifier {
   }
 
   getSchemaLocation() async {
-    log.i(schemaLocation);
+    log.i("Verifier:getSchemaLocation");
+    log.i("schemaLocation:$schemaLocation");
 
     final response = await Dio().get(schemaLocation);
 
@@ -59,7 +76,7 @@ class Verifier {
   }
 
   didAuth(payload, endPoint, token, privateKey) async {
-    log.i('did Auth');
+    log.i('Verifier:didAuth');
 
     final challengeBytes = utf8.encode(payload);
 
@@ -74,6 +91,7 @@ class Verifier {
   }
 
   responseChallenge(challengeUri, encodedSignatureBytes, token) async {
+    log.i('Verifier:responseChallenge');
     final response = await Dio().get(
       challengeUri,
       queryParameters: {'signature': encodedSignatureBytes},
@@ -84,6 +102,7 @@ class Verifier {
   }
 
   responseCheck(Response<dynamic> response) {
+    log.i("Verifier:responseCheck");
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         log.i("response: ${response.data}");

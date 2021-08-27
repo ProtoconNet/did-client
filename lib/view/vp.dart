@@ -66,8 +66,37 @@ class VP extends StatelessWidget {
                   )),
             ),
           ),
-          Obx(() =>
-              Column(children: (vcListController.vpManager.vps.map((vp) => VPVerifier(did: did, vp: vp)).toList()))),
+          Obx(() => Column(
+                  children: (vcListController.vpManager.vps.map((vp) {
+                var vpMatching = false;
+                for (var vc in vp.vc) {
+                  if (vc['name'] == name) {
+                    vpMatching = true;
+                    break;
+                  }
+                }
+                if (vpMatching == false) {
+                  return SizedBox();
+                }
+
+                var vcHoldCount = 0;
+
+                for (var vc in vcListController.vcManager.vcs) {
+                  for (var requiredVC in vp.vc) {
+                    if (requiredVC['name'] == vc.name && vc.vc.isNotEmpty) {
+                      vcHoldCount++;
+                      break;
+                    }
+                  }
+                }
+                print(vcHoldCount);
+
+                if (vp.vc.length == vcHoldCount) {
+                  return VPVerifier(did: did, vp: vp, enable: true);
+                } else {
+                  return VPVerifier(did: did, vp: vp, enable: false);
+                }
+              }).toList()))),
         ]);
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/widget/background.dart';
 import 'package:wallet/view/vc_list.dart';
+import 'package:wallet/view/create_wallet.dart';
 // import 'package:wallet/view/config.dart';
 import 'package:wallet/util/logger.dart';
 
@@ -73,8 +74,11 @@ class DIDList extends StatelessWidget {
                                 }
                                 g.biometric.value = false;
 
-                                // await deleteCacheDir();
-                                // await deleteAppDir();
+                                // final VCListController vcListController = Get.find();
+                                // await vcListController.vcManager.init();
+                                // await vcListController.vpManager.init();
+
+                                Get.offAll(CreateWallet());
                               },
                             ),
                           )

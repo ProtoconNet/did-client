@@ -21,37 +21,44 @@ class VPVerifierController extends GetxController {
 
   final storage = FlutterSecureStorage();
 
-  getVPSchema() async {
-    final List<Map<String, dynamic>> vcs = [];
+  Future<Map<String, dynamic>> getVPSchema() async {
+    log.i("getVPSchema");
+    List<Map<String, dynamic>> vcs = [];
 
     VCListController vcListController = Get.find();
 
     for (var vcItem in vpModel.vc) {
+      log.i("vcItem['name']: ${vcItem['name']}");
       var vc = vcListController.vcManager.getVC(vcItem['name']);
-      if (vc == false) {
-        vcs.add(vc);
+      if (vc != false) {
+        vcs.add(vc.toJson()['vc']);
       }
     }
 
     final didDocument = DIDDocument();
 
-    final pk = g.didManager.value.getDIDPK(did, g.password.value);
+    final pk = await g.didManager.value.getDIDPK(did, g.password.value);
     log.i(vcs);
 
     log.i("pk: $pk");
     var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
-    log.i(vp);
+    log.i("my vp: $vp");
 
     return vp;
   }
 
-  postVP(vp) async {
-    final verifier = Verifier(did);
+  postVP() async {
+    log.i('postVP');
+    final verifier = Verifier(vpModel.schemaRequest);
+    log.i('v');
 
-    final privateKey = g.didManager.value.getDIDPK(did, g.password.value);
-    final vp = getVPSchema();
+    final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
+    log.i('privateKey:$privateKey');
+    final vp = await getVPSchema();
+    log.i('vp:$vp');
 
     var response = await verifier.postVP({"did": did, "vp": vp}, privateKey);
+    log.i('v');
 
     return response;
   }

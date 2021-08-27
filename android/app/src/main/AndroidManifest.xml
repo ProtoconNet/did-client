@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.wallet">
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!--uses-permission android:name="android.permission.CAMERA"/-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <application
-        android:label="wallet"
+        android:label="Mitum DID"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launcher_icon">
         <activity

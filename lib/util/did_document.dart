@@ -27,7 +27,8 @@ class DIDDocument {
     return json.encode(didExample);
   }
 
-  createVP(String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
+  Future<Map<String, dynamic>> createVP(
+      String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
     // payload is vc list
     var now = DateTime.now();
 

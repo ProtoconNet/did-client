@@ -63,7 +63,7 @@ class VCManager {
     return flag;
   }
 
-  getVC(String name) async {
+  getVC(String name) {
     // await init();
     for (var vc in vcs) {
       if (vc.name == name) {
