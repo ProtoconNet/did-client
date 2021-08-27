@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,7 +37,7 @@ class CreateDIDController extends GetxController {
   registerDidDocument(did) async {
     log.i("&" * 100);
     try {
-      var response = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+      await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
     } catch (e) {
       log.i("DID Not Found. Let's Register");
 

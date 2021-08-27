@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 
 import 'package:wallet/widget/gradient_button.dart';
 import 'package:wallet/controller/create_did_controller.dart';
+import 'package:wallet/view/login.dart';
+
 import 'package:wallet/util/logger.dart';
 
 class CreateDID extends StatelessWidget {
@@ -30,7 +32,7 @@ class CreateDID extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Image.asset("assets/icons/walletIcon.png", width: 60, height: 60),
+                          Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", width: 60, height: 60)),
                           SizedBox(
                             height: 10,
                           ),
@@ -54,7 +56,7 @@ class CreateDID extends StatelessWidget {
                               gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]),
                               onPressed: () async {
                                 await c.registerDidDocument(snapshot.data);
-                                Get.offAllNamed('/');
+                                Get.offAll(Login());
                               },
                               child: Text('goToHome'.tr,
                                   style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)))

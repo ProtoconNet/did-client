@@ -4,7 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:wallet/view/introduction.dart';
 import 'package:wallet/view/login.dart';
-import 'package:wallet/home.dart';
+import 'package:wallet/view/did_list.dart';
+// import 'package:wallet/home.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
@@ -33,7 +34,7 @@ class WalletRoute extends StatelessWidget {
             if (g.password.value == "") {
               return Login();
             }
-            return Home(tabController: g.tabController.value);
+            return DIDList(); // Home(tabController: g.tabController.value);
           }
         });
   }

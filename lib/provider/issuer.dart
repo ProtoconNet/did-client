@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/util/logger.dart';

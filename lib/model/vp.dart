@@ -1,12 +1,12 @@
 class VPModel {
+  VPModel(this.name, this.description, this.type, this.icon, this.schemaRequest, this.vc);
+
   String name;
   String description;
   String type;
   int icon;
   String schemaRequest;
   List<dynamic> vc;
-
-  VPModel(this.name, this.description, this.type, this.icon, this.schemaRequest, this.vc);
 
   getField(field) {
     switch (field) {

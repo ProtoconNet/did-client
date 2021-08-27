@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:wallet/widget/background.dart';
 import 'package:wallet/view/vc_list.dart';
-import 'package:wallet/view/config.dart';
+// import 'package:wallet/view/config.dart';
 import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
@@ -32,7 +32,7 @@ class DIDList extends StatelessWidget {
         appBar: AppBar(
             backgroundColor: Get.theme.scaffoldBackgroundColor,
             elevation: 0,
-            leading: Hero(tag: "Wallet", child: Image.asset("assets/icons/walletIcon.png", scale: 4)),
+            leading: Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", scale: 4)),
             // Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor, size: 30)
             // leading: Image.asset("assets/icons/walletIcon.png", width: 20, height: 20),
             // automaticallyImplyLeading: false,
@@ -43,29 +43,42 @@ class DIDList extends StatelessWidget {
               //       Get.to(Config());
               //     },
               //     child: Text("O")),
-              IconButton(
-                icon: Icon(Icons.delete, color: Get.theme.primaryColor),
-                onPressed: () async {
-                  // box.remove('themeMode');
-                  // box.remove('language');
-                  if (await storage.containsKey(key: "DIDList")) {
-                    String didList = await storage.read(key: "DIDList") as String;
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PopupMenuButton(
+                    child: Icon(Icons.more_vert, color: Get.theme.primaryColor, size: 32),
+                    itemBuilder: (context) => [
+                          // PopupMenuItem(
+                          //   child: Text("First"),
+                          //   value: 1,
+                          // ),
+                          PopupMenuItem(
+                            child: TextButton(
+                              child: Text('Erase DID'),
+                              onPressed: () async {
+                                // box.remove('themeMode');
+                                // box.remove('language');
+                                if (await storage.containsKey(key: "DIDList")) {
+                                  String didList = await storage.read(key: "DIDList") as String;
 
-                    log.i("erase ${json.decode(didList)}");
+                                  log.i("erase ${json.decode(didList)}");
 
-                    for (var did in json.decode(didList).keys.toList()) {
-                      //var didVC = storage.read(key: did) as String;
-                      if (await storage.containsKey(key: did)) {
-                        await storage.delete(key: did);
-                      }
-                    }
-                    await storage.delete(key: "DIDList");
-                  }
-                  g.biometric.value = false;
+                                  for (var did in json.decode(didList).keys.toList()) {
+                                    //var didVC = storage.read(key: did) as String;
+                                    if (await storage.containsKey(key: did)) {
+                                      await storage.delete(key: did);
+                                    }
+                                  }
+                                  await storage.delete(key: "DIDList");
+                                }
+                                g.biometric.value = false;
 
-                  // await deleteCacheDir();
-                  // await deleteAppDir();
-                },
+                                // await deleteCacheDir();
+                                // await deleteAppDir();
+                              },
+                            ),
+                          )
+                        ]),
               ),
             ]),
         children: [Column(children: g.didManager.value.dids.keys.map((did) => VCList(did: did)).toList())]);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animations/animations.dart';
 
-import 'package:wallet/view/qr_viewer.dart';
+import 'package:wallet/candidate/view/qr_viewer.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 

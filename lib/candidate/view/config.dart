@@ -5,18 +5,18 @@ import 'package:local_auth/local_auth.dart';
 import 'package:wallet/widget/background.dart';
 import 'package:confetti/confetti.dart';
 import 'package:biometric_storage/biometric_storage.dart';
-import 'package:wallet/view/camera.dart';
+import 'package:wallet/candidate/view/camera.dart';
 import 'package:camera/camera.dart';
 // import 'package:dart_ipify/dart_ipify.dart';
 // import 'package:socket_io/socket_io.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
-import 'package:wallet/controller/config_controller.dart';
+import 'package:wallet/candidate/controller/config_controller.dart';
 
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 // import 'package:wallet/pages/camera.dart';
-import 'package:wallet/view/text_detector_painter.dart';
+import 'package:wallet/candidate/view/text_detector_painter.dart';
 
 class TextDetectorView extends StatefulWidget {
   @override

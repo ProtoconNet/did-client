@@ -4,14 +4,18 @@ import 'package:get/get.dart';
 
 import 'package:wallet/provider/issuer.dart';
 import 'package:wallet/model/vc_manager.dart';
+import 'package:wallet/model/vp_manager.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
 class VCListController extends GetxController {
-  VCListController(this.did) : vcManager = VCManager(did);
+  VCListController(this.did)
+      : vcManager = VCManager(did),
+        vpManager = VPManager(did);
 
   final String did;
   VCManager vcManager;
+  VPManager vpManager;
 
   final GlobalVariable g = Get.find();
   final log = Log();
@@ -21,8 +25,7 @@ class VCListController extends GetxController {
     super.onInit();
 
     await vcManager.init();
-    // await vcManager.value.init();
-    // vcManager.update((t) {});
+    await vpManager.init();
   }
 
   setVCList(did) async {

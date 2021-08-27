@@ -117,6 +117,7 @@ flutter:
     - assets/icons/benefitFilletIcon.png
     - assets/icons/walletIcon.png
 
+    - assets/images/wallet.png
     - assets/images/fullscreen.jpeg
     - assets/images/img1.jpeg
     - assets/images/img2.webp

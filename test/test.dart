@@ -15,8 +15,8 @@ import 'package:dio/dio.dart';
 // import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/provider/issuer.dart';
-import 'package:wallet/util/crypto.dart';
-import 'package:wallet/provider/platform.dart';
+// import 'package:wallet/util/crypto.dart';
+// import 'package:wallet/provider/platform.dart';
 
 void main() async {
   test('Get Schema Location Test', () async {

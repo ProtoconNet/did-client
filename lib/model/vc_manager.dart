@@ -70,6 +70,7 @@ class VCManager {
         return vc;
       }
     }
+    return false;
   }
 
   setByName(String name, String field, dynamic value) async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import 'package:wallet/controller/scan_qr_controller.dart';
+import 'package:wallet/candidate/controller/scan_qr_controller.dart';
 
 class ScanQR extends StatelessWidget {
   final ScanQRController c = Get.put(ScanQRController());

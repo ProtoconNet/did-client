@@ -21,7 +21,23 @@ class Login extends StatelessWidget {
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Hero(tag: "Wallet", child: Image.asset("assets/icons/walletIcon.png", width: 100, height: 100)),
+        Column(children: [
+          Container(
+              alignment: Alignment.center,
+              width: 100,
+              height: 40.0,
+              decoration:
+                  BoxDecoration(gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]), boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(0.0, 1.5),
+                  blurRadius: 1.5,
+                ),
+              ]),
+              child: Text('MITUM', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w900))),
+          Text('Wallet', style: Get.textTheme.headline2?.copyWith(fontWeight: FontWeight.w900)),
+        ]),
+        Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", width: 180, height: 180)),
         SizedBox(height: 30),
         Padding(
             padding: EdgeInsets.all(8),
