@@ -52,7 +52,7 @@ class Login extends StatelessWidget {
                   autocorrect: false,
                   onFieldSubmitted: (test) async {
                     log.i("submit with $test");
-                    await c.login(_pass.text);
+                    await c.passwordLogin(_pass.text);
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -67,27 +67,49 @@ class Login extends StatelessWidget {
                 width: Get.width * 0.8, // <-- match_parent
                 child: ElevatedButton(
                     onPressed: () async {
-                      await c.login(_pass.text);
+                      await c.passwordLogin(_pass.text);
                     },
                     child: Text('enter'.tr)))),
-        Padding(
-            padding: EdgeInsets.all(8),
-            child: SizedBox(
-                height: 30,
-                width: Get.width * 0.8, // <-- match_parent
-                child: Row(children: [
-                  Obx(
-                    () => Checkbox(
-                        checkColor: Colors.white,
-                        activeColor: Get.theme.primaryColor,
-                        value: g.biometric.value,
-                        onChanged: (value) {
-                          g.biometric.value = value!;
-                        },
-                        shape: CircleBorder()),
-                  ),
-                  Text("다음부터 생체인식 사용하기")
-                ]))),
+        ElevatedButton(
+            onPressed: () async {
+              await c.passwordLogin("ekdrms1!");
+            },
+            child: Text('button')),
+        ElevatedButton(
+            onPressed: () async {
+              await c.biometricLogin();
+            },
+            child: Text('button')),
+        FutureBuilder(
+          future: c.canBiometricAuth(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data == true) {
+              return Padding(
+                  padding: EdgeInsets.all(8),
+                  child: SizedBox(
+                      height: 30,
+                      width: Get.width * 0.8, // <-- match_parent
+                      child: Row(children: [
+                        Obx(
+                          () => Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Get.theme.primaryColor,
+                              value: g.biometric.value,
+                              onChanged: (value) {
+                                g.biometric.value = value!;
+                              },
+                              shape: CircleBorder()),
+                        ),
+                        Text("다음부터 생체인식 사용하기")
+                      ])));
+            } else {
+              return SizedBox();
+            }
+          },
+        )
       ])),
     ]);
   }
