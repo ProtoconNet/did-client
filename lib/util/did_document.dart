@@ -7,7 +7,7 @@ import 'package:wallet/util/logger.dart';
 class DIDDocument {
   final log = Log();
 
-  createDIDDocument(did) {
+  String createDIDDocument(String did) {
     final didExample = {
       "@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1"],
       "id": did,

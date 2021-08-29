@@ -47,7 +47,7 @@ class VPVerifierController extends GetxController {
     return vp;
   }
 
-  postVP() async {
+  Future<String> postVP() async {
     log.i('postVP');
     final verifier = Verifier(vpModel.schemaRequest);
     log.i('v');

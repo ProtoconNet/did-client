@@ -23,20 +23,10 @@ class Verifier {
     return responseCheck(response);
   }
 
-  postVP(data, privateKey) async {
+  Future<String> postVP(Map<String, dynamic> data, String privateKey) async {
     log.i("Verifier:postVP");
     log.i("params:$data");
     final locations = await getSchemaLocation();
-
-    // final response = await http.post(
-    //   Uri.parse(locations["VPPost"]),
-    //   body: json.encode(data),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Accept": "application/json",
-    //   },
-    // );
-    // log.i("${response.body}:${response.statusCode}");
 
     log.i("locations['VPPost']:${locations['VPPost']}");
     final response = await Dio().post(
@@ -58,11 +48,10 @@ class Verifier {
     if (challenge.containsKey('payload')) {
       final challengeResult =
           await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']![0], privateKey);
-      if (challengeResult) {
-        return response.headers['authorization']![0];
-      }
+      log.i("challengeResult: $challengeResult");
     }
-    return false;
+
+    return "";
   }
 
   getSchemaLocation() async {
@@ -75,7 +64,7 @@ class Verifier {
     return json.decode(vcLocation.data);
   }
 
-  didAuth(payload, endPoint, token, privateKey) async {
+  Future<bool> didAuth(String payload, endPoint, String token, String privateKey) async {
     log.i('Verifier:didAuth');
 
     final challengeBytes = utf8.encode(payload);

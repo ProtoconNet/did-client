@@ -33,7 +33,7 @@ class Crypto {
     return signature.bytes;
   }
 
-  verify(List<int> payload, List<int> signature, List<int> pubKey) async {
+  Future<bool> verify(List<int> payload, List<int> signature, List<int> pubKey) async {
     final algorithm = Ed25519();
 
     final result = await algorithm.verify(payload,
