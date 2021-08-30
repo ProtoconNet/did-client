@@ -46,7 +46,7 @@ class CreateWallet extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset("assets/icons/benefitAuthIcon.png", width: 45),
+                          Image.asset("assets/icons/cert.png", width: 45),
                           SizedBox(width: 20),
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('모든 인증을 한번에', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
@@ -66,7 +66,7 @@ class CreateWallet extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset("assets/icons/benefitChainIcon.png", width: 45),
+                          Image.asset("assets/icons/block.png", width: 45),
                           SizedBox(width: 20),
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('블록체인으로 안전하게', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
@@ -86,7 +86,7 @@ class CreateWallet extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset("assets/icons/benefitFilletIcon.png", width: 45),
+                          Image.asset("assets/icons/info.png", width: 45),
                           SizedBox(width: 20),
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('필요할 때, 필요한 정보만',

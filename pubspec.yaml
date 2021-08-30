@@ -99,30 +99,26 @@ flutter:
     - development.env
     - production.env
 
-    - assets/icons/flutter.png
+    - assets/icons/block.png
+    - assets/icons/cert.png
+    - assets/icons/info.png
+
+    - assets/images/wallet.png
     - assets/images/cardGlow.png
     - assets/images/visualAid.png
 
-    - assets/images/driver_license.png
     - assets/images/drivers_license.png
     - assets/images/drivers_license_logo.png
-    - assets/images/drivers_license_template.png
     - assets/images/jejupass_logo.png
     - assets/images/jejupass.png
+    - assets/images/jejupass_background.png
     - assets/images/car_box.png
     - assets/images/sk_rentacar_logo.png
 
-    - assets/icons/benefitAuthIcon.png
-    - assets/icons/benefitChainIcon.png
-    - assets/icons/benefitFilletIcon.png
-    - assets/icons/walletIcon.png
-
-    - assets/images/wallet.png
-    - assets/images/fullscreen.jpeg
-    - assets/images/img1.jpeg
-    - assets/images/img2.webp
-    - assets/images/img3.jpeg
-  #   - images/a_dot_ham.jpeg
+    - assets/introduction/fullscreen.jpeg
+    - assets/introduction/img1.jpeg
+    - assets/introduction/img2.webp
+    - assets/introduction/img3.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -19,7 +19,7 @@ class _OnBoardingState extends State<OnBoarding> {
 
   Widget _buildFullScreenImage() {
     return Image.asset(
-      'assets/images/fullscreen.jpeg',
+      'assets/introduction/fullscreen.jpeg',
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
@@ -28,11 +28,11 @@ class _OnBoardingState extends State<OnBoarding> {
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/images/$assetName', width: width);
+    return Image.asset('assets/introduction/$assetName', width: width);
   }
 
   Widget _buildIcon(String assetName, [double width = 350]) {
-    return Image.asset('assets/icons/$assetName', width: width);
+    return Image.asset('assets/introduction/$assetName', width: width);
   }
 
   @override

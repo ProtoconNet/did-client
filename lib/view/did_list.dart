@@ -34,16 +34,8 @@ class DIDList extends StatelessWidget {
             backgroundColor: Get.theme.scaffoldBackgroundColor,
             elevation: 0,
             leading: Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", scale: 4)),
-            // Icon(Icons.account_balance_wallet_rounded, color: Get.theme.primaryColor, size: 30)
-            // leading: Image.asset("assets/icons/walletIcon.png", width: 20, height: 20),
-            // automaticallyImplyLeading: false,
             title: Text('MITUM Wallet', style: Get.textTheme.headline6),
             actions: [
-              // ElevatedButton(
-              //     onPressed: () {
-              //       Get.to(Config());
-              //     },
-              //     child: Text("O")),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: PopupMenuButton(

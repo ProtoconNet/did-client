@@ -56,9 +56,9 @@ class VCCard extends StatelessWidget {
   Widget getWaitImageByName(String name) {
     const double height = 50;
     if (name == "drivers license" || name == "운전면허증") {
-      return Image.asset('assets/images/drivers_license_template.png', height: height);
+      return Image.asset('assets/images/visualAid.png', height: height);
     } else if (name == "jejupass" || name == "제주패스") {
-      return Image.asset('assets/images/drivers_license_template.png', height: height);
+      return Image.asset('assets/images/visualAid.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
     }

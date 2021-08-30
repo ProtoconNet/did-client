@@ -69,10 +69,7 @@ class VPVerifier extends StatelessWidget {
             Image.asset('assets/images/car_box.png', width: Get.width * 0.75),
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(vp.name,
-                    style: Get.textTheme.headline5!.copyWith(
-                        fontWeight: FontWeight.w700)) //Image.asset('assets/images/sk_rentacar_logo.png', width: 100),
-                ),
+                child: Text(vp.name, style: Get.textTheme.headline5!.copyWith(fontWeight: FontWeight.w700))),
             Positioned(
                 left: 10,
                 top: 70,
