@@ -79,7 +79,7 @@ class VC extends StatelessWidget {
       return InkWell(
         onTap: () {
           // log.i("VC closedBuilder: ${vc['name']}");
-          Get.to(VP(did: did, name: name, vc: vc));
+          Get.to(VP(did: did, name: name, vc: vc, schemaRequest: schemaRequest));
         },
         child: VCCard(
             name: name,

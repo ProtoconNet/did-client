@@ -76,12 +76,12 @@ class ReceivePassword extends StatelessWidget {
                         ), //, labelText: 'Password'),
                         validator: (value) {
                           RegExp regExp = RegExp(r"[a-zA-Z]");
-                          if (!regExp.hasMatch(value!)) return 'password should have lowercase alphabet';
+                          if (!regExp.hasMatch(value!)) return '알파벳 소문자가 포함되어 있어야 합니다.';
                           regExp = RegExp(r"[0-9]");
-                          if (!regExp.hasMatch(value)) return 'password should have number';
+                          if (!regExp.hasMatch(value)) return '숫자가 포함되어 있어야 합니다.';
                           regExp = RegExp(r"\W");
-                          if (!regExp.hasMatch(value)) return 'password should have special character';
-                          if (value.length < 8) return 'password should longer than 8';
+                          if (!regExp.hasMatch(value)) return '특수 문자가 포함되어 있어야 합니다.';
+                          if (value.length < 8) return '8자리 이상이어야 합니다.';
                           return null;
                         },
                         onChanged: (value) {
@@ -106,7 +106,7 @@ class ReceivePassword extends StatelessWidget {
                           ),
                         ), //, labelText: 'Confirm'),
                         validator: (value) {
-                          if (value != pass.text) return 'Error: Password and confirm password have to same';
+                          if (value != pass.text) return '비밀번호가 일치하지 않습니다.';
                           return null;
                         },
                         onChanged: (value) {

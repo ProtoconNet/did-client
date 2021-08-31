@@ -56,7 +56,7 @@ class _OnBoardingState extends State<OnBoarding> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.only(top: 16, right: 16),
-            child: _buildIcon('flutter.png', 100),
+            child: _buildIcon('SIT_logo_cube_colored.png', 100),
           ),
         ),
       ),

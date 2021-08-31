@@ -132,11 +132,17 @@ class Schema extends StatelessWidget {
     log.i("+" * 100);
 
     return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      // SizedBox(
+      //     height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 82,
+      //     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      //       ...inputs,
+      //     ])),
       SizedBox(
-          height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 80,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          height: Get.height - Get.statusBarHeight - 50 - 32 - Get.mediaQuery.viewInsets.bottom,
+          child: ListView(children: [
             ...inputs,
           ])),
+
       SizedBox(
           width: Get.width * 0.8,
           height: 50,

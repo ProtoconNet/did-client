@@ -3,24 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:wallet/widget/background.dart';
-// import 'package:wallet/controller/vp_controller.dart';
+import 'package:wallet/controller/vp_controller.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 import 'package:wallet/view/vp_verifier.dart';
 
 class VP extends StatelessWidget {
-  VP({key, required this.did, required this.name, required this.vc})
-      // : c = Get.put(VPController(did)),
-      : super(key: key);
+  VP({key, required this.did, required this.name, required this.vc, required this.schemaRequest})
+      : c = Get.put(VPController(did, schemaRequest)),
+        super(key: key);
 
-  // final VPController c;
+  final VPController c;
 
   final VCListController vcListController = Get.find();
 
   final Map<String, dynamic> vc;
   final String did;
   final String name;
+  final String schemaRequest;
 
   List<Widget> credentialSubjectList(Map<String, dynamic> credentialSubject) {
+    // await c.getSchema(c.schemaRequest);
     List<Widget> ret = [];
     for (var key in credentialSubject.keys) {
       ret.add(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

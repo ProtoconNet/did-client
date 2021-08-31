@@ -35,7 +35,7 @@ class DIDManager {
     return dids.keys.first;
   }
 
-  getDIDPK(did, password) async {
+  getDIDPK(String did, String password) async {
     return crypto.decryptPK(dids[did], password);
   }
 }

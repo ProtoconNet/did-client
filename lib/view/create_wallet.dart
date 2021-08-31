@@ -51,7 +51,7 @@ class CreateWallet extends StatelessWidget {
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('모든 인증을 한번에', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
                             Container(
-                                constraints: BoxConstraints(maxWidth: Get.width * 0.6),
+                                constraints: BoxConstraints(maxWidth: Get.width * 0.75 - 45 - 20),
                                 child: Text(
                                   '신분증과 티켓을 지갑없이 관리하고 사용할 수 있어요',
                                   style: Get.textTheme.bodyText2,
@@ -71,7 +71,7 @@ class CreateWallet extends StatelessWidget {
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('블록체인으로 안전하게', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
                             Container(
-                                constraints: BoxConstraints(maxWidth: Get.width * 0.6),
+                                constraints: BoxConstraints(maxWidth: Get.width * 0.75 - 45 - 20),
                                 child: Text(
                                   '당신의 개인정보는 최고의 블록체인 MITUM에 안전하게 저장합니다',
                                   style: Get.textTheme.bodyText2,
@@ -92,7 +92,7 @@ class CreateWallet extends StatelessWidget {
                             Text('필요할 때, 필요한 정보만',
                                 style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold)),
                             Container(
-                                constraints: BoxConstraints(maxWidth: Get.width * 0.6),
+                                constraints: BoxConstraints(maxWidth: Get.width * 0.75 - 45 - 20),
                                 child: Text(
                                   'MITUM 블록체인 기술로 필요한 정보만 필요한 시점에 사용할 수 있어요',
                                   style: Get.textTheme.bodyText2,

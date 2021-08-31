@@ -70,16 +70,6 @@ class Login extends StatelessWidget {
                       await c.passwordLogin(_pass.text);
                     },
                     child: Text('enter'.tr)))),
-        ElevatedButton(
-            onPressed: () async {
-              await c.passwordLogin("ekdrms1!");
-            },
-            child: Text('button')),
-        ElevatedButton(
-            onPressed: () async {
-              await c.biometricLogin();
-            },
-            child: Text('button')),
         FutureBuilder(
           future: c.canBiometricAuth(),
           builder: (context, snapshot) {

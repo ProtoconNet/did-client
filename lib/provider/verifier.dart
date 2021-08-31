@@ -37,9 +37,9 @@ class Verifier {
     log.i("1");
 
     final result = responseCheck(response);
-    log.i('b:$result, ${result.runtimeType}');
+    log.i('b:$result, ${result.data.runtimeType}');
 
-    final challenge = jsonDecode(result);
+    final challenge = jsonDecode(result.data);
     log.i('c');
 
     log.i('${response.headers}');

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:cryptography/cryptography.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 
@@ -38,11 +39,23 @@ class VPVerifierController extends GetxController {
     final didDocument = DIDDocument();
 
     final pk = await g.didManager.value.getDIDPK(did, g.password.value);
-    log.i(vcs);
 
-    log.i("pk: $pk");
+    // final clearText = Base58Decode(pk);
+    // log.i(vcs);
+
+    // final algorithm = Ed25519();
+    // final keyPair = await algorithm.newKeyPairFromSeed(clearText);
+    // final pubKey = await keyPair.extractPublicKey();
+    // // final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
+    // log.i(vcs);
+    // log.i("pk: ${Base58Encode(await keyPair.extractPrivateKeyBytes())}");
+    // var vp =
+    //     await didDocument.createVP(did, did, did, vcs, [...(await keyPair.extractPrivateKeyBytes()), ...pubKey.bytes]);
+
+    // log.i("pk: $pk");
     var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
     log.i("my vp: $vp");
+    // log.i("my vp2: $vp2");
 
     return vp;
   }

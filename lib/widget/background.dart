@@ -25,6 +25,6 @@ class Background extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: mainAxisAlignment,
                     crossAxisAlignment: crossAxisAlignment,
-                    children: [...children, SizedBox(width: Get.width)]))));
+                    children: [...children, SizedBox(width: Get.width, height: 0)]))));
   }
 }

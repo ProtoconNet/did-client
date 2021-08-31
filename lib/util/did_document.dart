@@ -33,7 +33,7 @@ class DIDDocument {
     var now = DateTime.now();
 
     var expire = now.add(Duration(minutes: 1));
-    var vp = {
+    var template = {
       "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
       "id": did,
       "type": ["VerifiablePresentation"],
@@ -43,6 +43,20 @@ class DIDDocument {
       "verifiableCredential": payload,
     };
 
+    var vp = template;
+
+    var proof = {
+      "type": "Ed25519Signature2018",
+      "expire": expire.toIso8601String(),
+      "created": now.toIso8601String(),
+      "proofPurpose": "authentication",
+      "verificationMethod": keyLocation,
+      // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
+      // "domain": "test.org", // submit vp domain
+    };
+
+    vp["proof"] = [proof];
+
     // Create a json web token
     final jwt = JWT(vp); //, issuer: did, audience: audience, jwtId: "test");
 
@@ -50,22 +64,19 @@ class DIDDocument {
         algorithm: JWTAlgorithm.EdDSA,
         noIssueAt: true); //, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
 
-    var splitToken = token.split('.');
-    var noPayloadToken = splitToken[0] + ".." + splitToken[2];
+    // var splitToken = token.split('.');
+    // var noPayloadToken = splitToken[0] + ".." + splitToken[2];
 
-    var proof = [
-      {
-        "type": "Ed25519Signature2018",
-        "expire": expire.toIso8601String(),
-        "created": now.toIso8601String(),
-        "proofPurpose": "authentication",
-        "verificationMethod": keyLocation,
-        // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
-        // "domain": "test.org", // submit vp domain
-        "jws": noPayloadToken // token
-      }
-    ];
-    vp['proof'] = proof;
+    log.i(vp["proof"]);
+
+    var vp2 = template;
+
+    proof["jws"] = token; //noPayloadToken;
+
+    vp2["proof"] = [proof];
+
+    log.i(token);
+    // log.i("jws: ${vp['proof']}");
 
     return vp;
   }
