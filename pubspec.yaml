@@ -81,7 +81,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/wallet.jpg"
+  image_path: "assets/images/wallet.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -119,6 +119,7 @@ flutter:
     - assets/introduction/img1.jpeg
     - assets/introduction/img2.webp
     - assets/introduction/img3.jpeg
+    - assets/introduction/SIT_logo_cube_colored.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

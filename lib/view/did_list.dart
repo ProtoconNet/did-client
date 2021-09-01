@@ -66,6 +66,8 @@ class DIDList extends StatelessWidget {
                                 }
                                 g.biometric.value = false;
 
+                                g.didManager.value.dids = {};
+
                                 // final VCListController vcListController = Get.find();
                                 // await vcListController.vcManager.init();
                                 // await vcListController.vpManager.init();

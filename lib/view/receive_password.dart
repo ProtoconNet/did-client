@@ -16,6 +16,18 @@ class ReceivePassword extends StatelessWidget {
   final TextEditingController pass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
+  String passwordValidate(String value) {
+    RegExp regExp = RegExp(r"[a-zA-Z]");
+    if (!regExp.hasMatch(value)) return '알파벳 소문자가 포함되어 있어야 합니다.';
+    regExp = RegExp(r"[0-9]");
+    if (!regExp.hasMatch(value)) return '숫자가 포함되어 있어야 합니다.';
+    regExp = RegExp(r"\W");
+    if (!regExp.hasMatch(value)) return '특수 문자가 포함되어 있어야 합니다.';
+    if (value.length < 8) return '8자리 이상이어야 합니다.';
+
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     log.i('ReceivePasswordPage');
@@ -75,18 +87,15 @@ class ReceivePassword extends StatelessWidget {
                           ),
                         ), //, labelText: 'Password'),
                         validator: (value) {
-                          RegExp regExp = RegExp(r"[a-zA-Z]");
-                          if (!regExp.hasMatch(value!)) return '알파벳 소문자가 포함되어 있어야 합니다.';
-                          regExp = RegExp(r"[0-9]");
-                          if (!regExp.hasMatch(value)) return '숫자가 포함되어 있어야 합니다.';
-                          regExp = RegExp(r"\W");
-                          if (!regExp.hasMatch(value)) return '특수 문자가 포함되어 있어야 합니다.';
-                          if (value.length < 8) return '8자리 이상이어야 합니다.';
-                          return null;
+                          final validateError = passwordValidate(value!);
+                          if (validateError == '') {
+                            return null;
+                          }
+                          return validateError;
                         },
                         onChanged: (value) {
-                          c.formKey.value.currentState!.validate();
-                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text);
+                          final isValid = c.formKey.value.currentState!.validate();
+                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text && isValid);
                         },
                         onEditingComplete: () => node.nextFocus()),
                     TextFormField(
@@ -110,8 +119,8 @@ class ReceivePassword extends StatelessWidget {
                           return null;
                         },
                         onChanged: (value) {
-                          c.formKey.value.currentState!.validate();
-                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text);
+                          final isValid = c.formKey.value.currentState!.validate();
+                          c.status.value = (value.isNotEmpty && pass.text == confirmPass.text && isValid);
                         },
                         onEditingComplete: () => node.nextFocus(),
                         onFieldSubmitted: (test) async {

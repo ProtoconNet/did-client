@@ -59,11 +59,10 @@ class LoginController extends GetxController {
 
   passwordLogin(password) async {
     try {
-      log.i('a');
       final did = g.didManager.value.getFirstDID();
-      log.i('get did');
+      log.i('secureKim did: $did');
       final pk = await g.didManager.value.getDIDPK(did, password);
-      log.i('get pk using password');
+      log.i('secureKim pk: $pk');
 
       if (pk == "") throw Error();
 
