@@ -1,15 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import 'package:animations/animations.dart';
-// import 'package:google_fonts/google_fonts.dart';
-import 'package:wallet/provider/global_variable.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:wallet/controller/did_list_controller.dart';
+import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/widget/background.dart';
 import 'package:wallet/view/vc_list.dart';
 import 'package:wallet/view/create_wallet.dart';
-// import 'package:wallet/view/config.dart';
 import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
@@ -18,15 +16,11 @@ class DIDList extends StatelessWidget {
 
   final storage = FlutterSecureStorage();
 
+  final c = DIDListController();
+
   @override
   Widget build(BuildContext context) {
-    log.i("DIDList build");
-
-    log.i("height:${Get.height}");
-    log.i("width:${Get.width}");
-    log.i("statusBar:${Get.statusBarHeight}");
-    log.i("bottomBar:${Get.bottomBarHeight}");
-    log.i("pixelRatio:${Get.pixelRatio}");
+    log.i("DIDList:build");
 
     return Background(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,36 +35,11 @@ class DIDList extends StatelessWidget {
                 child: PopupMenuButton(
                     child: Icon(Icons.more_vert, color: Get.theme.primaryColor, size: 32),
                     itemBuilder: (context) => [
-                          // PopupMenuItem(
-                          //   child: Text("First"),
-                          //   value: 1,
-                          // ),
                           PopupMenuItem(
                             child: TextButton(
                               child: Text('Erase DID'),
                               onPressed: () async {
-                                // box.remove('themeMode');
-                                // box.remove('language');
-                                if (await storage.containsKey(key: "DIDList")) {
-                                  String didList = await storage.read(key: "DIDList") as String;
-
-                                  log.i("erase ${json.decode(didList)}");
-
-                                  for (var did in json.decode(didList).keys.toList()) {
-                                    //var didVC = storage.read(key: did) as String;
-                                    if (await storage.containsKey(key: did)) {
-                                      await storage.delete(key: did);
-                                    }
-                                  }
-                                  await storage.delete(key: "DIDList");
-                                }
-                                g.biometric.value = false;
-
-                                g.didManager.value.dids = {};
-
-                                // final VCListController vcListController = Get.find();
-                                // await vcListController.vcManager.init();
-                                // await vcListController.vpManager.init();
+                                await c.eraseAll();
 
                                 Get.offAll(CreateWallet());
                               },

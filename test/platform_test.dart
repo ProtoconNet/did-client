@@ -12,10 +12,12 @@ import 'package:test/test.dart';
 // import 'package:wallet/provider/issuer.dart';
 // import 'package:wallet/provider/platform.dart';
 import 'package:wallet/util/did_document.dart';
+import 'package:wallet/util/logger.dart';
 
 void main() async {
   group('platform test', () {
     final did = "did:mtm:A5KirmUHQPbm1m7nPob35k3p6gxPxFE64cogoq1Tv5c8";
+    final log = Log();
 
     test('Create DID Document Test', () async {
       // final platform = Platform();
@@ -23,7 +25,7 @@ void main() async {
 
       final document = didDocument.createDIDDocument(did);
 
-      print(document);
+      log.i(document);
 
       // expect((response.statusCode / 100).floor(), 2);
 

@@ -6,6 +6,7 @@ import 'package:wallet/widget/background.dart';
 import 'package:wallet/controller/vp_controller.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 import 'package:wallet/view/vp_verifier.dart';
+import 'package:wallet/util/logger.dart';
 
 class VP extends StatelessWidget {
   VP({key, required this.did, required this.name, required this.vc, required this.schemaRequest})
@@ -14,6 +15,8 @@ class VP extends StatelessWidget {
 
   final VPController c;
 
+  final log = Log();
+
   final VCListController vcListController = Get.find();
 
   final Map<String, dynamic> vc;
@@ -21,7 +24,7 @@ class VP extends StatelessWidget {
   final String name;
   final String schemaRequest;
 
-  List<Widget> credentialSubjectList(Map<String, dynamic> credentialSubject) {
+  List<Widget> _credentialSubjectList(Map<String, dynamic> credentialSubject) {
     // await c.getSchema(c.schemaRequest);
     List<Widget> ret = [];
     for (var key in credentialSubject.keys) {
@@ -37,7 +40,8 @@ class VP extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(vcListController.vpManager.vps[0].name);
+    log.i("VP:build");
+    log.i(vcListController.vpManager.vps[0].name);
     return Background(
         appBar: AppBar(
           title: Text(name),
@@ -61,7 +65,7 @@ class VP extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ...credentialSubjectList(vc['credentialSubject']),
+                      ..._credentialSubjectList(vc['credentialSubject']),
                       SizedBox(height: 18),
                       Center(child: QrImage(data: did, version: QrVersions.auto, size: 160.0))
                     ],
@@ -91,7 +95,7 @@ class VP extends StatelessWidget {
                     }
                   }
                 }
-                print(vcHoldCount);
+                log.i(vcHoldCount);
 
                 if (vp.vc.length == vcHoldCount) {
                   return VPVerifier(did: did, vp: vp, enable: true);

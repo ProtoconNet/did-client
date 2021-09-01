@@ -15,7 +15,7 @@ class Verifier {
   final String schemaLocation;
 
   getVPSchema() async {
-    log.i("getVPSchema");
+    log.i("Verifier:getVPSchema");
     final locations = await getSchemaLocation();
 
     final response = await Dio().get(locations['schema']);
@@ -34,16 +34,14 @@ class Verifier {
       data: data,
       options: Options(headers: {"content-type": "application/json", "accept": "application/json"}),
     );
-    log.i("1");
 
     final result = responseCheck(response);
-    log.i('b:$result, ${result.data.runtimeType}');
+    log.i('result: $result, ${result.data.runtimeType}');
 
     final challenge = jsonDecode(result.data);
-    log.i('c');
 
-    log.i('${response.headers}');
-    log.i('${response.headers['authorization']}');
+    log.i('response.headers: ${response.headers}');
+    log.i('headers authorization: ${response.headers['authorization']}');
 
     if (challenge.containsKey('payload')) {
       final challengeResult =

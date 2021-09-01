@@ -8,6 +8,7 @@ class DIDDocument {
   final log = Log();
 
   String createDIDDocument(String did) {
+    log.i("DIDDocument:createDIDDocument");
     final didExample = {
       "@context": ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1"],
       "id": did,
@@ -29,6 +30,7 @@ class DIDDocument {
 
   Future<Map<String, dynamic>> createVP(
       String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
+    log.i("DIDDocument:createVP");
     // payload is vc list
     var now = DateTime.now();
 

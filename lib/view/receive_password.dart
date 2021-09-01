@@ -16,7 +16,7 @@ class ReceivePassword extends StatelessWidget {
   final TextEditingController pass = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
-  String passwordValidate(String value) {
+  String _passwordValidate(String value) {
     RegExp regExp = RegExp(r"[a-zA-Z]");
     if (!regExp.hasMatch(value)) return '알파벳 소문자가 포함되어 있어야 합니다.';
     regExp = RegExp(r"[0-9]");
@@ -30,7 +30,7 @@ class ReceivePassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i('ReceivePasswordPage');
+    log.i('ReceivePassword:build');
     final node = FocusScope.of(context);
     return Background(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -87,7 +87,7 @@ class ReceivePassword extends StatelessWidget {
                           ),
                         ), //, labelText: 'Password'),
                         validator: (value) {
-                          final validateError = passwordValidate(value!);
+                          final validateError = _passwordValidate(value!);
                           if (validateError == '') {
                             return null;
                           }

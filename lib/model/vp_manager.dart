@@ -16,6 +16,7 @@ class VPManager {
   bool uninitialized = true;
 
   init() async {
+    log.i("VPManager:init");
     if (uninitialized) {
       uninitialized = false;
       if (await storage.containsKey(key: did + ":vp")) {
@@ -40,7 +41,8 @@ class VPManager {
     }
   }
 
-  setVP(String value) async {
+  Future<bool> setVP(String value) async {
+    log.i("VPManager:setVP");
     await init();
 
     final newVP = VPModel.fromJson(json.decode(value));
@@ -63,7 +65,8 @@ class VPManager {
     return flag;
   }
 
-  readVP() async {
+  loadVP() async {
+    log.i("VPManager:readVP");
     final vpList = json.decode(await storage.read(key: did + ":vp") as String);
     log.i("vcList: $vpList");
     vps.value = [];
@@ -73,16 +76,19 @@ class VPManager {
     }
   }
 
-  getVP(String name) async {
+  Future<VPModel?> getVP(String name) async {
+    log.i("VPManager:getVP(name:$name)");
     await init();
     for (var vp in vps) {
       if (vp.name == name) {
         return vp;
       }
     }
+    return null;
   }
 
   setByName(String name, String field, dynamic value) async {
+    log.i("VPManager:setByName(name:$name, field:$field, value:$value)");
     await init();
     for (var vp in vps) {
       if (vp.name == name) {
@@ -92,12 +98,14 @@ class VPManager {
     await storage.write(key: did + ":vp", value: json.encode(vps.map((e) => e.toJson()).toList()));
   }
 
-  getByName(String name, String field) async {
+  Future<dynamic> getByName(String name, String field) async {
+    log.i("VPManager:getByName(name:$name, field:$field)");
     await init();
     for (var vp in vps) {
       if (vp.name == name) {
         return vp.getField(field);
       }
     }
+    return null;
   }
 }

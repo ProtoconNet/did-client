@@ -15,7 +15,7 @@ class VCManager {
   bool uninitialized = true;
 
   init() async {
-    log.i("vcManager.init $uninitialized");
+    log.i("VCManager:init");
     if (uninitialized) {
       uninitialized = false;
       if (await storage.containsKey(key: did)) {
@@ -32,6 +32,7 @@ class VCManager {
   }
 
   readVC() async {
+    log.i("VCManager:readVC");
     final vcList = json.decode(await storage.read(key: did) as String);
     log.i("vcList: $vcList");
     vcs.value = [];
@@ -41,8 +42,8 @@ class VCManager {
     }
   }
 
-  setVC(String value) async {
-    // await init();
+  Future<bool> setVC(String value) async {
+    log.i("VCManager:setVC(value:$value)");
     final newVC = VCModel.fromJson(json.decode(value));
 
     var flag = true;
@@ -63,18 +64,18 @@ class VCManager {
     return flag;
   }
 
-  getVC(String name) {
-    // await init();
+  VCModel? getVC(String name) {
+    log.i("VCManager:getVC(name:$name)");
     for (var vc in vcs) {
       if (vc.name == name) {
         return vc;
       }
     }
-    return false;
+    return null;
   }
 
   setByName(String name, String field, dynamic value) async {
-    // await init();
+    log.i("VCManager:setByName(name:$name, field:$field, value:$value)");
     for (var vc in vcs) {
       if (vc.name == name) {
         vc.setField(field, value);
@@ -84,7 +85,7 @@ class VCManager {
   }
 
   getByName(String name, String field) async {
-    // await init();
+    log.i("VCManager:getByName(name:$name, field:$field)");
     for (var vc in vcs) {
       if (vc.name == name) {
         return vc.getField(field);

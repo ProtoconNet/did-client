@@ -15,14 +15,16 @@ import 'package:dio/dio.dart';
 // import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/util/logger.dart';
 // import 'package:wallet/util/crypto.dart';
 // import 'package:wallet/provider/platform.dart';
 
 void main() async {
+  final log = Log();
   test('Get Schema Location Test', () async {
     var issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
     var response = await issuer.getSchemaLocation();
-    print(response['VCPost']);
+    log.i(response['VCPost']);
 
     var response2 = await Dio()
         .post(
@@ -38,9 +40,9 @@ void main() async {
       }), //contentType: Headers.jsonContentType),
     )
         .catchError((e) {
-      print(e);
+      log.e(e);
     });
 
-    print(response2);
+    log.i(response2);
   });
 }

@@ -36,7 +36,7 @@ class VC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i("VC build");
+    log.i("VC:build");
 
     if (vc.isEmpty) {
       log.i('vc empty');
@@ -44,7 +44,7 @@ class VC extends StatelessWidget {
         log.i('no VC');
         return InkWell(
             onTap: () async {
-              log.i("*" * 100 + "Schema" + "*" * 100);
+              log.i("go to Schema");
               log.i("schemaRequest: $schemaRequest");
               await Get.to(Schema(
                 did: did,

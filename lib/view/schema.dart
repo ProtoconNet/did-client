@@ -25,7 +25,7 @@ class Schema extends StatelessWidget {
   final log = Log();
 
   builder(name) {
-    log.i('Schema Builder');
+    log.i('Schema:builder');
     log.i("${c.schemaList}: $requestSchema");
 
     final schemaList = c.schemaList;
@@ -129,8 +129,6 @@ class Schema extends StatelessWidget {
       }
     }
 
-    log.i("+" * 100);
-
     return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       // SizedBox(
       //     height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 82,
@@ -157,6 +155,7 @@ class Schema extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log.i('Schema:build');
     return Background(
         appBar: AppBar(
             backgroundColor: Color.fromARGB(0xff, 61, 61, 61),
@@ -170,7 +169,8 @@ class Schema extends StatelessWidget {
               child: FutureBuilder(
                   future: c.init(requestSchema),
                   builder: (context, snapshot) {
-                    log.i(snapshot.data);
+                    log.i("snapshot.data:${snapshot.data}");
+                    log.i("snapshot.hasData:${snapshot.hasData}");
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());
                     } else {

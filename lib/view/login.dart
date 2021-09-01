@@ -18,6 +18,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log.i("Login:build");
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [

@@ -13,6 +13,7 @@ class DIDManager {
   bool uninitialized = true;
 
   init() async {
+    log.i("DIDManager:init");
     if (!await storage.containsKey(key: 'DIDList')) {
       await storage.write(key: 'DIDList', value: '{}');
     }
@@ -24,18 +25,21 @@ class DIDManager {
     uninitialized = false;
   }
 
-  setDID(did, encodedPriv, password) async {
+  setDID(String did, String encodedPriv, String password) async {
+    log.i("DIDManager:setDID");
     log.i("$did : $encodedPriv : $password");
     dids[did] = encodedPriv;
 
     await storage.write(key: 'DIDList', value: json.encode(dids));
   }
 
-  getFirstDID() {
+  String getFirstDID() {
+    log.i("DIDManager:getFirstDID");
     return dids.keys.first;
   }
 
-  getDIDPK(String did, String password) async {
-    return crypto.decryptPK(dids[did], password);
+  Future<String> getDIDPK(String did, String password) async {
+    log.i("DIDManager:getDIDPK");
+    return await crypto.decryptPK(dids[did], password);
   }
 }

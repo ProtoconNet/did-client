@@ -17,18 +17,17 @@ class VPController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  getSchema(schema) async {
+  Future<bool?> getSchema(String schema) async {
+    log.i("VPController:getSchema(schema:$schema)");
     log.i('getSchema:: $schemaRequest :: $schema');
-    log.i('*' * 200);
     final issuer = Issuer(schema);
     final platform = Platform();
     var locations = await issuer.getSchemaLocation();
 
     var response = await platform.getSchema(locations['schema']);
-    log.i("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!$response");
-    log.i(response.runtimeType);
+    log.i("response: $response");
     if (response.containsKey('error')) {
-      return;
+      return null;
     }
 
     log.i("schema: ${response['data']}, ${response['data'].runtimeType}");
@@ -41,8 +40,9 @@ class VPController extends GetxController {
   }
 
   getVPList() async {
+    log.i("VPController:getVPList");
     VCListController vcListController = Get.find();
     // await vcListController.setVCList(did);
-    await vcListController.vpManager.readVP();
+    await vcListController.vpManager.loadVP();
   }
 }

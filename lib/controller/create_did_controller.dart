@@ -16,16 +16,17 @@ class CreateDIDController extends GetxController {
   String publicKey = "";
 
   Future<String> createDID(String password) async {
-    var keyPair = await crypto.generateKeyPair();
-    var encodedPriv = keyPair[0];
-    var encodedPub = keyPair[1];
+    log.i("CreateDIDController:createDID(password:$password)");
+    final List<String> keyPair = await crypto.generateKeyPair();
+    final String encodedPriv = keyPair[0];
+    final String encodedPub = keyPair[1];
 
-    final did = 'did:mtm:' + encodedPub;
+    final String did = 'did:mtm:' + encodedPub;
     g.did.value = did;
 
     log.i("encodedPriv: $encodedPriv");
 
-    final encrypted = await crypto.encryptPK(encodedPriv, password);
+    final List<int> encrypted = await crypto.encryptPK(encodedPriv, password);
 
     log.i("encrypted: $encrypted");
 
@@ -34,28 +35,25 @@ class CreateDIDController extends GetxController {
     return did;
   }
 
-  registerDidDocument(did) async {
-    log.i("&" * 100);
+  registerDidDocument(String did) async {
+    log.i("CreateDIDController:registerDidDocument(did:$did)");
     try {
       await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
     } catch (e) {
       log.i("DID Not Found. Let's Register");
 
-      log.i("&" * 100);
-
       var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
-      log.i("&" * 100);
       log.i("set did document response: $response");
 
       var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-      log.i(response2);
+      log.i("response2: $response2");
       if (response2['message'] == "success") {
         log.i("DID Registration Success");
       } else {
         log.i("DID Registration Failed");
       }
     } finally {
-      log.i("DID Already Exist");
+      log.i("DID register done");
     }
   }
 }

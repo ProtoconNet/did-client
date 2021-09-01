@@ -26,7 +26,8 @@ class VCCard extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  Widget getLogoByName(String name) {
+  Widget _getLogoByName(String name) {
+    log.i("VCCard:getLogoByName");
     const double height = 20;
     if (name == "drivers license" || name == "운전면허증") {
       return Image.asset('assets/images/drivers_license_logo.png', height: height);
@@ -37,7 +38,8 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget getCardByName(String name) {
+  Widget _getCardByName(String name) {
+    log.i("VCCard:getCardByName");
     const double height = 200;
 
     if (name == "drivers license" || name == "운전면허증") {
@@ -53,7 +55,8 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget getWaitImageByName(String name) {
+  Widget _getWaitImageByName(String name) {
+    log.i("VCCard:getWaitImageByName");
     const double height = 50;
     if (name == "drivers license" || name == "운전면허증") {
       return Image.asset('assets/images/visualAid.png', height: height);
@@ -64,22 +67,23 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget contentByStatus(String name, String status) {
+  Widget _contentByStatus(String name, String status) {
+    log.i("VCCard:contentByStatus");
     if (status == "noVC") {
       return Padding(
           padding: EdgeInsets.all(20),
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [getLogoByName(name)]),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
             Text(description, style: Get.textTheme.bodyText1),
             Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
           ]));
     } else if (status == "VC") {
-      return getCardByName(name);
+      return _getCardByName(name);
     } else {
       // wait
       return Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [getLogoByName(name)]),
-        getWaitImageByName(name),
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
+        _getWaitImageByName(name),
         Text('담당자 확인 후 $name 이(가) 발급됩니다.')
       ]);
     }
@@ -87,7 +91,7 @@ class VCCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i("VCCard build");
+    log.i("VCCard:build");
 
     if (c.animationOffset == null) return Text('loading');
 
@@ -115,7 +119,7 @@ class VCCard extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomRight,
                             colors: [Colors.white, Colors.grey.shade200])),
-                    child: contentByStatus(name, status)),
+                    child: _contentByStatus(name, status)),
               ),
               Opacity(
                   opacity: 0.3,

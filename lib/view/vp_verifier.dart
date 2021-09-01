@@ -4,11 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:wallet/model/vp.dart';
 import 'package:wallet/controller/vp_verifier_controller.dart';
+import 'package:wallet/util/logger.dart';
 
 class VPVerifier extends StatelessWidget {
   VPVerifier({key, required this.did, required this.vp, required this.enable})
       : c = Get.put(VPVerifierController(did, vp)),
         super(key: key);
+
+  final log = Log();
 
   final String did;
   final VPModel vp;
@@ -16,7 +19,7 @@ class VPVerifier extends StatelessWidget {
 
   final VPVerifierController c;
 
-  Widget requiredVC(vcName, requestedSubject, iconData) {
+  Widget _requiredVC(vcName, requestedSubject, iconData) {
     return Container(
       margin: EdgeInsets.only(bottom: 8),
       width: Get.width * 0.90,
@@ -54,6 +57,7 @@ class VPVerifier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log.i("VPVerifier:build");
     return InkWell(
       child: Container(
           margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 20),
@@ -111,8 +115,8 @@ class VPVerifier extends StatelessWidget {
                     SizedBox(height: 12),
                     Column(
                         children: vp.vc
-                            .map(
-                                (vc) => requiredVC(vc['name'], vc['required'].join(", "), FontAwesomeIcons.addressCard))
+                            .map((vc) =>
+                                _requiredVC(vc['name'], vc['required'].join(", "), FontAwesomeIcons.addressCard))
                             .toList()
                         // requiredVC('운전면허 정보', '성명, 생년월일, 운전면허번호', FontAwesomeIcons.addressCard),
                         // requiredVC('제주패스 정보', '성명, 예약번호, 유효기간', FontAwesomeIcons.ticketAlt),
@@ -124,10 +128,9 @@ class VPVerifier extends StatelessWidget {
                           child: Text('인증하기'),
                           style: Get.theme.textButtonTheme.style,
                           onPressed: () async {
-                            print("~" * 100);
                             try {
                               var vpResult = await c.postVP();
-                              print("#######################$vpResult########################");
+                              log.i("vpResult: $vpResult");
                               await Get.defaultDialog(
                                   title: "인증 완료",
                                   content: Text("인증이 성공적으로 완료 되었습니다."),

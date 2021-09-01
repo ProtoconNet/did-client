@@ -69,8 +69,4 @@ class Messages extends Translations {
           'ok': '확인',
         }
       };
-  // Text('logged_in'.trParams({
-  //  'name': 'John',
-  //  'email': 'john@example.com'
-  //  }));
 }

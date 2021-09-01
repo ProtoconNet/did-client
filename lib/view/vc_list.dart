@@ -21,7 +21,7 @@ class VCList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i("VCList build: $did");
+    log.i("VCList:build");
     return Container(
         alignment: Alignment.center,
         height: Get.height - Get.statusBarHeight,

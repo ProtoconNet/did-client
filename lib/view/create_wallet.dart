@@ -13,7 +13,7 @@ class CreateWallet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i('CreateWallet');
+    log.i('CreateWallet:build');
     return Background(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,

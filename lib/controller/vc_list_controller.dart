@@ -28,8 +28,8 @@ class VCListController extends GetxController {
     await vpManager.init();
   }
 
-  setVCList(did) async {
-    log.i("getVCList");
+  setVCList(String did) async {
+    log.i("VCListController:setVCList(did:$did)");
 
     for (var vc in vcManager.vcs) {
       log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
@@ -49,6 +49,5 @@ class VCListController extends GetxController {
         await vcManager.setByName(vc.name, 'jwt', "");
       }
     }
-    // vcManager.update((t) {});
   }
 }

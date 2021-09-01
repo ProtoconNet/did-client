@@ -18,7 +18,7 @@ class CreateDID extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log.i("CreateDID build");
+    log.i("CreateDID:build");
     return Background(children: [
       FutureBuilder<String>(
           future: c.createDID(password),
@@ -55,7 +55,7 @@ class CreateDID extends StatelessWidget {
                           GradientButton(
                               gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]),
                               onPressed: () async {
-                                await c.registerDidDocument(snapshot.data);
+                                await c.registerDidDocument(snapshot.data!);
                                 Get.offAll(Login());
                               },
                               child: Text('goToHome'.tr,

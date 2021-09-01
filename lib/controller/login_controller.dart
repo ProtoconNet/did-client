@@ -25,10 +25,12 @@ class LoginController extends GetxController {
   }
 
   Future<bool> canBiometricAuth() async {
+    log.i("LoginController:canBiometricAuth");
     return await BiometricStorage().canCheckBiometric();
   }
 
-  Future<void> biometricLogin() async {
+  biometricLogin() async {
+    log.i("LoginController:biometricLogin");
     try {
       final password = await BiometricStorage().read('password');
 
@@ -57,12 +59,13 @@ class LoginController extends GetxController {
     }
   }
 
-  passwordLogin(password) async {
+  passwordLogin(String password) async {
+    log.i("LoginController:passwordLogin(password:$password)");
     try {
       final did = g.didManager.value.getFirstDID();
-      log.i('secureKim did: $did');
+      log.i('did: $did');
       final pk = await g.didManager.value.getDIDPK(did, password);
-      log.i('secureKim pk: $pk');
+      log.i('pk: $pk');
 
       if (pk == "") throw Error();
 
@@ -79,7 +82,7 @@ class LoginController extends GetxController {
       Get.offAll(DIDList(), transition: Transition.fadeIn, duration: Duration(milliseconds: 1000));
     } catch (e) {
       log.e(e);
-      // log.i("${password} is not correct password");
+      log.i("$password is not correct password");
       await Get.defaultDialog(
           title: "incorrectPasswordTitle".tr,
           content: Text('incorrectPasswordContent'.tr),

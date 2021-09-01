@@ -12,85 +12,9 @@ class Issuer {
   final crypto = Crypto();
 
   final String schemaLocation;
-/*
-  responseCheck(http.Response response) {
-    switch ((response.statusCode / 100).floor()) {
-      case 2:
-        log.i("response: ${response.body}");
-        return response.body;
-      default:
-        log.lw("Response Error ${response.statusCode}:${response.body}");
-        return response.body;
-      // throw Error();
-    }
-  }
 
-  getVC(token) async {
-    final locations = await getSchemaLocation();
-    http.Response response = await http.get(
-      Uri.parse(locations['VCGet']),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer ' + token
-      },
-    );
-    return responseCheck(response);
-  }
-
-  postVC(body, privateKey) async {
-    final locations = await getSchemaLocation();
-    http.Response response = await http.post(
-      Uri.parse(locations['VCPost']),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: json.encode(body),
-    );
-    final challenge = json.decode(responseCheck(response));
-
-    // final challenge = jsonDecode(result.body);
-
-    if (challenge.containsKey('payload')) {
-      final challengeResult =
-          await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization'], privateKey);
-      if (challengeResult) {
-        return response.headers['authorization'];
-      }
-    }
-    return false;
-  }
-
-  responseChallenge(challengeUri, encodedSignatureBytes, token) async {
-    http.Response response = await http.get(challengeUri.replace(queryParameters: {'signature': encodedSignatureBytes}),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer ' + token});
-    return responseCheck(response);
-  }
-
-  getSchemaLocation() async {
-    log.i(schemaLocation);
-    http.Response response = await http.get(Uri.parse(schemaLocation));
-    final vcLocation = responseCheck(response);
-    return json.decode(vcLocation);
-  }
-
-  didAuth(payload, endPoint, token, privateKey) async {
-    log.i('did Auth');
-
-    final challengeBytes = utf8.encode(payload);
-
-    final signature = await crypto.sign(challengeBytes, privateKey);
-
-    final response2 = await responseChallenge(Uri.parse(endPoint), Base58Encode(signature), token);
-    if (response2 == "") {
-      log.le("Challenge Failed");
-      return false;
-    }
-    return true;
-  }
-  */
   responseCheck(Response<dynamic> response) {
+    log.i("Issuer:responseCheck");
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         log.i("response: ${response.data}");
@@ -103,6 +27,7 @@ class Issuer {
   }
 
   getVC(token) async {
+    log.i("Issuer:getVC");
     final locations = await getSchemaLocation();
     final response = await Dio().get(
       locations['VCGet'],
@@ -112,18 +37,9 @@ class Issuer {
   }
 
   postVC(data, privateKey) async {
+    log.i("Issuer:postVC");
     final locations = await getSchemaLocation();
     log.i('1:${locations['VCPost']}, $data');
-
-    // var response = await http.post(
-    //   Uri.parse(locations['VCPost']),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Accept": "application/json",
-    //   },
-    //   body: json.encode(data),
-    // );
-    // log.i("response body: ${response.body}");
 
     var response = await Dio()
         .post(
@@ -137,16 +53,15 @@ class Issuer {
         .catchError((onError) {
       log.e("error:${onError.toString()}");
     });
-    log.i('a:${response.data}');
+    log.i('response.data: ${response.data}');
 
     final result = responseCheck(response);
-    log.i('b:$result, ${result.runtimeType}');
+    log.i('result: $result, ${result.runtimeType}');
 
     final challenge = jsonDecode(result);
-    log.i('c');
 
-    log.i('${response.headers}');
-    log.i('${response.headers['authorization']}');
+    log.i('response.headers: ${response.headers}');
+    log.i('headers authorization: ${response.headers['authorization']}');
 
     if (challenge.containsKey('payload')) {
       final challengeResult =
@@ -159,6 +74,7 @@ class Issuer {
   }
 
   responseChallenge(challengeUri, encodedSignatureBytes, token) async {
+    log.i("Issuer:responseChallenge");
     final response = await Dio().get(
       challengeUri,
       queryParameters: {'signature': encodedSignatureBytes},
@@ -169,6 +85,7 @@ class Issuer {
   }
 
   getSchemaLocation() async {
+    log.i("Issuer:getSchemaLocation");
     log.i(schemaLocation);
 
     final response = await Dio().get(schemaLocation);
@@ -178,7 +95,7 @@ class Issuer {
   }
 
   didAuth(payload, endPoint, token, privateKey) async {
-    log.i('did Auth');
+    log.i("Issuer:didAuth");
 
     final challengeBytes = utf8.encode(payload);
 

@@ -11,6 +11,7 @@ class Crypto {
   final storage = FlutterSecureStorage();
 
   Future<List<String>> generateKeyPair() async {
+    log.i("Crypto:generateKeyPair");
     final seeds = encrypt.SecureRandom(32).bytes;
 
     final algorithm = Ed25519();
@@ -23,6 +24,7 @@ class Crypto {
   }
 
   Future<List<int>> sign(List<int> payload, String pk) async {
+    log.i("Crypto:sign");
     final clearText = Base58Decode(pk);
 
     final algorithm = Ed25519();
@@ -34,6 +36,7 @@ class Crypto {
   }
 
   Future<bool> verify(List<int> payload, List<int> signature, List<int> pubKey) async {
+    log.i("Crypto:verify");
     final algorithm = Ed25519();
 
     final result = await algorithm.verify(payload,
@@ -43,6 +46,7 @@ class Crypto {
   }
 
   Future<List<int>> encryptPK(String encodedPriv, String password) async {
+    log.i("Crypto:encryptPK");
     final passwordBytes = utf8.encode(password);
 
     final sink = Sha256().newHashSink();
@@ -60,6 +64,7 @@ class Crypto {
   }
 
   Future<String> decryptPK(String encryptedPk, String password) async {
+    log.i("Crypto:decryptPK");
     try {
       final passwordBytes = utf8.encode(password);
       // Generate a random secret key.
