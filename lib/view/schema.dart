@@ -24,7 +24,7 @@ class Schema extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  builder(name) {
+  _builder(name) {
     log.i('Schema:builder');
     log.i("${c.schemaList}: $requestSchema");
 
@@ -174,7 +174,7 @@ class Schema extends StatelessWidget {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      return Obx(() => builder(name));
+                      return Obx(() => _builder(name));
                     }
                   }))
         ]);

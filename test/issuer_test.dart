@@ -40,13 +40,13 @@ void main() async {
       String did = "did:mtm:" + key[1];
 
       var response = await platform.getDIDDocument("http://49.50.164.195:8080/v1/DIDDocument?did=" + did);
-      expect(json.decode(response)['message'], isNot(equals("success")));
+      expect(json.decode(response.data)['message'], isNot(equals("success")));
 
       response = await platform.setDIDDocument("http://49.50.164.195:8080/v1/DIDDocument", did);
       expect(response.statusCode, equals(200));
 
       response = await platform.getDIDDocument("http://49.50.164.195:8080/v1/DIDDocument?did=" + did);
-      expect(json.decode(response)['message'], equals("success"));
+      expect(json.decode(response.data)['message'], equals("success"));
 
       var token = await issuer.postVC({
         "did": did,
@@ -62,7 +62,7 @@ void main() async {
 
       response = await issuer.getVC(token!);
 
-      expect(json.decode(response)['Response'], equals(true));
+      expect(json.decode(response.data)['Response'], equals(true));
     });
   });
 }

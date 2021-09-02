@@ -4,6 +4,105 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:wallet/util/logger.dart';
 
+class DID {}
+
+class Authentication {
+  String id = "";
+  String type = ""; // enum??
+  String controller = ""; // did type check??
+  String publicKeyMultibase = ""; // type??
+}
+
+class VerificationMethod {
+  String id = "";
+  String type = ""; // enum??
+  String controller = ""; // did type check??
+  String publicKeyMultibase = ""; // type??
+}
+
+class DIDDocumentTmp {
+  List<String> context = [];
+  String id = ""; // single URI
+  List<String> type = []; // VerificationCredential, VerifiablePresentation, UniversityDegreeCredential...
+  dynamic issuer = ""; // URI or Map
+  DateTime issuanceDate = DateTime.now();
+  DateTime expirationDate = DateTime.now();
+  Map<String, dynamic> credentialSubject = {};
+  Map<String, dynamic> credentialStatus = {};
+  List<Map<String, dynamic>> verifiableCredential = [];
+  List<Authentication> authentication = [];
+  List<VerificationMethod> verificationMethod = [];
+}
+
+class Proof {
+  String type = "";
+  DateTime expire = DateTime.now();
+  DateTime created = DateTime.now();
+  String proofPurpose = "";
+  String verificationMethod = "";
+  String challenge = "";
+  String domain = "";
+}
+
+class JsonTypeDIDDocument {
+  Map<String, dynamic> base = {"id": ""};
+
+  Map<String, dynamic> proof = {
+    "type": "",
+    "expire": "",
+    "created": "",
+    "proofPurpose": "",
+  };
+
+  Map<String, dynamic> verificationMethod = {
+    "id": "",
+    "type": "",
+    "controller": "",
+    "publicKeyMultibase": "",
+  };
+  Map<String, dynamic> authentication = {};
+
+  String _publicKeyType(String type, String publicKey) {
+    if (type == "publicKeyMultibase") {
+      return "z" + publicKey;
+    }
+    return publicKey;
+  }
+
+  String? _isDIDFormat(String did) {
+    var splitDID = did.split(":");
+    if (splitDID.length == 3) {
+      return did;
+    }
+    return null;
+  }
+
+  addVerificationMethod(String id, String type, String controller, String publicKeyType, String publicKey) {
+    var newVerificationMethod = verificationMethod;
+    newVerificationMethod["id"] = id;
+    newVerificationMethod["type"] = type;
+    newVerificationMethod["controller"] = _isDIDFormat(controller)!;
+
+    newVerificationMethod[publicKeyType] = _publicKeyType(publicKeyType, publicKey);
+  }
+
+  addProof(String type, DateTime expire, DateTime created, String proofPurpose, {String? challenge, String? domain}) {
+    var newProof = proof;
+    newProof["type"] = type;
+    newProof["expire"] = expire.toIso8601String();
+    newProof["created"] = created.toIso8601String();
+    newProof["proofPurpose"] = proofPurpose;
+    if (challenge != null) {
+      newProof["challenge"] = challenge;
+    }
+    if (domain != null) {
+      newProof["domain"] = domain;
+    }
+
+    base["proof"] = [proof];
+  }
+}
+
 class DIDDocument {
   final log = Log();
 

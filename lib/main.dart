@@ -9,6 +9,7 @@ import 'package:wallet/config/translations.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/config/theme.dart';
 import 'package:wallet/wallet_route.dart';
+import 'package:wallet/util/logger.dart';
 
 // List<CameraDescription> cameras = [];
 
@@ -16,7 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // cameras = await availableCameras();
   await initService();
-  runApp(const WigglerWallet());
+  runApp(WigglerWallet());
 }
 
 initService() async {
@@ -37,10 +38,13 @@ initService() async {
 }
 
 class WigglerWallet extends StatelessWidget {
-  const WigglerWallet({Key? key}) : super(key: key);
+  WigglerWallet({Key? key}) : super(key: key);
+
+  final log = Log();
 
   @override
   Widget build(BuildContext context) {
+    log.i("WigglerWallet:build");
     return GetMaterialApp(
       title: 'Wiggler Wallet',
       theme: theme,
