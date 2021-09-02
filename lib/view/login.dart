@@ -37,7 +37,7 @@ class Login extends StatelessWidget {
                   blurRadius: 1.5,
                 ),
               ]),
-              child: const Text('MITUM',
+              child: const Text('PROTOCON',
                   style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w900))),
           Text('Wallet', style: Get.textTheme.headline2?.copyWith(fontWeight: FontWeight.w900)),
         ]),

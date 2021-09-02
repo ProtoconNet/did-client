@@ -50,7 +50,7 @@ class Messages extends Translations {
           'noImage': '이미지가 선택되지 않았습니다.',
           'takePicture': '사진',
           'pickGallery': '갤러리',
-          'noAccount': 'DID가 없습니다. Mitum DID에 가입하세요',
+          'noAccount': 'DID가 없습니다. Protocon DID에 가입하세요',
           'createWallet': '내 지갑 만들기',
           'createAccount': '새로운 DID 생성',
           'importAccount': 'DID Key 가져오기',

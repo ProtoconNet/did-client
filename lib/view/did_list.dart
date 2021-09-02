@@ -29,7 +29,7 @@ class DIDList extends StatelessWidget {
             backgroundColor: Get.theme.scaffoldBackgroundColor,
             elevation: 0,
             leading: Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", scale: 4)),
-            title: Text('MITUM Wallet', style: Get.textTheme.headline6),
+            title: Text('PROTOCON Wallet', style: Get.textTheme.headline6),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
