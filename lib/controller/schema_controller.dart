@@ -85,13 +85,13 @@ class SchemaController extends GetxController {
     var locations = await issuer.getSchemaLocation();
 
     var response = await platform.getSchema(locations['schema']);
-    if (response.containsKey('error')) {
+    if (response.data.containsKey('error')) {
       return false;
     }
 
-    log.i("schema: ${response['data']}, ${response['data'].runtimeType}");
+    log.i("schema: ${response.data}, ${response.data.runtimeType}");
 
-    schemaList.value = json.decode(response['data']);
+    schemaList.value = json.decode(response.data);
 
     log.i("schemaList: $schemaList");
 
@@ -188,7 +188,7 @@ class SchemaController extends GetxController {
       }
     }
 
-    // TODO: change static vc1
+    // TODO change static vc1
     var body = {"did": g.did.value, "schema": "vc1", "credentialSubject": credentialSubject};
 
     log.i("body:${json.encode(body)}");

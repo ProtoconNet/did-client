@@ -26,13 +26,13 @@ class VPController extends GetxController {
 
     var response = await platform.getSchema(locations['schema']);
     log.i("response: $response");
-    if (response.containsKey('error')) {
+    if (response.data.containsKey('error')) {
       return null;
     }
 
-    log.i("schema: ${response['data']}, ${response['data'].runtimeType}");
+    log.i("schema: ${response.data}, ${response.data.runtimeType}");
 
-    schemaList.value = json.decode(response['data']);
+    schemaList.value = json.decode(response.data);
 
     log.i("schemaList: $schemaList");
 

@@ -48,21 +48,19 @@ void main() async {
       response = await platform.getDIDDocument("http://49.50.164.195:8080/v1/DIDDocument?did=" + did);
       expect(json.decode(response)['message'], equals("success"));
 
-      var token = await issuer.postVC(
-          json.encode({
-            "did": did,
-            "schema": "vc1",
-            "credentialSubject": {
-              "name": "asdf",
-              "license number": "123",
-              "license": "",
-              "expire": "2021-08-17T10:47:38.000"
-            }
-          }),
-          key[0]);
+      var token = await issuer.postVC({
+        "did": did,
+        "schema": "vc1",
+        "credentialSubject": {
+          "name": "asdf",
+          "license number": "123",
+          "license": "",
+          "expire": "2021-08-17T10:47:38.000"
+        }
+      }, key[0]);
       expect(token, isNot(equals(false)));
 
-      response = await issuer.getVC(token);
+      response = await issuer.getVC(token!);
 
       expect(json.decode(response)['Response'], equals(true));
     });

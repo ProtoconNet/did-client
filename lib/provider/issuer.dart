@@ -14,20 +14,20 @@ class Issuer {
   final String schemaLocation;
 
   responseCheck(Response<dynamic> response) {
-    log.i("Issuer:responseCheck");
+    log.i("Issuer:responseCheck(response:$response)");
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         log.i("response: ${response.data}");
-        return response.data;
+        return response;
       default:
         log.lw("Response Error $response");
-        return response.data;
+        return response;
       // throw Error();
     }
   }
 
-  getVC(token) async {
-    log.i("Issuer:getVC");
+  Future<Response<dynamic>> getVC(String token) async {
+    log.i("Issuer:getVC(token:$token)");
     final locations = await getSchemaLocation();
     final response = await Dio().get(
       locations['VCGet'],
@@ -36,8 +36,8 @@ class Issuer {
     return responseCheck(response);
   }
 
-  postVC(data, privateKey) async {
-    log.i("Issuer:postVC");
+  Future<String?> postVC(Map<String, dynamic> data, String privateKey) async {
+    log.i("Issuer:postVC(data:$data, privateKey:$privateKey)");
     final locations = await getSchemaLocation();
     log.i('1:${locations['VCPost']}, $data');
 
@@ -70,11 +70,11 @@ class Issuer {
         return response.headers['authorization']![0];
       }
     }
-    return false;
+    return null;
   }
 
-  responseChallenge(challengeUri, encodedSignatureBytes, token) async {
-    log.i("Issuer:responseChallenge");
+  Future<Response<dynamic>> responseChallenge(String challengeUri, String encodedSignatureBytes, String token) async {
+    log.i("Issuer:responseChallenge()");
     final response = await Dio().get(
       challengeUri,
       queryParameters: {'signature': encodedSignatureBytes},
@@ -84,7 +84,7 @@ class Issuer {
     return responseCheck(response);
   }
 
-  getSchemaLocation() async {
+  Future<Map<String, dynamic>> getSchemaLocation() async {
     log.i("Issuer:getSchemaLocation");
     log.i(schemaLocation);
 
@@ -94,7 +94,7 @@ class Issuer {
     return json.decode(vcLocation);
   }
 
-  didAuth(payload, endPoint, token, privateKey) async {
+  Future<bool> didAuth(String payload, String endPoint, String token, String privateKey) async {
     log.i("Issuer:didAuth");
 
     final challengeBytes = utf8.encode(payload);

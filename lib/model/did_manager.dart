@@ -26,7 +26,7 @@ class DIDManager {
   }
 
   setDID(String did, String encodedPriv, String password) async {
-    log.i("DIDManager:setDID");
+    log.i("DIDManager:setDID(did:$did, encodedPriv:$encodedPriv, password:$password)");
     log.i("$did : $encodedPriv : $password");
     dids[did] = encodedPriv;
 
@@ -39,7 +39,7 @@ class DIDManager {
   }
 
   Future<String> getDIDPK(String did, String password) async {
-    log.i("DIDManager:getDIDPK");
+    log.i("DIDManager:getDIDPK(did:$did, password:$password)");
     return await crypto.decryptPK(dids[did], password);
   }
 }

@@ -39,11 +39,11 @@ class VCListController extends GetxController {
         final issuer = Issuer(vc.schemaRequest);
         var response = await issuer.getVC(vc.jwt);
 
-        if (json.decode(response).containsKey('error')) {
+        if (json.decode(response.data).containsKey('error')) {
           continue;
         }
 
-        var data = json.decode(response)['VC'];
+        var data = json.decode(response.data)['VC'];
 
         await vcManager.setByName(vc.name, 'vc', data);
         await vcManager.setByName(vc.name, 'jwt', "");

@@ -8,20 +8,20 @@ class Platform {
 
   final didDocument = DIDDocument();
 
-  responseCheck(Response<dynamic> response) {
+  Response<dynamic> responseCheck(Response<dynamic> response) {
     log.i("Platform:responseCheck(response:$response)");
     switch ((response.statusCode! / 100).floor()) {
       case 2:
         // log.i("${response.body}");
-        return response.data;
+        return response;
       default:
         log.lw("Response Error: $response");
-        return response.data;
+        return response;
       // throw Error();
     }
   }
 
-  getDIDDocument(String getDIDDocumentUri) async {
+  Future<Response<dynamic>> getDIDDocument(String getDIDDocumentUri) async {
     log.i("Platform:getDIDDocument(getDIDDocumentUri:$getDIDDocumentUri)");
     log.i(getDIDDocumentUri);
     final response = await Dio().get(getDIDDocumentUri);
@@ -29,7 +29,7 @@ class Platform {
     return responseCheck(response);
   }
 
-  setDIDDocument(String setDIDDocumentUri, String did) async {
+  Future<Response<dynamic>> setDIDDocument(String setDIDDocumentUri, String did) async {
     log.i("Platform:setDIDDocument(setDIDDocumentUri:$setDIDDocumentUri, did:$did)");
     String document = didDocument.createDIDDocument(did);
 
@@ -39,7 +39,7 @@ class Platform {
     return responseCheck(response);
   }
 
-  getSchema(String schemaUri) async {
+  Future<Response<dynamic>> getSchema(String schemaUri) async {
     log.i("Platform:getSchema(schemaUri:$schemaUri)");
     final response = await Dio().get(schemaUri);
 

@@ -35,7 +35,7 @@ class CreateDIDController extends GetxController {
     return did;
   }
 
-  registerDidDocument(String did) async {
+  Future<bool> registerDidDocument(String did) async {
     log.i("CreateDIDController:registerDidDocument(did:$did)");
     try {
       await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
@@ -47,13 +47,16 @@ class CreateDIDController extends GetxController {
 
       var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
       log.i("response2: $response2");
-      if (response2['message'] == "success") {
+      if (response2.data['message'] == "success") {
         log.i("DID Registration Success");
+        return true;
       } else {
         log.i("DID Registration Failed");
+        return false;
       }
     } finally {
       log.i("DID register done");
     }
+    return false;
   }
 }

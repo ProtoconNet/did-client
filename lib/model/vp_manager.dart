@@ -42,7 +42,7 @@ class VPManager {
   }
 
   Future<bool> setVP(String value) async {
-    log.i("VPManager:setVP");
+    log.i("VPManager:setVP(value:$value)");
     await init();
 
     final newVP = VPModel.fromJson(json.decode(value));
