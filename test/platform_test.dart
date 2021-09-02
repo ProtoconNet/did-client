@@ -16,7 +16,7 @@ import 'package:wallet/util/logger.dart';
 
 void main() async {
   group('platform test', () {
-    final did = "did:mtm:A5KirmUHQPbm1m7nPob35k3p6gxPxFE64cogoq1Tv5c8";
+    const did = "did:mtm:A5KirmUHQPbm1m7nPob35k3p6gxPxFE64cogoq1Tv5c8";
     final log = Log();
 
     test('Create DID Document Test', () async {

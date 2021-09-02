@@ -56,7 +56,7 @@ class Schema extends StatelessWidget {
             Obx(() => c.imageList.length > idx && c.imageList[idx] != ""
                 ? Image.memory(base64Decode(c.imageList[idx]), height: shortSide / 2)
                 : Image.asset('assets/images/visualAid.png')),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             SizedBox(
                 width: Get.width * 0.8,
                 child: Row(
@@ -69,7 +69,7 @@ class Schema extends StatelessWidget {
                               await c.takeImage(idx);
                             },
                             child: Text('takePicture'.tr))),
-                    Text(' '),
+                    const Text(' '),
                     SizedBox(
                         width: Get.width * 0.39,
                         child: ElevatedButton(
@@ -107,7 +107,7 @@ class Schema extends StatelessWidget {
               String formattedDate = formatter.format(c.date.value);
               return Text(
                 formattedDate,
-                style: TextStyle(color: Colors.blue),
+                style: const TextStyle(color: Colors.blue),
               );
             })),
             TextButton(onPressed: () {
@@ -119,7 +119,7 @@ class Schema extends StatelessWidget {
               String formattedTime = formatter.format(c.time.value);
               return Text(
                 formattedTime,
-                style: TextStyle(color: Colors.blue),
+                style: const TextStyle(color: Colors.blue),
               );
             }))
           ]));
@@ -145,7 +145,7 @@ class Schema extends StatelessWidget {
           width: Get.width * 0.8,
           height: 50,
           child: ElevatedButton(
-              child: Text('Submit'),
+              child: const Text('Submit'),
               onPressed: () async {
                 await c.submit(requestSchema, name, schemaList);
                 Get.back();
@@ -158,12 +158,12 @@ class Schema extends StatelessWidget {
     log.i('Schema:build');
     return Background(
         appBar: AppBar(
-            backgroundColor: Color.fromARGB(0xff, 61, 61, 61),
+            backgroundColor: const Color.fromARGB(0xff, 61, 61, 61),
             title: Text(name,
                 style: GoogleFonts.roboto(textStyle: Get.theme.textTheme.headline6?.copyWith(color: Colors.white)))),
         children: [
           Container(
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - 16.0 * 2,
               child: FutureBuilder(
@@ -172,7 +172,7 @@ class Schema extends StatelessWidget {
                     log.i("snapshot.data:${snapshot.data}");
                     log.i("snapshot.hasData:${snapshot.hasData}");
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else {
                       return Obx(() => builder(name));
                     }

@@ -16,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // cameras = await availableCameras();
   await initService();
-  runApp(WigglerWallet());
+  runApp(const WigglerWallet());
 }
 
 initService() async {
@@ -37,6 +37,8 @@ initService() async {
 }
 
 class WigglerWallet extends StatelessWidget {
+  const WigglerWallet({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -46,14 +48,14 @@ class WigglerWallet extends StatelessWidget {
       themeMode: GlobalVariable().themeMode(GlobalVariable().theme),
       translations: Messages(),
       locale: GlobalVariable().languageMode(GlobalVariable().language),
-      fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       home: WalletRoute(),
       // initialRoute: '/',
       // getPages: [GetPage(name: '/', page: () => WalletRoute())],
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (BuildContext context) => Scaffold(body: Center(child: Text('Not Found'))),
+          builder: (BuildContext context) => const Scaffold(body: Center(child: Text('Not Found'))),
         );
       },
     );

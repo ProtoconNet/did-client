@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GradientIcon extends StatelessWidget {
-  GradientIcon(
-    this.icon,
-    this.size,
-    this.gradient,
-  );
+  const GradientIcon({Key? key, required this.icon, required this.size, required this.gradient}) : super(key: key);
 
   final IconData icon;
   final double size;

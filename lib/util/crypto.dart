@@ -8,7 +8,7 @@ import 'package:wallet/util/logger.dart';
 
 class Crypto {
   final log = Log();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Future<List<String>> generateKeyPair() async {
     log.i("Crypto:generateKeyPair");

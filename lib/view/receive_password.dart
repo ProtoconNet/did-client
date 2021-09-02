@@ -8,6 +8,7 @@ import 'package:wallet/view/create_did.dart';
 import 'package:wallet/util/logger.dart';
 
 class ReceivePassword extends StatelessWidget {
+  ReceivePassword({Key? key}) : super(key: key);
   final ReceivePasswordController c = Get.put(ReceivePasswordController());
 
   final GlobalVariable g = Get.find();
@@ -41,19 +42,19 @@ class ReceivePassword extends StatelessWidget {
             children: [
               // Icon(Icons.account_balance_wallet_rounded, size: 40, color: Colors.deepPurple),
               Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Text('비밀번호 설정', style: Get.textTheme.headline6?.copyWith(fontWeight: FontWeight.w700)))
             ],
           ),
           Column(children: [
             Icon(Icons.error_outline, size: 35, color: Get.theme.accentColor),
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Center(
                 child: Text('지금 설정한 PIN을 꼭 기억하세요!',
                     style: Get.textTheme.subtitle1?.copyWith(color: Get.theme.accentColor))),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
+              SizedBox(
                   width: Get.width * 0.8,
                   child: Column(children: [
                     Text('설정한 PIN은 어떤 서버에도 저장되지 않으며,', style: Get.textTheme.bodyText2),
@@ -76,14 +77,14 @@ class ReceivePassword extends StatelessWidget {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           hintText: '비밀번호 입력(영문, 숫자, 특수기호 조합 8자리 이상)',
                           suffixIcon: IconButton(
                             onPressed: () {
                               pass.clear();
                               confirmPass.clear();
                             },
-                            icon: Icon(Icons.clear),
+                            icon: const Icon(Icons.clear),
                           ),
                         ), //, labelText: 'Password'),
                         validator: (value) {
@@ -104,14 +105,14 @@ class ReceivePassword extends StatelessWidget {
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           hintText: '비밀번호 확인',
                           suffixIcon: IconButton(
                             onPressed: () {
                               pass.clear();
                               confirmPass.clear();
                             },
-                            icon: Icon(Icons.clear),
+                            icon: const Icon(Icons.clear),
                           ),
                         ), //, labelText: 'Confirm'),
                         validator: (value) {
@@ -128,12 +129,12 @@ class ReceivePassword extends StatelessWidget {
                           // Navigator.push(
                           //     context, MaterialPageRoute(builder: (context) => CreateDID(password: confirmPass.text)));
                         }),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Obx(() => SizedBox(
                           height: 48,
                           width: double.maxFinite,
                           child: ElevatedButton(
-                            child: c.status.value ? Text('submit'.tr) : Text('check password'),
+                            child: c.status.value ? Text('submit'.tr) : const Text('check password'),
                             onPressed: c.status.value
                                 ? () async {
                                     Get.to(CreateDID(password: confirmPass.text));

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final primary = createMaterialColor(Color(0xFF5A24BE));
-final secondary = createMaterialColor(Color(0xFFED742F));
+final primary = createMaterialColor(const Color(0xFF5A24BE));
+final secondary = createMaterialColor(const Color(0xFFED742F));
 
 final theme = ThemeData(
   brightness: Brightness.light,
   fontFamily: GoogleFonts.notoSans().fontFamily,
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     headline1: TextStyle(fontSize: 93, letterSpacing: -1.5, color: Colors.black),
     headline2: TextStyle(fontSize: 60, letterSpacing: -0.52, color: Colors.black),
     headline3: TextStyle(fontSize: 48, letterSpacing: 0.0, color: Colors.black),
@@ -31,15 +31,15 @@ final theme = ThemeData(
   highlightColor: primary.shade700,
   buttonColor: primary.shade700,
   // cursorColor: primary.shade700,
-  canvasColor: Color(0xfffafafa),
-  cardColor: Color(0xfffafafa),
-  scaffoldBackgroundColor: Color(0xfffafafa),
-  errorColor: Color(0xffba3183),
+  canvasColor: const Color(0xfffafafa),
+  cardColor: const Color(0xfffafafa),
+  scaffoldBackgroundColor: const Color(0xfffafafa),
+  errorColor: const Color(0xffba3183),
 );
 final darkTheme = ThemeData(
   brightness: Brightness.dark,
   fontFamily: GoogleFonts.notoSans().fontFamily,
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     headline1: TextStyle(fontSize: 93, letterSpacing: -1.5, color: Colors.white),
     headline2: TextStyle(fontSize: 60, letterSpacing: -0.52, color: Colors.white),
     headline3: TextStyle(fontSize: 48, letterSpacing: 0.0, color: Colors.white),

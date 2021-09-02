@@ -10,7 +10,7 @@ class VPManager {
   final String did;
 
   final log = Log();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   RxList<VPModel> vps = <VPModel>[].obs;
   bool uninitialized = true;

@@ -54,19 +54,19 @@ class VP extends StatelessWidget {
               color: Get.theme.cardColor,
               elevation: 1,
               shape: RoundedRectangleBorder(
-                side: BorderSide(
+                side: const BorderSide(
                   color: Colors.grey,
                   width: 0.5,
                 ),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ..._credentialSubjectList(vc['credentialSubject']),
-                      SizedBox(height: 18),
+                      const SizedBox(height: 18),
                       Center(child: QrImage(data: did, version: QrVersions.auto, size: 160.0))
                     ],
                   )),
@@ -82,7 +82,7 @@ class VP extends StatelessWidget {
                   }
                 }
                 if (vpMatching == false) {
-                  return SizedBox();
+                  return const SizedBox();
                 }
 
                 var vcHoldCount = 0;

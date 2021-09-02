@@ -5,7 +5,7 @@ import 'package:wallet/util/logger.dart';
 
 class BiometricStorage {
   final log = Log();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
   final LocalAuthentication auth = LocalAuthentication();
 
   Future<bool> canCheckBiometric() async {

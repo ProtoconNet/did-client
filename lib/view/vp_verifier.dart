@@ -21,28 +21,28 @@ class VPVerifier extends StatelessWidget {
 
   Widget _requiredVC(vcName, requestedSubject, iconData) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       width: Get.width * 0.90,
       child: Card(
         color: Get.theme.cardColor,
         elevation: 1,
         shape: RoundedRectangleBorder(
-          side: BorderSide(
+          side: const BorderSide(
             color: Colors.grey,
             width: 0.5,
           ),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(padding: EdgeInsets.all(10), child: Icon(iconData)),
+                    Padding(padding: const EdgeInsets.all(10), child: Icon(iconData)),
                     Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Text(vcName, style: Get.textTheme.bodyText1),
                           Text(requestedSubject, style: Get.textTheme.bodyText2)
@@ -63,7 +63,7 @@ class VPVerifier extends StatelessWidget {
           margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 20),
           width: Get.width * 0.75,
           foregroundDecoration: enable
-              ? BoxDecoration()
+              ? const BoxDecoration()
               : BoxDecoration(
                   color: Colors.grey,
                   backgroundBlendMode: BlendMode.saturation,
@@ -87,7 +87,7 @@ class VPVerifier extends StatelessWidget {
           Get.dialog(
             Dialog(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                insetPadding: EdgeInsets.all(30.0),
+                insetPadding: const EdgeInsets.all(30.0),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -99,7 +99,7 @@ class VPVerifier extends StatelessWidget {
                           child: Text('인증요청', style: Get.textTheme.subtitle2),
                         ),
                         IconButton(
-                          icon: Icon(Icons.close),
+                          icon: const Icon(Icons.close),
                           onPressed: () {
                             Get.back();
                           },
@@ -108,11 +108,11 @@ class VPVerifier extends StatelessWidget {
                     ),
                     Text(vp.name,
                         style: Get.textTheme.headline6!.copyWith(color: Colors.black, fontWeight: FontWeight.w700)),
-                    SizedBox(height: 27),
+                    const SizedBox(height: 27),
                     Text('제주패스 회원 10% 할인', style: Get.textTheme.subtitle1!.copyWith(color: Get.theme.accentColor)),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Text('${vp.name}에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Column(
                         children: vp.vc
                             .map((vc) =>
@@ -125,7 +125,7 @@ class VPVerifier extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                          child: Text('인증하기'),
+                          child: const Text('인증하기'),
                           style: Get.theme.textButtonTheme.style,
                           onPressed: () async {
                             try {
@@ -133,9 +133,9 @@ class VPVerifier extends StatelessWidget {
                               log.i("vpResult: $vpResult");
                               await Get.defaultDialog(
                                   title: "인증 완료",
-                                  content: Text("인증이 성공적으로 완료 되었습니다."),
+                                  content: const Text("인증이 성공적으로 완료 되었습니다."),
                                   confirm: ElevatedButton(
-                                    child: Text('ok'),
+                                    child: const Text('ok'),
                                     onPressed: () {
                                       Get.back();
                                     },
@@ -143,9 +143,9 @@ class VPVerifier extends StatelessWidget {
                             } catch (e) {
                               await Get.defaultDialog(
                                   title: "VP 인증 실패",
-                                  content: Text("인증이 실패 하였습니다."),
+                                  content: const Text("인증이 실패 하였습니다."),
                                   confirm: ElevatedButton(
-                                    child: Text('ok'),
+                                    child: const Text('ok'),
                                     onPressed: () {
                                       Get.back();
                                     },

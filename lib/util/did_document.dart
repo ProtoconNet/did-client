@@ -34,7 +34,7 @@ class DIDDocument {
     // payload is vc list
     var now = DateTime.now();
 
-    var expire = now.add(Duration(minutes: 1));
+    var expire = now.add(const Duration(minutes: 1));
     var template = {
       "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
       "id": did,

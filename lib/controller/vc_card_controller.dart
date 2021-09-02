@@ -9,7 +9,7 @@ class VCCardController extends GetxController with SingleGetTickerProviderMixin 
   void onInit() {
     super.onInit();
 
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     final curve = CurvedAnimation(parent: animationController!, curve: Curves.elasticOut);
 

@@ -24,7 +24,7 @@ class CreateDID extends StatelessWidget {
           future: c.createDID(password),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container(
+              return SizedBox(
                   width: Get.width * 0.75,
                   height: Get.height - Get.statusBarHeight - Get.bottomBarHeight,
                   child: Column(
@@ -33,13 +33,13 @@ class CreateDID extends StatelessWidget {
                       children: [
                         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", width: 60, height: 60)),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text("지갑을 만들었어요!",
                               style: Get.theme.textTheme.headline5
                                   ?.copyWith(fontWeight: FontWeight.bold, color: Colors.black)),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text("안전하게 보관하고,", style: Get.theme.textTheme.bodyText1),
@@ -49,21 +49,22 @@ class CreateDID extends StatelessWidget {
                         ]),
                         Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
                           Text("이제 다양한 기능을 사용해 보세요!", style: Get.theme.textTheme.caption),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           GradientButton(
-                              gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]),
+                              gradient: const LinearGradient(colors: [Colors.purple, Colors.deepPurple]),
                               onPressed: () async {
                                 await c.registerDidDocument(snapshot.data!);
                                 Get.offAll(Login());
                               },
                               child: Text('goToHome'.tr,
-                                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)))
+                                  style:
+                                      const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)))
                         ]),
                       ]));
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           }),
     ]);

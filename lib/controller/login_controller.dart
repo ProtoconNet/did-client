@@ -42,7 +42,7 @@ class LoginController extends GetxController {
 
         g.password.value = password;
         g.did.value = did;
-        Get.offAll(DIDList(), transition: Transition.fadeIn, duration: Duration(milliseconds: 1000));
+        Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
       }
     } catch (e) {
       log.e(e);
@@ -79,7 +79,7 @@ class LoginController extends GetxController {
         }
       }
 
-      Get.offAll(DIDList(), transition: Transition.fadeIn, duration: Duration(milliseconds: 1000));
+      Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
     } catch (e) {
       log.e(e);
       log.i("$password is not correct password");

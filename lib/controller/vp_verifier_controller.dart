@@ -19,7 +19,7 @@ class VPVerifierController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Future<Map<String, dynamic>> getVPSchema() async {
     log.i("VPVerifierController:getVPSchema");

@@ -210,12 +210,12 @@ class SchemaController extends GetxController {
           content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text('VC Proposal Failed'),
-          SizedBox(
+          const Text('VC Proposal Failed'),
+          const SizedBox(
             width: 5,
           ),
           ElevatedButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () => Get.back(),
           ),
         ],

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-final languageModeList = {"system": Get.deviceLocale, "korean": Locale('ko', 'KR'), "english": Locale('en', 'US')};
+final languageModeList = {
+  "system": Get.deviceLocale,
+  "korean": const Locale('ko', 'KR'),
+  "english": const Locale('en', 'US')
+};
 
 class Messages extends Translations {
   @override

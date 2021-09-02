@@ -7,7 +7,7 @@ import 'package:wallet/util/logger.dart';
 class DIDManager {
   final log = Log();
   final crypto = Crypto();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Map<String, dynamic> dids = {};
   bool uninitialized = true;

@@ -71,7 +71,7 @@ class VCCard extends StatelessWidget {
     log.i("VCCard:contentByStatus");
     if (status == "noVC") {
       return Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
             Text(description, style: Get.textTheme.bodyText1),
@@ -93,7 +93,7 @@ class VCCard extends StatelessWidget {
   Widget build(BuildContext context) {
     log.i("VCCard:build");
 
-    if (c.animationOffset == null) return Text('loading');
+    if (c.animationOffset == null) return const Text('loading');
 
     return SlideTransition(
         position: c.animationOffset!,
@@ -106,7 +106,7 @@ class VCCard extends StatelessWidget {
                 color: Colors.red, //Get.theme.cardColor,
                 elevation: 1,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(
+                  side: const BorderSide(
                     color: Colors.grey,
                     width: 0.5,
                   ),

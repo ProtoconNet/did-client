@@ -33,10 +33,10 @@ class VCList extends StatelessWidget {
                 future: c.setVCList(did),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else {
                     if (snapshot.hasError) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else {
                       // final vcs = snapshot.data as List<VCModel>;
                       // log.i("vcs:${vcs.map((vc) => vc.name)}");

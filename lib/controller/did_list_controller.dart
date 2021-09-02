@@ -10,7 +10,7 @@ class DIDListController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   _deleteCacheDir() async {
     final cacheDir = await getTemporaryDirectory();

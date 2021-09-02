@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Background extends StatelessWidget {
-  Background(
+  const Background(
       {key,
       this.appBar,
       required this.children,

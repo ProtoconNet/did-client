@@ -9,6 +9,7 @@ import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 
 class WalletRoute extends StatelessWidget {
+  WalletRoute({Key? key}) : super(key: key);
   final GlobalVariable g = Get.find();
   final log = Log();
 
@@ -25,7 +26,7 @@ class WalletRoute extends StatelessWidget {
         builder: (context, snapshot) {
           log.i('snapshot: ${snapshot.data}');
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if ((snapshot.data as Map<String, dynamic>).keys.isEmpty) {
             return CreateWallet();

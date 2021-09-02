@@ -8,7 +8,7 @@ import 'package:wallet/util/logger.dart';
 class VCManager {
   VCManager(this.did);
   final log = Log();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   final String did;
   RxList<VCModel> vcs = <VCModel>[].obs;

@@ -25,7 +25,7 @@ class GradientButton extends StatelessWidget {
       height: 50.0,
       decoration: BoxDecoration(
           gradient: gradient,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               offset: Offset(0.0, 1.5),

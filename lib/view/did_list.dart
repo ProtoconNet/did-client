@@ -11,10 +11,11 @@ import 'package:wallet/view/create_wallet.dart';
 import 'package:wallet/util/logger.dart';
 
 class DIDList extends StatelessWidget {
+  DIDList({Key? key}) : super(key: key);
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   final c = DIDListController();
 
@@ -37,7 +38,7 @@ class DIDList extends StatelessWidget {
                     itemBuilder: (context) => [
                           PopupMenuItem(
                             child: TextButton(
-                              child: Text('Erase DID'),
+                              child: const Text('Erase DID'),
                               onPressed: () async {
                                 await c.eraseAll();
 

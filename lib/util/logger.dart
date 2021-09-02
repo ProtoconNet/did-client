@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-final logColor = false;
+const logColor = false;
 
 class Log {
   final d = Logger(printer: SimplePrinter(colors: logColor)).d;
