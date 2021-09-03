@@ -35,7 +35,7 @@ void main() async {
       var crypto = Crypto();
       final platform = Platform();
 
-      var key = await crypto.generateKeyPair();
+      var key = await crypto.generateKeyPair(Algorithm.ed25519);
 
       String did = "did:mtm:" + key[1];
 

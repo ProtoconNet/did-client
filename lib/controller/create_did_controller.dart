@@ -17,7 +17,7 @@ class CreateDIDController extends GetxController {
 
   Future<String> createDID(String password) async {
     log.i("CreateDIDController:createDID(password:$password)");
-    final List<String> keyPair = await crypto.generateKeyPair();
+    final List<String> keyPair = await crypto.generateKeyPair(Algorithm.ed25519);
     final String encodedPriv = keyPair[0];
     final String encodedPub = keyPair[1];
 

@@ -200,7 +200,7 @@ class SchemaController extends GetxController {
 
     log.i("postVC Response: $response");
 
-    if (response != false) {
+    if (response != null) {
       VCListController c = Get.find();
       await c.vcManager.setByName(name, 'jwt', response);
       // await c.vcManager.value.setByName(name, 'jwt', response);

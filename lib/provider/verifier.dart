@@ -20,7 +20,7 @@ class Verifier {
 
     final response = await Dio().get(locations['schema']);
 
-    return responseCheck(response);
+    return response;
   }
 
   Future<String> postVP(Map<String, dynamic> data, String privateKey) async {
@@ -35,10 +35,7 @@ class Verifier {
       options: Options(headers: {"content-type": "application/json", "accept": "application/json"}),
     );
 
-    final result = responseCheck(response);
-    log.i('result: $result, ${result.data.runtimeType}');
-
-    final challenge = jsonDecode(result.data);
+    final challenge = jsonDecode(response.data);
 
     log.i('response.headers: ${response.headers}');
     log.i('headers authorization: ${response.headers['authorization']}');
@@ -58,8 +55,7 @@ class Verifier {
 
     final response = await Dio().get(schemaLocation);
 
-    final vcLocation = responseCheck(response);
-    return json.decode(vcLocation.data);
+    return json.decode(response.data);
   }
 
   Future<bool> didAuth(String payload, endPoint, String token, String privateKey) async {
@@ -67,7 +63,7 @@ class Verifier {
 
     final challengeBytes = utf8.encode(payload);
 
-    final signature = await crypto.sign(challengeBytes, privateKey);
+    final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
 
     final response2 = await responseChallenge(endPoint, Base58Encode(signature), token);
     if (response2 == "") {
@@ -85,19 +81,6 @@ class Verifier {
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
     );
 
-    return responseCheck(response);
-  }
-
-  responseCheck(Response<dynamic> response) {
-    log.i("Verifier:responseCheck");
-    switch ((response.statusCode! / 100).floor()) {
-      case 2:
-        log.i("response: ${response.data}");
-        return response;
-      default:
-        log.lw("Response Error $response");
-        return response;
-      // throw Error();
-    }
+    return response;
   }
 }

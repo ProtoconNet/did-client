@@ -15,8 +15,8 @@ void main() async {
   test('Generate KeyPair Test', () async {
     var crypto = Crypto();
 
-    var key1 = await crypto.generateKeyPair();
-    var key2 = await crypto.generateKeyPair();
+    var key1 = await crypto.generateKeyPair(Algorithm.ed25519);
+    var key2 = await crypto.generateKeyPair(Algorithm.ed25519);
 
     expect(key1[0], isNot(equals(key2[0])));
     expect(key1[1], isNot(equals(key2[1])));
@@ -36,13 +36,13 @@ void main() async {
     var crypto = Crypto();
 
     var plainText = "raynear_Work-In.Wiggler?";
-    var key = await crypto.generateKeyPair();
+    var key = await crypto.generateKeyPair(Algorithm.ed25519);
 
     final plainTextBytes = utf8.encode(plainText);
 
-    final signature = await crypto.sign(plainTextBytes, key[0]);
+    final signature = await crypto.sign(Algorithm.ed25519, plainTextBytes, key[0]);
 
-    final result = await crypto.verify(plainTextBytes, signature, Base58Decode(key[1]));
+    final result = await crypto.verify(Algorithm.ed25519, plainTextBytes, signature, Base58Decode(key[1]));
 
     expect(result, equals(true));
   });

@@ -13,19 +13,6 @@ class Issuer {
 
   final String schemaLocation;
 
-  responseCheck(Response<dynamic> response) {
-    log.i("Issuer:responseCheck(response:$response)");
-    switch ((response.statusCode! / 100).floor()) {
-      case 2:
-        log.i("response: ${response.data}");
-        return response;
-      default:
-        log.lw("Response Error $response");
-        return response;
-      // throw Error();
-    }
-  }
-
   Future<Response<dynamic>> getVC(String token) async {
     log.i("Issuer:getVC(token:$token)");
     final locations = await getSchemaLocation();
@@ -33,7 +20,7 @@ class Issuer {
       locations['VCGet'],
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
     );
-    return responseCheck(response);
+    return response;
   }
 
   Future<String?> postVC(Map<String, dynamic> data, String privateKey) async {
@@ -55,10 +42,7 @@ class Issuer {
     });
     log.i('response.data: ${response.data}');
 
-    final result = responseCheck(response);
-    log.i('result: $result, ${result.runtimeType}');
-
-    final challenge = jsonDecode(result);
+    final challenge = jsonDecode(response.data);
 
     log.i('response.headers: ${response.headers}');
     log.i('headers authorization: ${response.headers['authorization']}');
@@ -81,7 +65,7 @@ class Issuer {
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
     );
 
-    return responseCheck(response);
+    return response;
   }
 
   Future<Map<String, dynamic>> getSchemaLocation() async {
@@ -90,8 +74,7 @@ class Issuer {
 
     final response = await Dio().get(schemaLocation);
 
-    final vcLocation = responseCheck(response);
-    return json.decode(vcLocation);
+    return json.decode(response.data);
   }
 
   Future<bool> didAuth(String payload, String endPoint, String token, String privateKey) async {
@@ -99,10 +82,10 @@ class Issuer {
 
     final challengeBytes = utf8.encode(payload);
 
-    final signature = await crypto.sign(challengeBytes, privateKey);
+    final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
 
     final response2 = await responseChallenge(endPoint, Base58Encode(signature), token);
-    if (response2 == "") {
+    if (response2.data == "") {
       log.le("Challenge Failed");
       return false;
     }

@@ -6,16 +6,65 @@ import 'package:fast_base58/fast_base58.dart';
 
 import 'package:wallet/util/logger.dart';
 
+enum Algorithm {
+  ed25519,
+  rsaPssSha256,
+}
+
+getAlgorithm(Algorithm algorithm) {
+  switch (algorithm) {
+    case Algorithm.ed25519:
+      return Ed25519();
+    case Algorithm.rsaPssSha256:
+      return RsaPss(Sha256());
+    // JsonWebKey2020
+    // EcdsaSecp256k1VerificationKey2019
+    // Ed25519VerificationKey2018
+    // Bls12381G1Key2020
+    // Bls12381G2Key2020
+    // PgpVerificationKey2021
+    // RsaVerificationKey2018
+    // X25519KeyAgreementKey2019
+    // SchnorrSecp256k1VerificationKey2019
+    // EcdsaSecp256k1RecoveryMethod2020
+    // VerifiableCondition2021
+    default:
+      return null;
+  }
+}
+
+getKeyPairType(Algorithm algorithm) {
+  switch (algorithm) {
+    case Algorithm.ed25519:
+      return KeyPairType.ed25519;
+    case Algorithm.rsaPssSha256:
+      return KeyPairType.rsa;
+    // JsonWebKey2020
+    // EcdsaSecp256k1VerificationKey2019
+    // Ed25519VerificationKey2018
+    // Bls12381G1Key2020
+    // Bls12381G2Key2020
+    // PgpVerificationKey2021
+    // RsaVerificationKey2018
+    // X25519KeyAgreementKey2019
+    // SchnorrSecp256k1VerificationKey2019
+    // EcdsaSecp256k1RecoveryMethod2020
+    // VerifiableCondition2021
+    default:
+      return null;
+  }
+}
+
 class Crypto {
   final log = Log();
   final storage = const FlutterSecureStorage();
 
-  Future<List<String>> generateKeyPair() async {
+  Future<List<String>> generateKeyPair(Algorithm signAlgorithm) async {
     log.i("Crypto:generateKeyPair");
     final seeds = encrypt.SecureRandom(32).bytes;
 
-    final algorithm = Ed25519();
-    final keyPair = await algorithm.newKeyPairFromSeed(seeds);
+    final algorithm = getAlgorithm(signAlgorithm);
+    final keyPair = await algorithm!.newKeyPairFromSeed(seeds);
 
     var encodedPriv = Base58Encode(await keyPair.extractPrivateKeyBytes());
     var encodedPub = Base58Encode((await keyPair.extractPublicKey()).bytes);
@@ -23,11 +72,11 @@ class Crypto {
     return [encodedPriv, encodedPub];
   }
 
-  Future<List<int>> sign(List<int> payload, String pk) async {
+  Future<List<int>> sign(Algorithm signAlgorithm, List<int> payload, String pk) async {
     log.i("Crypto:sign");
     final clearText = Base58Decode(pk);
 
-    final algorithm = Ed25519();
+    final algorithm = getAlgorithm(signAlgorithm);
     final keyPair = await algorithm.newKeyPairFromSeed(clearText);
 
     final signature = await algorithm.sign(payload, keyPair: keyPair);
@@ -35,12 +84,13 @@ class Crypto {
     return signature.bytes;
   }
 
-  Future<bool> verify(List<int> payload, List<int> signature, List<int> pubKey) async {
+  Future<bool> verify(Algorithm signAlgorithm, List<int> payload, List<int> signature, List<int> pubKey) async {
     log.i("Crypto:verify");
-    final algorithm = Ed25519();
+    final algorithm = getAlgorithm(signAlgorithm);
+    final keyPairType = getKeyPairType(signAlgorithm);
 
     final result = await algorithm.verify(payload,
-        signature: Signature(signature, publicKey: SimplePublicKey(pubKey, type: KeyPairType.ed25519)));
+        signature: Signature(signature, publicKey: SimplePublicKey(pubKey, type: keyPairType)));
 
     return result;
   }

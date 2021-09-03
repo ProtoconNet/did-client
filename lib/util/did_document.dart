@@ -1,10 +1,21 @@
 import 'dart:convert';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:fast_base58/fast_base58.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 import 'package:wallet/util/logger.dart';
 
 class DID {}
+
+enum PublicKeyType {
+  publicKeyJwk,
+  publicKeyBase58,
+  publicKeyHex,
+  publicKeyMultibase,
+  blockchainAccountId,
+  ethereumAddress,
+}
 
 class Authentication {
   String id = "";
@@ -62,11 +73,23 @@ class JsonTypeDIDDocument {
   };
   Map<String, dynamic> authentication = {};
 
-  String _publicKeyType(String type, String publicKey) {
-    if (type == "publicKeyMultibase") {
-      return "z" + publicKey;
+  dynamic _publicKeyType(PublicKeyType type, List<int> publicKey) {
+    switch (type) {
+      // case PublicKeyType.publicKeyJwk:
+      //   return {};
+      // case PublicKeyType.publicKeyBase58:
+      //   return "";
+      // case PublicKeyType.publicKeyHex:
+      //   return "";
+      case PublicKeyType.publicKeyMultibase:
+        return "z" + Base58Encode(publicKey);
+      // case PublicKeyType.blockchainAccountId:
+      //   return "";
+      // case PublicKeyType.ethereumAddress:
+      //   return "";
+      default:
+        return null;
     }
-    return publicKey;
   }
 
   String? _isDIDFormat(String did) {
@@ -77,13 +100,17 @@ class JsonTypeDIDDocument {
     return null;
   }
 
-  addVerificationMethod(String id, String type, String controller, String publicKeyType, String publicKey) {
+  String? _isURI(String val) {
+    return val;
+  }
+
+  addVerificationMethod(String id, String type, String controller, PublicKeyType publicKeyType, List<int> publicKey) {
     var newVerificationMethod = verificationMethod;
     newVerificationMethod["id"] = id;
     newVerificationMethod["type"] = type;
     newVerificationMethod["controller"] = _isDIDFormat(controller)!;
 
-    newVerificationMethod[publicKeyType] = _publicKeyType(publicKeyType, publicKey);
+    newVerificationMethod[EnumToString.convertToString(publicKeyType)] = _publicKeyType(publicKeyType, publicKey);
   }
 
   addProof(String type, DateTime expire, DateTime created, String proofPurpose, {String? challenge, String? domain}) {
