@@ -18,7 +18,9 @@ class Verifier {
     log.i("Verifier:getVPSchema");
     final locations = await getSchemaLocation();
 
-    final response = await Dio().get(locations['schema']);
+    final response = await Dio().get(locations['schema']).catchError((onError) {
+      log.e("getVPSchema error: ${onError.toString()}");
+    });
 
     return response;
   }
@@ -29,11 +31,15 @@ class Verifier {
     final locations = await getSchemaLocation();
 
     log.i("locations['VPPost']:${locations['VPPost']}");
-    final response = await Dio().post(
+    final response = await Dio()
+        .post(
       locations["VPPost"],
       data: data,
-      options: Options(headers: {"content-type": "application/json", "accept": "application/json"}),
-    );
+      options: Options(contentType: Headers.jsonContentType),
+    )
+        .catchError((onError) {
+      log.e("postVP error: ${onError.toString()}");
+    });
 
     final challenge = jsonDecode(response.data);
 
@@ -53,7 +59,9 @@ class Verifier {
     log.i("Verifier:getSchemaLocation");
     log.i("schemaLocation:$schemaLocation");
 
-    final response = await Dio().get(schemaLocation);
+    final response = await Dio().get(schemaLocation).catchError((onError) {
+      log.e("getSchemaLocation error: ${onError.toString()}");
+    });
 
     return json.decode(response.data);
   }
@@ -75,11 +83,15 @@ class Verifier {
 
   responseChallenge(challengeUri, encodedSignatureBytes, token) async {
     log.i('Verifier:responseChallenge');
-    final response = await Dio().get(
+    final response = await Dio()
+        .get(
       challengeUri,
       queryParameters: {'signature': encodedSignatureBytes},
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
-    );
+    )
+        .catchError((onError) {
+      log.e("responseChallenge error: ${onError.toString()}");
+    });
 
     return response;
   }

@@ -11,7 +11,9 @@ class Platform {
   Future<Response<dynamic>> getDIDDocument(String getDIDDocumentUri) async {
     log.i("Platform:getDIDDocument(getDIDDocumentUri:$getDIDDocumentUri)");
     log.i(getDIDDocumentUri);
-    final response = await Dio().get(getDIDDocumentUri);
+    final response = await Dio().get(getDIDDocumentUri).catchError((onError) {
+      log.e("getDIDDocument error: ${onError.toString()}");
+    });
 
     return response;
   }
@@ -20,15 +22,20 @@ class Platform {
     log.i("Platform:setDIDDocument(setDIDDocumentUri:$setDIDDocumentUri, did:$did)");
     String document = didDocument.createDIDDocument(did);
 
-    var response =
-        await Dio().post(setDIDDocumentUri, options: Options(contentType: Headers.jsonContentType), data: document);
+    var response = await Dio()
+        .post(setDIDDocumentUri, options: Options(contentType: Headers.jsonContentType), data: document)
+        .catchError((onError) {
+      log.e("setDIDDocument error: ${onError.toString()}");
+    });
 
     return response;
   }
 
   Future<Response<dynamic>> getSchema(String schemaUri) async {
     log.i("Platform:getSchema(schemaUri:$schemaUri)");
-    final response = await Dio().get(schemaUri);
+    final response = await Dio().get(schemaUri).catchError((onError) {
+      log.e("getSchema error: ${onError.toString()}");
+    });
 
     return response;
   }

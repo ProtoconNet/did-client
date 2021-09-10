@@ -70,13 +70,14 @@ dependencies:
   enum_to_string: ^2.0.1
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   lints: ^1.0.1
   flutter_lints: ^1.0.4
   test: any
   mockito: ^5.0.11
-  flutter_driver: any
+  flutter_driver:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
   # flutter_native_splash: ^1.2.0
   # flutter_launcher_icons: ^0.9.0
 

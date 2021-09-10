@@ -8,25 +8,28 @@ import 'package:wallet/util/logger.dart';
 
 enum Algorithm {
   ed25519,
-  rsaPssSha256,
+  rsaSsaPkcs1v15Sha256,
+  ecdsaSecp256k1,
 }
 
 getAlgorithm(Algorithm algorithm) {
   switch (algorithm) {
+    // Ed25519VerificationKey2018
     case Algorithm.ed25519:
       return Ed25519();
-    case Algorithm.rsaPssSha256:
-      return RsaPss(Sha256());
-    // JsonWebKey2020
+    // RsaVerificationKey2018
+    case Algorithm.rsaSsaPkcs1v15Sha256:
+      return RsaSsaPkcs1v15(Sha256());
     // EcdsaSecp256k1VerificationKey2019
-    // Ed25519VerificationKey2018
+    case Algorithm.ecdsaSecp256k1:
+      return Ecdsa.p256(Sha256());
+    // EcdsaSecp256k1RecoveryMethod2020
+    // JsonWebKey2020
     // Bls12381G1Key2020
     // Bls12381G2Key2020
     // PgpVerificationKey2021
-    // RsaVerificationKey2018
     // X25519KeyAgreementKey2019
     // SchnorrSecp256k1VerificationKey2019
-    // EcdsaSecp256k1RecoveryMethod2020
     // VerifiableCondition2021
     default:
       return null;
@@ -35,17 +38,19 @@ getAlgorithm(Algorithm algorithm) {
 
 getKeyPairType(Algorithm algorithm) {
   switch (algorithm) {
+    // Ed25519VerificationKey2018
     case Algorithm.ed25519:
       return KeyPairType.ed25519;
-    case Algorithm.rsaPssSha256:
+    // RsaVerificationKey2018
+    case Algorithm.rsaSsaPkcs1v15Sha256:
       return KeyPairType.rsa;
-    // JsonWebKey2020
     // EcdsaSecp256k1VerificationKey2019
-    // Ed25519VerificationKey2018
+    case Algorithm.ecdsaSecp256k1:
+      return KeyPairType.p256;
+    // JsonWebKey2020
     // Bls12381G1Key2020
     // Bls12381G2Key2020
     // PgpVerificationKey2021
-    // RsaVerificationKey2018
     // X25519KeyAgreementKey2019
     // SchnorrSecp256k1VerificationKey2019
     // EcdsaSecp256k1RecoveryMethod2020

@@ -16,10 +16,14 @@ class Issuer {
   Future<Response<dynamic>> getVC(String token) async {
     log.i("Issuer:getVC(token:$token)");
     final locations = await getSchemaLocation();
-    final response = await Dio().get(
+    final response = await Dio()
+        .get(
       locations['VCGet'],
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
-    );
+    )
+        .catchError((onError) {
+      log.e("VCGet error:${onError.toString()}");
+    });
     return response;
   }
 
@@ -29,16 +33,9 @@ class Issuer {
     log.i('1:${locations['VCPost']}, $data');
 
     var response = await Dio()
-        .post(
-      locations['VCPost'],
-      data: data,
-      options: Options(headers: {
-        "content-type": "application/json",
-        "accept": "application/json"
-      }), //contentType: Headers.jsonContentType),
-    )
+        .post(locations['VCPost'], data: data, options: Options(contentType: Headers.jsonContentType))
         .catchError((onError) {
-      log.e("error:${onError.toString()}");
+      log.e("VCPost error:${onError.toString()}");
     });
     log.i('response.data: ${response.data}');
 
@@ -59,11 +56,15 @@ class Issuer {
 
   Future<Response<dynamic>> responseChallenge(String challengeUri, String encodedSignatureBytes, String token) async {
     log.i("Issuer:responseChallenge()");
-    final response = await Dio().get(
+    final response = await Dio()
+        .get(
       challengeUri,
       queryParameters: {'signature': encodedSignatureBytes},
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
-    );
+    )
+        .catchError((onError) {
+      log.e("responseChallenge error:${onError.toString()}");
+    });
 
     return response;
   }
@@ -72,7 +73,9 @@ class Issuer {
     log.i("Issuer:getSchemaLocation");
     log.i(schemaLocation);
 
-    final response = await Dio().get(schemaLocation);
+    final response = await Dio().get(schemaLocation).catchError((onError) {
+      log.e("getSchemaLocation error:${onError.toString()}");
+    });
 
     return json.decode(response.data);
   }
