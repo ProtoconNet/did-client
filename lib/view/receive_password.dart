@@ -47,11 +47,11 @@ class ReceivePassword extends StatelessWidget {
             ],
           ),
           Column(children: [
-            Icon(Icons.error_outline, size: 35, color: Get.theme.accentColor),
+            Icon(Icons.error_outline, size: 35, color: Get.theme.colorScheme.secondary),
             const SizedBox(height: 3),
             Center(
                 child: Text('지금 설정한 PIN을 꼭 기억하세요!',
-                    style: Get.textTheme.subtitle1?.copyWith(color: Get.theme.accentColor))),
+                    style: Get.textTheme.subtitle1?.copyWith(color: Get.theme.colorScheme.secondary))),
             const SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(
@@ -134,7 +134,9 @@ class ReceivePassword extends StatelessWidget {
                           height: 48,
                           width: double.maxFinite,
                           child: ElevatedButton(
-                            child: c.status.value ? Text('submit'.tr) : const Text('check password'),
+                            child: c.status.value
+                                ? Text('submit'.tr, style: Get.textTheme.button!.copyWith(color: Colors.white))
+                                : const Text('check password'),
                             onPressed: c.status.value
                                 ? () async {
                                     Get.to(CreateDID(password: confirmPass.text));

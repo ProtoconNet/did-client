@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/model/vp.dart';
 import 'package:wallet/util/logger.dart';
@@ -10,7 +10,7 @@ class VPManager {
   final String did;
 
   final log = Log();
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   RxList<VPModel> vps = <VPModel>[].obs;
   bool uninitialized = true;
@@ -19,8 +19,8 @@ class VPManager {
     log.i("VPManager:init");
     if (uninitialized) {
       uninitialized = false;
-      if (await storage.containsKey(key: did + ":vp")) {
-        final vpList = json.decode(await storage.read(key: did + ":vp") as String);
+      if (await storage.containsKey(key: did + ":vp") == true) {
+        final vpList = json.decode((await storage.read(key: did + ":vp"))!);
 
         for (var vp in vpList) {
           vps.add(VPModel.fromJson(vp));
@@ -67,7 +67,7 @@ class VPManager {
 
   loadVP() async {
     log.i("VPManager:readVP");
-    final vpList = json.decode(await storage.read(key: did + ":vp") as String);
+    final vpList = json.decode((await storage.read(key: did + ":vp"))!);
     log.i("vcList: $vpList");
     vps.value = [];
 

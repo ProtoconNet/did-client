@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
@@ -10,7 +10,7 @@ class DIDListController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   _deleteCacheDir() async {
     final cacheDir = await getTemporaryDirectory();
@@ -30,14 +30,14 @@ class DIDListController extends GetxController {
 
   eraseAll() async {
     log.i("DIDListController:eraseAll");
-    if (await storage.containsKey(key: "DIDList")) {
+    if (await storage.containsKey(key: "DIDList") == true) {
       String didList = await storage.read(key: "DIDList") as String;
 
       log.i("erase ${json.decode(didList)}");
 
       for (var did in json.decode(didList).keys.toList()) {
         //var didVC = storage.read(key: did) as String;
-        if (await storage.containsKey(key: did)) {
+        if (await storage.containsKey(key: did) == true) {
           await storage.delete(key: did);
         }
       }

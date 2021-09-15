@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/controller/did_list_controller.dart';
 import 'package:wallet/provider/global_variable.dart';
@@ -15,7 +15,7 @@ class DIDList extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   final c = DIDListController();
 

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 
@@ -18,8 +17,6 @@ class VPVerifierController extends GetxController {
 
   final GlobalVariable g = Get.find();
   final log = Log();
-
-  final storage = const FlutterSecureStorage();
 
   Future<Map<String, dynamic>> getVPSchema() async {
     log.i("VPVerifierController:getVPSchema");

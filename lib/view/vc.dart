@@ -40,7 +40,31 @@ class VC extends StatelessWidget {
 
     if (vc.isEmpty) {
       log.i('vc empty');
-      if (jwt == "") {
+      if (jwt == "denied") {
+        log.i('denied VC');
+        return InkWell(
+            onTap: () async {
+              log.i("go to Schema");
+              log.i("schemaRequest: $schemaRequest");
+              await Get.to(Schema(
+                did: did,
+                name: name,
+                requestSchema: schemaRequest,
+              ));
+              VCListController vcListController = Get.find();
+              await vcListController.setVCList(did);
+              await vcListController.vcManager.readVC();
+              // vcListController.vcManager.update((t) {});
+              Get.back();
+              // Get.offAll(DIDList());
+            },
+            child: VCCard(
+                name: name,
+                description: description,
+                type: type,
+                icon: IconData(icon, fontFamily: 'MaterialIcons'),
+                status: "denied"));
+      } else if (jwt == "") {
         log.i('no VC');
         return InkWell(
             onTap: () async {

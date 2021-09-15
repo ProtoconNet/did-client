@@ -55,13 +55,25 @@ class VCCard extends StatelessWidget {
     }
   }
 
+  Widget _getDeniedImageByName(String name) {
+    log.i("VCCard:getWaitImageByName");
+    const double height = 50;
+    if (name == "drivers license" || name == "운전면허증") {
+      return Image.asset('assets/images/idDeny.png', height: height);
+    } else if (name == "jejupass" || name == "제주패스") {
+      return Image.asset('assets/images/idDeny.png', height: height);
+    } else {
+      return Image.asset('assets/icons/flutter.png', height: height);
+    }
+  }
+
   Widget _getWaitImageByName(String name) {
     log.i("VCCard:getWaitImageByName");
     const double height = 50;
     if (name == "drivers license" || name == "운전면허증") {
-      return Image.asset('assets/images/visualAid.png', height: height);
+      return Image.asset('assets/images/idReview.png', height: height);
     } else if (name == "jejupass" || name == "제주패스") {
-      return Image.asset('assets/images/visualAid.png', height: height);
+      return Image.asset('assets/images/idReview.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
     }
@@ -75,10 +87,17 @@ class VCCard extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
             Text(description, style: Get.textTheme.bodyText1),
-            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
+            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.colorScheme.primary)),
           ]));
     } else if (status == "VC") {
       return _getCardByName(name);
+    } else if (status == "denied") {
+      return Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
+        _getDeniedImageByName(name),
+        Text('$name 발급이 거절 되었습니다.'),
+        Text('재신청하기', style: Get.textTheme.button!.copyWith(color: Get.theme.colorScheme.primary)),
+      ]);
     } else {
       // wait
       return Column(children: [
@@ -122,7 +141,7 @@ class VCCard extends StatelessWidget {
                     child: _contentByStatus(name, status)),
               ),
               Opacity(
-                  opacity: 0.3,
+                  opacity: 1.0,
                   child: Image.asset(
                     'assets/images/cardGlow.png',
                     height: 200,

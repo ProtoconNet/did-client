@@ -20,21 +20,7 @@ class CreateWallet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(children: [
-            Container(
-                alignment: Alignment.center,
-                width: 100,
-                height: 40.0,
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.5),
-                        blurRadius: 1.5,
-                      ),
-                    ]),
-                child: const Text('PROTOCON',
-                    style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w900))),
+            Image.asset('assets/images/protocon_logo_horizon.png', width: 130),
             Text('Wallet', style: Get.textTheme.headline2?.copyWith(fontWeight: FontWeight.w900)),
           ]),
           SizedBox(

@@ -89,9 +89,9 @@ class SchemaController extends GetxController {
       return false;
     }
 
-    log.i("schema: ${response.data}, ${response.data.runtimeType}");
+    log.i("schema: ${response.data['data']}, ${response.data.runtimeType}");
 
-    schemaList.value = json.decode(response.data);
+    schemaList.value = json.decode(response.data['data']);
 
     log.i("schemaList: $schemaList");
 

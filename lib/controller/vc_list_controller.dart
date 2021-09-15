@@ -39,14 +39,15 @@ class VCListController extends GetxController {
         final issuer = Issuer(vc.schemaRequest);
         var response = await issuer.getVC(vc.jwt);
 
+        // catchup denied
         if (json.decode(response.data).containsKey('error')) {
-          continue;
+          await vcManager.setByName(vc.name, 'jwt', "denied");
+        } else {
+          var data = json.decode(response.data)['VC'];
+
+          await vcManager.setByName(vc.name, 'vc', data);
+          await vcManager.setByName(vc.name, 'jwt', "");
         }
-
-        var data = json.decode(response.data)['VC'];
-
-        await vcManager.setByName(vc.name, 'vc', data);
-        await vcManager.setByName(vc.name, 'jwt', "");
       }
     }
   }

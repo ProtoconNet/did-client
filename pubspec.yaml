@@ -59,7 +59,8 @@ dependencies:
   image: ^3.0.2
   # dart_ipify: ^1.1.0
   # socket_io: ^1.0.0
-  biometric_storage: ^2.0.3
+  enum_to_string: ^2.0.1
+  biometric_storage: ^3.0.0
   # camera: ^0.8.1+7
   # video_player: ^2.1.12
   # google_ml_kit: ^0.7.0
@@ -67,7 +68,6 @@ dependencies:
   # try to use
   # pinput: ^1.2.0
   # dexecve: ^1.3.0
-  enum_to_string: ^2.0.1
 
 dev_dependencies:
   lints: ^1.0.1
@@ -78,7 +78,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  # flutter_native_splash: ^1.2.0
+  flutter_native_splash: ^1.2.0
   # flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
@@ -117,6 +117,11 @@ flutter:
     - assets/images/jejupass_background.png
     - assets/images/car_box.png
     - assets/images/sk_rentacar_logo.png
+    - assets/images/idDeny.png
+    - assets/images/idReview.png
+    - assets/images/protocon_cube.png
+    - assets/images/protocon_logo_horizon.png
+    - assets/images/protocon_logo.png
 
     - assets/introduction/fullscreen.jpeg
     - assets/introduction/img1.jpeg

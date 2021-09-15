@@ -66,7 +66,7 @@ class Messages extends Translations {
           'goToHome': '시작',
           'login': '로그인',
           'inputPassword': '비밀번호를 입력하세요',
-          'enter': '제출',
+          'enter': '확인',
           'incorrectPasswordTitle': '비밀번호가 틀렸습니다',
           'incorrectPasswordContent': '올바른 비밀번호를 입력해주세요',
           'issue': '발급 신청',

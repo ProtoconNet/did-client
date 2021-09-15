@@ -1,16 +1,27 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 
 import 'package:wallet/util/logger.dart';
 
-class BiometricStorage {
-  final log = Log();
-  final storage = const FlutterSecureStorage();
-  final LocalAuthentication auth = LocalAuthentication();
+enum CanAuthenticateResponse { success, statusUnknown, failed }
 
-  Future<bool> canCheckBiometric() async {
+class BiometricStorage {
+  BiometricStorage(this.key);
+
+  final log = Log();
+  final storage = FlutterSecureStorage();
+  final LocalAuthentication auth = LocalAuthentication();
+  final String key;
+
+  Future<CanAuthenticateResponse> canAuthenticate() async {
     log.i("BiometricStorage:canCheckBiometric");
-    return await auth.canCheckBiometrics;
+    var canAuth = await auth.canCheckBiometrics;
+
+    if (canAuth) {
+      return CanAuthenticateResponse.success;
+    } else {
+      return CanAuthenticateResponse.failed;
+    }
   }
 
   Future<bool> authenticate() async {
@@ -22,9 +33,9 @@ class BiometricStorage {
         biometricOnly: true);
   }
 
-  Future<bool?> write(String key, String value) async {
+  Future<bool?> write(String value) async {
     log.i("BiometricStorage:write");
-    if (await canCheckBiometric() && await authenticate()) {
+    if (await canAuthenticate() == CanAuthenticateResponse.success && await authenticate()) {
       await storage.write(key: key, value: value);
 
       var readValue = await storage.read(key: key);
@@ -39,17 +50,17 @@ class BiometricStorage {
     return null;
   }
 
-  Future<String?> read(String key) async {
+  Future<String?> read() async {
     log.i("BiometricStorage:read");
-    if (await canCheckBiometric() && await authenticate()) {
+    if (await canAuthenticate() == CanAuthenticateResponse.success && await authenticate()) {
       return await storage.read(key: key);
     }
     return null;
   }
 
-  Future<bool?> delete(String key) async {
+  Future<bool?> delete() async {
     log.i("BiometricStorage:delete");
-    if (await canCheckBiometric() && await authenticate()) {
+    if (await canAuthenticate() == CanAuthenticateResponse.success && await authenticate()) {
       await storage.delete(key: key);
       if (await storage.read(key: key) == null) {
         return true;
@@ -63,7 +74,7 @@ class BiometricStorage {
 
   Future<bool?> deleteAll() async {
     log.i("BiometricStorage:deleteAll");
-    if (await canCheckBiometric() && await authenticate()) {
+    if (await canAuthenticate() == CanAuthenticateResponse.success && await authenticate()) {
       await storage.deleteAll();
     }
 
@@ -72,8 +83,8 @@ class BiometricStorage {
 
   Future<Map<String, String>?> readAll() async {
     log.i("BiometricStorage:readAll");
-    if (await canCheckBiometric() && await authenticate()) {
-      Map<String, String> allValues = await storage.readAll();
+    if (await canAuthenticate() == CanAuthenticateResponse.success && await authenticate()) {
+      Map<String, String> allValues = (await storage.readAll())!;
 
       return allValues;
     }

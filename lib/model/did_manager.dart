@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/util/crypto.dart';
 import 'package:wallet/util/logger.dart';
@@ -7,20 +7,20 @@ import 'package:wallet/util/logger.dart';
 class DIDManager {
   final log = Log();
   final crypto = Crypto();
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   Map<String, dynamic> dids = {};
   bool uninitialized = true;
 
   init() async {
     log.i("DIDManager:init");
-    if (!await storage.containsKey(key: 'DIDList')) {
+    if (await storage.containsKey(key: 'DIDList') == false) {
       await storage.write(key: 'DIDList', value: '{}');
     }
     if (uninitialized) {
-      var didListStr = await storage.read(key: "DIDList") as String;
+      var didListStr = await storage.read(key: "DIDList");
       log.i("didListStr: $didListStr");
-      dids = json.decode(didListStr);
+      dids = json.decode(didListStr!);
     }
     uninitialized = false;
   }

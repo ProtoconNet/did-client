@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:fast_base58/fast_base58.dart';
-import 'package:enum_to_string/enum_to_string.dart';
+// import 'package:enum_to_string/enum_to_string.dart';
 
 import 'package:wallet/util/logger.dart';
-
-class DID {}
 
 enum PublicKeyType {
   publicKeyJwk,
@@ -17,61 +15,23 @@ enum PublicKeyType {
   ethereumAddress,
 }
 
-class Authentication {
-  String id = "";
-  String type = ""; // enum??
-  String controller = ""; // did type check??
-  String publicKeyMultibase = ""; // type??
-}
-
-class VerificationMethod {
-  String id = "";
-  String type = ""; // enum??
-  String controller = ""; // did type check??
-  String publicKeyMultibase = ""; // type??
-}
-
-class DIDDocumentTmp {
-  List<String> context = [];
-  String id = ""; // single URI
-  List<String> type = []; // VerificationCredential, VerifiablePresentation, UniversityDegreeCredential...
-  dynamic issuer = ""; // URI or Map
-  DateTime issuanceDate = DateTime.now();
-  DateTime expirationDate = DateTime.now();
-  Map<String, dynamic> credentialSubject = {};
-  Map<String, dynamic> credentialStatus = {};
-  List<Map<String, dynamic>> verifiableCredential = [];
-  List<Authentication> authentication = [];
-  List<VerificationMethod> verificationMethod = [];
-}
-
-class Proof {
-  String type = "";
-  DateTime expire = DateTime.now();
-  DateTime created = DateTime.now();
-  String proofPurpose = "";
-  String verificationMethod = "";
-  String challenge = "";
-  String domain = "";
-}
-
 class JsonTypeDIDDocument {
   Map<String, dynamic> base = {"id": ""};
 
-  Map<String, dynamic> proof = {
+  Map<String, dynamic> proofTemplate = {
     "type": "",
     "expire": "",
     "created": "",
     "proofPurpose": "",
   };
 
-  Map<String, dynamic> verificationMethod = {
+  Map<String, dynamic> verificationMethodTemplate = {
     "id": "",
     "type": "",
     "controller": "",
-    "publicKeyMultibase": "",
   };
-  Map<String, dynamic> authentication = {};
+
+  Map<String, dynamic> authenticationTemplate = {};
 
   dynamic _publicKeyType(PublicKeyType type, List<int> publicKey) {
     switch (type) {
@@ -105,31 +65,32 @@ class JsonTypeDIDDocument {
   }
 
   addVerificationMethod(String id, String type, String controller, PublicKeyType publicKeyType, List<int> publicKey) {
-    var newVerificationMethod = verificationMethod;
-    newVerificationMethod["id"] = id;
-    newVerificationMethod["type"] = type;
-    newVerificationMethod["controller"] = _isDIDFormat(controller)!;
+    var verificationMethod = verificationMethodTemplate;
+    verificationMethod["id"] = id;
+    verificationMethod["type"] = type;
+    verificationMethod["controller"] = _isDIDFormat(controller)!;
 
-    newVerificationMethod[EnumToString.convertToString(publicKeyType)] = _publicKeyType(publicKeyType, publicKey);
+    // verificationMethod[EnumToString.convertToString(publicKeyType)] = _publicKeyType(publicKeyType, publicKey);
   }
 
   addProof(String type, DateTime expire, DateTime created, String proofPurpose, {String? challenge, String? domain}) {
-    var newProof = proof;
-    newProof["type"] = type;
-    newProof["expire"] = expire.toIso8601String();
-    newProof["created"] = created.toIso8601String();
-    newProof["proofPurpose"] = proofPurpose;
+    var proof = proofTemplate;
+    proof["type"] = type;
+    proof["expire"] = expire.toIso8601String();
+    proof["created"] = created.toIso8601String();
+    proof["proofPurpose"] = proofPurpose;
     if (challenge != null) {
-      newProof["challenge"] = challenge;
+      proof["challenge"] = challenge;
     }
     if (domain != null) {
-      newProof["domain"] = domain;
+      proof["domain"] = domain;
     }
 
     base["proof"] = [proof];
   }
 }
 
+// old version
 class DIDDocument {
   final log = Log();
 

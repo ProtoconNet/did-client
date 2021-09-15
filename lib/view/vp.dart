@@ -29,7 +29,7 @@ class VP extends StatelessWidget {
     List<Widget> ret = [];
     for (var key in credentialSubject.keys) {
       ret.add(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(key.toUpperCase(), style: Get.textTheme.subtitle2!.copyWith(color: Get.theme.accentColor)),
+        Text(key.toUpperCase(), style: Get.textTheme.subtitle2!.copyWith(color: Get.theme.colorScheme.secondary)),
         Text("${credentialSubject[key]}",
             style: Get.textTheme.headline5!.copyWith(fontWeight: FontWeight.w600), maxLines: 3)
       ]));

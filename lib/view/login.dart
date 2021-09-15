@@ -21,49 +21,54 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i("Login:build");
+    _pass.addListener(() {
+      c.onError.value = false;
+    });
     return Background(children: [
       Form(
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Column(children: [
-          Container(
-              alignment: Alignment.center,
-              width: 100,
-              height: 40.0,
-              decoration:
-                  const BoxDecoration(gradient: LinearGradient(colors: [Colors.purple, Colors.deepPurple]), boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  offset: Offset(0.0, 1.5),
-                  blurRadius: 1.5,
-                ),
-              ]),
-              child: const Text('PROTOCON',
-                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w900))),
+          Image.asset('assets/images/protocon_logo_horizon.png', width: 130),
           Text('Wallet', style: Get.textTheme.headline2?.copyWith(fontWeight: FontWeight.w900)),
         ]),
         Hero(tag: "Wallet", child: Image.asset("assets/images/wallet.png", width: 180, height: 180)),
         const SizedBox(height: 30),
         Padding(
             padding: const EdgeInsets.all(8),
-            child: SizedBox(
-                height: 50,
-                width: Get.width * 0.8, // <-- match_parent
-                child: TextFormField(
-                  autofocus: true,
-                  controller: _pass,
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  onFieldSubmitted: (test) async {
-                    log.i("submit with $test");
-                    await c.passwordLogin(_pass.text);
-                  },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Password',
-                    // prefixIcon: Icon(Icons.perm_identity),
-                  ),
-                ))),
+            child: Column(children: [
+              Obx(() {
+                if (c.onError.value) {
+                  return SizedBox(
+                      width: Get.width * 0.8,
+                      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                        Text('비밀번호가 일치하지 않습니다.', style: Get.textTheme.caption!.copyWith(color: Colors.red))
+                      ]));
+                } else {
+                  return const SizedBox(height: 0);
+                }
+              }),
+              SizedBox(
+                  height: 50,
+                  width: Get.width * 0.8, // <-- match_parent
+                  child: Obx(() => TextFormField(
+                        autofocus: true,
+                        controller: _pass,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        onFieldSubmitted: (test) async {
+                          log.i("submit with $test");
+                          await c.passwordLogin(_pass.text);
+                        },
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: c.onError.value ? Colors.red : Get.theme.primaryColor, width: 1.0)),
+                          hintText: '비밀번호',
+                          // prefixIcon: Icon(Icons.perm_identity),
+                        ),
+                      )))
+            ])),
         Padding(
             padding: const EdgeInsets.all(8),
             child: SizedBox(

@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+// import 'package:local_auth/local_auth.dart';
+// import 'package:biometric_storage/biometric_storage.dart';
 
 import 'package:wallet/util/biometric_storage.dart';
 import 'package:wallet/provider/global_variable.dart';
@@ -9,6 +12,8 @@ import 'package:wallet/view/did_list.dart';
 class LoginController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
+
+  var onError = false.obs;
 
   @override
   onInit() async {
@@ -25,37 +30,64 @@ class LoginController extends GetxController {
   }
 
   Future<bool> canBiometricAuth() async {
-    log.i("LoginController:canBiometricAuth");
-    return await BiometricStorage().canCheckBiometric();
+    final response = await BiometricStorage('login').canAuthenticate();
+    log.i('checked if authentication was possible: $response');
+    final supportsAuthenticated =
+        response == CanAuthenticateResponse.success || response == CanAuthenticateResponse.statusUnknown;
+    return supportsAuthenticated;
   }
 
   biometricLogin() async {
     log.i("LoginController:biometricLogin");
     try {
-      final password = await BiometricStorage().read('password');
+      final authenticate = await canBiometricAuth();
+      if (authenticate) {
+        log.i('onInit try to read biometric storage');
+        var authStorage = BiometricStorage('login');
+        // var authStorage = await BiometricStorage().getStorage('login',
+        //     options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+        //     promptInfo: const PromptInfo(
+        //       androidPromptInfo: AndroidPromptInfo(
+        //         title: 'Custom title',
+        //         subtitle: 'Custom subtitle',
+        //         description: 'Custom description',
+        //         negativeButton: 'Nope!',
+        //       ),
+        //     ));
+        log.i('onInit try to read biometric storage 2');
+        // log.i('${_noConfirmation.name} ');
+        // final password = await _noConfirmation.read();
 
-      if (password != null) {
+        String? password = await authStorage.read();
+        log.i('password: $password');
+
         final did = g.didManager.value.getFirstDID();
-        final pk = await g.didManager.value.getDIDPK(did, password);
+        log.i('a');
+        final pk = await g.didManager.value.getDIDPK(did, password!);
+        log.i('a');
 
         if (pk == "") throw Error();
+        log.i('a');
 
         g.password.value = password;
+        log.i('a');
         g.did.value = did;
+        log.i('a');
         Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
       }
     } catch (e) {
       log.e(e);
-      await Get.defaultDialog(
-          title: "incorrectPasswordTitle".tr,
-          content: Text('incorrectPasswordContent'.tr),
-          confirm: ElevatedButton(
-            child: Text('ok'.tr),
-            style: Get.theme.textButtonTheme.style,
-            onPressed: () {
-              Get.back();
-            },
-          ));
+      onError.value = true;
+      // await Get.defaultDialog(
+      //     title: "incorrectPasswordTitle".tr,
+      //     content: Text('incorrectPasswordContent'.tr),
+      //     confirm: ElevatedButton(
+      //       child: Text('ok'.tr),
+      //       style: Get.theme.textButtonTheme.style,
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //     ));
     }
   }
 
@@ -73,26 +105,37 @@ class LoginController extends GetxController {
       g.did.value = did;
 
       if (g.biometric.value) {
-        final result = await BiometricStorage().write('password', password);
-        if (result == null) {
-          log.e("biometric storage write error");
-        }
+        var authStorage = BiometricStorage('login');
+        // var authStorage = await BiometricStorage().getStorage(
+        //   'login',
+        //   options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+        //   // promptInfo: const PromptInfo(
+        //   //   androidPromptInfo: AndroidPromptInfo(
+        //   //     title: 'Custom title',
+        //   //     subtitle: 'Custom subtitle',
+        //   //     description: 'Custom description',
+        //   //     negativeButton: 'Nope!',
+        //   //   ),
+        //   //)
+        // );
+        authStorage.write(password);
       }
 
       Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
     } catch (e) {
       log.e(e);
+      onError.value = true;
       log.i("$password is not correct password");
-      await Get.defaultDialog(
-          title: "incorrectPasswordTitle".tr,
-          content: Text('incorrectPasswordContent'.tr),
-          confirm: ElevatedButton(
-            child: Text('ok'.tr),
-            style: Get.theme.textButtonTheme.style,
-            onPressed: () {
-              Get.back();
-            },
-          ));
+      // await Get.defaultDialog(
+      //     title: "incorrectPasswordTitle".tr,
+      //     content: Text('incorrectPasswordContent'.tr),
+      //     confirm: ElevatedButton(
+      //       child: Text('ok'.tr),
+      //       style: Get.theme.textButtonTheme.style,
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //     ));
     }
   }
 }

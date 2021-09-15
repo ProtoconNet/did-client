@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 import 'package:cryptography/cryptography.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_base58/fast_base58.dart';
@@ -62,7 +62,7 @@ getKeyPairType(Algorithm algorithm) {
 
 class Crypto {
   final log = Log();
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   Future<List<String>> generateKeyPair(Algorithm signAlgorithm) async {
     log.i("Crypto:generateKeyPair");

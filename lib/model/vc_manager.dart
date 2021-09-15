@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/model/vc.dart';
 import 'package:wallet/util/logger.dart';
@@ -8,7 +8,7 @@ import 'package:wallet/util/logger.dart';
 class VCManager {
   VCManager(this.did);
   final log = Log();
-  final storage = const FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   final String did;
   RxList<VCModel> vcs = <VCModel>[].obs;
@@ -18,7 +18,7 @@ class VCManager {
     log.i("VCManager:init");
     if (uninitialized) {
       uninitialized = false;
-      if (await storage.containsKey(key: did)) {
+      if ((await storage.containsKey(key: did)) == true) {
         log.i("have vc in did");
         await readVC();
       } else if (vcs.isEmpty) {
