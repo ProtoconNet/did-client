@@ -87,7 +87,7 @@ class VCCard extends StatelessWidget {
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
             Text(description, style: Get.textTheme.bodyText1),
-            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.colorScheme.primary)),
+            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
           ]));
     } else if (status == "VC") {
       return _getCardByName(name);
@@ -96,7 +96,7 @@ class VCCard extends StatelessWidget {
         Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
         _getDeniedImageByName(name),
         Text('$name 발급이 거절 되었습니다.'),
-        Text('재신청하기', style: Get.textTheme.button!.copyWith(color: Get.theme.colorScheme.primary)),
+        Text('재신청하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
       ]);
     } else {
       // wait

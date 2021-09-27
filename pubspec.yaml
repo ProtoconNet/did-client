@@ -101,6 +101,7 @@ flutter:
     - default.env
     - development.env
     - production.env
+    - test.env
 
     - assets/icons/block.png
     - assets/icons/cert.png

@@ -2,9 +2,9 @@
 import 'package:get/get.dart';
 
 // import 'package:local_auth/local_auth.dart';
-// import 'package:biometric_storage/biometric_storage.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 
-import 'package:wallet/util/biometric_storage.dart';
+// import 'package:wallet/util/biometric_storage.dart';
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/view/did_list.dart';
@@ -30,7 +30,7 @@ class LoginController extends GetxController {
   }
 
   Future<bool> canBiometricAuth() async {
-    final response = await BiometricStorage('login').canAuthenticate();
+    final response = await BiometricStorage().canAuthenticate();
     log.i('checked if authentication was possible: $response');
     final supportsAuthenticated =
         response == CanAuthenticateResponse.success || response == CanAuthenticateResponse.statusUnknown;
@@ -42,10 +42,23 @@ class LoginController extends GetxController {
     try {
       final authenticate = await canBiometricAuth();
       if (authenticate) {
-        log.i('onInit try to read biometric storage');
-        var authStorage = BiometricStorage('login');
-        // var authStorage = await BiometricStorage().getStorage('login',
+        BiometricStorageFile authStorage =
+            await BiometricStorage().getStorage('login', options: StorageFileInitOptions());
+        // var customPrompt = await BiometricStorage().getStorage('login',
         //     options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+        //     promptInfo: const PromptInfo(
+        //       androidPromptInfo: AndroidPromptInfo(
+        //         title: 'Custom title',
+        //         subtitle: 'Custom subtitle',
+        //         description: 'Custom description',
+        //         negativeButton: 'Nope!',
+        //       ),
+        //     ));
+
+        // log.i('onInit try to read biometric storage');
+        // // var authStorage = BiometricStorage('login');
+        // var authStorage = await BiometricStorage().getStorage('login',
+        //     options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30, authenticationRequired: true),
         //     promptInfo: const PromptInfo(
         //       androidPromptInfo: AndroidPromptInfo(
         //         title: 'Custom title',
@@ -105,19 +118,19 @@ class LoginController extends GetxController {
       g.did.value = did;
 
       if (g.biometric.value) {
-        var authStorage = BiometricStorage('login');
-        // var authStorage = await BiometricStorage().getStorage(
-        //   'login',
-        //   options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
-        //   // promptInfo: const PromptInfo(
-        //   //   androidPromptInfo: AndroidPromptInfo(
-        //   //     title: 'Custom title',
-        //   //     subtitle: 'Custom subtitle',
-        //   //     description: 'Custom description',
-        //   //     negativeButton: 'Nope!',
-        //   //   ),
-        //   //)
-        // );
+        // var authStorage = BiometricStorage('login');
+        var authStorage = await BiometricStorage().getStorage(
+          'login',
+          options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30, authenticationRequired: true),
+          // promptInfo: const PromptInfo(
+          //   androidPromptInfo: AndroidPromptInfo(
+          //     title: 'Custom title',
+          //     subtitle: 'Custom subtitle',
+          //     description: 'Custom description',
+          //     negativeButton: 'Nope!',
+          //   ),
+          //)
+        );
         authStorage.write(password);
       }
 

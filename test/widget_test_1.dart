@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_driver/flutter_driver.dart' as fd;
-import 'package:flutter_driver/driver_extension.dart';
+// import 'package:flutter_driver/flutter_driver.dart' as fd;
+// import 'package:flutter_driver/driver_extension.dart';
 import 'package:get_storage/src/storage_impl.dart';
 import 'package:get_storage/src/read_write_value.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,9 +24,9 @@ import 'package:wallet/util/logger.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  enableFlutterDriverExtension();
+  // late fd.FlutterDriver driver;
 
-  late fd.FlutterDriver driver;
+  // enableFlutterDriverExtension();
 
   final log = Log();
 
@@ -42,16 +42,16 @@ void main() {
 
   setUpAll(() async {
     setUpMockChannels(channel);
-    driver = await fd.FlutterDriver.connect();
+    // driver = await fd.FlutterDriver.connect();
+    await initService();
   });
 
   tearDownAll(() async {
-    driver.close();
+    // driver.close();
   });
 
   setUp(() async {
     log.i('a');
-    await initService();
     log.i('b');
   });
 
@@ -68,15 +68,9 @@ void main() {
 
 initService() async {
   final log = Log();
-  const environment = String.fromEnvironment("environment", defaultValue: "production");
   log.i("c");
-  if (environment == "production") {
-    await dotenv.load(fileName: "production.env");
-  } else if (environment == "development") {
-    await dotenv.load(fileName: "development.env");
-  } else {
-    await dotenv.load(fileName: "default.env");
-  }
+  await dotenv.load(fileName: "test.env");
+
   Logger.level = Level.info;
   log.i("d");
 

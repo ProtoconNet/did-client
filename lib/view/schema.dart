@@ -165,7 +165,7 @@ class Schema extends StatelessWidget {
           Container(
               margin: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
-              height: Get.height - Get.statusBarHeight - 16.0 * 2,
+              height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 16.0 * 2,
               child: FutureBuilder(
                   future: c.init(requestSchema),
                   builder: (context, snapshot) {

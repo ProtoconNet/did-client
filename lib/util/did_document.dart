@@ -1,21 +1,67 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:fast_base58/fast_base58.dart';
-// import 'package:enum_to_string/enum_to_string.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 import 'package:wallet/util/logger.dart';
 
-enum PublicKeyType {
-  publicKeyJwk,
-  publicKeyBase58,
-  publicKeyHex,
-  publicKeyMultibase,
-  blockchainAccountId,
-  ethereumAddress,
+enum AsymmetricKeyType {
+  JsonWebKey2020,
+  EcdsaSecp256k1VerificationKey2019,
+  Ed25519VerificationKey2018,
+  Bls12381G1Key2020,
+  Bls12381G2Key2020,
+  PgpVerificationKey2021,
+  RsaVerificationKey2018,
+  X25519KeyAgreementKey2019,
+  SchnorrSecp256k1VerificationKey2019,
+  EcdsaSecp256k1RecoveryMethod2020,
+  VerifiableCondition2021,
 }
 
+enum PublicKeyType {
+  publicKeyJwk,
+  publicKeyMultibase,
+  // publicKeyBase58,
+  // publicKeyHex,
+  // blockchainAccountId,
+  // ethereumAddress,
+}
+
+enum VCType { VerifiablePresentation, VerifiableCredential }
+
+List<String> didDocumentProperties = [
+  "id",
+  "alsoKnownAs",
+  "controller",
+  "verificationMethod",
+  "authentication",
+  "assertionMethod",
+  "keyAgreement",
+  "capabilityInvocation",
+  "capabilityDelegation",
+  "service",
+];
+
+List<String> verificationMethodProperties = [
+  "id",
+  "controller",
+  "type",
+  "publicKeyJwk",
+  "publicKeyMultibase",
+];
+
+List<String> serviceProperties = [
+  "id",
+  "type",
+  "serviceEndpoint",
+];
+
 class JsonTypeDIDDocument {
+  final log = Log();
   Map<String, dynamic> base = {"id": ""};
 
   Map<String, dynamic> proofTemplate = {
@@ -25,13 +71,11 @@ class JsonTypeDIDDocument {
     "proofPurpose": "",
   };
 
-  Map<String, dynamic> verificationMethodTemplate = {
+  Map<String, dynamic> keyTemplate = {
     "id": "",
     "type": "",
     "controller": "",
   };
-
-  Map<String, dynamic> authenticationTemplate = {};
 
   dynamic _publicKeyType(PublicKeyType type, List<int> publicKey) {
     switch (type) {
@@ -64,13 +108,12 @@ class JsonTypeDIDDocument {
     return val;
   }
 
-  addVerificationMethod(String id, String type, String controller, PublicKeyType publicKeyType, List<int> publicKey) {
-    var verificationMethod = verificationMethodTemplate;
+  getKeyObject(String id, String type, String controller, PublicKeyType publicKeyType, List<int> publicKey) {
+    var verificationMethod = keyTemplate;
     verificationMethod["id"] = id;
     verificationMethod["type"] = type;
     verificationMethod["controller"] = _isDIDFormat(controller)!;
-
-    // verificationMethod[EnumToString.convertToString(publicKeyType)] = _publicKeyType(publicKeyType, publicKey);
+    verificationMethod[EnumToString.convertToString(publicKeyType)] = _publicKeyType(publicKeyType, publicKey);
   }
 
   addProof(String type, DateTime expire, DateTime created, String proofPurpose, {String? challenge, String? domain}) {
@@ -87,6 +130,79 @@ class JsonTypeDIDDocument {
     }
 
     base["proof"] = [proof];
+  }
+
+  createDIDDocument(String did, List<int> publicKey) {
+    log.i("JsonDIDDocument:createDIDDocument");
+
+    var pubKeyType = PublicKeyType.publicKeyMultibase;
+
+    var didDocument = base;
+
+    didDocument["@context"] = ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1"];
+    didDocument["id"] = did;
+    didDocument["authentication"] = [
+      getKeyObject(did, "Ed25519VerificationKey2018", did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
+    ];
+    didDocument["verificationMethod"] = [
+      getKeyObject(did, "Ed25519VerificationKey2018", did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
+    ];
+
+    return json.encode(didDocument);
+  }
+
+  createVP(String did, String keyLocation, String audience, List<Map<String, dynamic>> payload, List<int> pk) async {
+    log.i("JsonDIDDocument:createVP");
+    // payload is vc list
+    var now = DateTime.now();
+
+    var expire = now.add(const Duration(minutes: 1));
+    var template = {
+      "@context": ["https://www.w3.org/2018/credentials/v1", "https://www.w3.org/2018/credentials/examples/v1"],
+      "id": did,
+      "type": ["VerifiablePresentation"],
+      "issuer": did,
+      "issuanceDate": now.toIso8601String(),
+      "expirationDate": expire.toIso8601String(),
+      "verifiableCredential": payload,
+    };
+
+    var vp = template;
+
+    var proof = {
+      "type": "Ed25519Signature2018",
+      "expire": expire.toIso8601String(),
+      "created": now.toIso8601String(),
+      "proofPurpose": "authentication",
+      "verificationMethod": keyLocation,
+      // "challenge": "c0ae1c8e-c7e7-469f-b252-86e6a0e7387e", // random
+      // "domain": "test.org", // submit vp domain
+    };
+
+    vp["proof"] = [proof];
+
+    // Create a json web token
+    final jwt = JWT(vp); //, issuer: did, audience: audience, jwtId: "test");
+
+    var token = jwt.sign(EdDSAPrivateKey(pk),
+        algorithm: JWTAlgorithm.EdDSA,
+        noIssueAt: true); //, expiresIn: Duration(minutes: 1), notBefore: Duration(seconds: 0));
+
+    // var splitToken = token.split('.');
+    // var noPayloadToken = splitToken[0] + ".." + splitToken[2];
+
+    log.i(vp["proof"]);
+
+    var vp2 = template;
+
+    proof["jws"] = token; //noPayloadToken;
+
+    vp2["proof"] = [proof];
+
+    log.i(token);
+    // log.i("jws: ${vp['proof']}");
+
+    return vp;
   }
 }
 

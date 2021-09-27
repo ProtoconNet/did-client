@@ -1,4 +1,4 @@
-import 'package:wallet/util/logger.dart';
+// import 'package:wallet/util/logger.dart';
 import 'package:get_storage/get_storage.dart';
 
 class FlutterSecureStorage {

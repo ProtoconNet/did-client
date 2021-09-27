@@ -22,6 +22,7 @@ final theme = ThemeData(
     overline: TextStyle(fontSize: 10, letterSpacing: 1.5, color: Colors.black),
     button: TextStyle(fontSize: 18, letterSpacing: -0.4, color: Colors.black, fontWeight: FontWeight.w700),
   ),
+  primarySwatch: primary,
   colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: const Color(0xFF5A24BE),
@@ -55,6 +56,7 @@ final darkTheme = ThemeData(
     overline: TextStyle(fontSize: 10, letterSpacing: 1.5, color: Colors.white),
     button: TextStyle(fontSize: 18, letterSpacing: -0.4, color: Colors.white, fontWeight: FontWeight.w700),
   ),
+  primarySwatch: primary,
   colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: const Color(0xFF5A24BE),
