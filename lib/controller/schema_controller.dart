@@ -38,6 +38,8 @@ class SchemaController extends GetxController {
   RxList<dynamic> schemaList = [].obs;
   // var schema = ''.obs;
 
+  RxList<Widget> widgets = <Widget>[].obs;
+
   @override
   onInit() async {
     super.onInit();
@@ -58,6 +60,7 @@ class SchemaController extends GetxController {
   }
 
   _setImageFile(File _new) {
+    log.i("SchemaController:setImageFile");
     imageFile = _new;
     update();
   }

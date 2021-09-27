@@ -68,7 +68,7 @@ class Schema extends StatelessWidget {
                             onPressed: () async {
                               await c.takeImage(idx);
                             },
-                            child: Text('takePicture'.tr))),
+                            child: Text('takePicture'.tr, style: Get.textTheme.button!.copyWith(color: Colors.white)))),
                     const Text(' '),
                     SizedBox(
                         width: Get.width * 0.39,
@@ -76,7 +76,7 @@ class Schema extends StatelessWidget {
                             onPressed: () async {
                               await c.getImage(idx);
                             },
-                            child: Text('pickGallery'.tr))),
+                            child: Text('pickGallery'.tr, style: Get.textTheme.button!.copyWith(color: Colors.white)))),
                   ],
                 ))
           ]));
@@ -129,14 +129,14 @@ class Schema extends StatelessWidget {
       }
     }
 
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    c.widgets.value = [
       // SizedBox(
       //     height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 82,
       //     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       //       ...inputs,
       //     ])),
       SizedBox(
-          height: Get.height - Get.statusBarHeight - 50 - 32 - Get.mediaQuery.viewInsets.bottom,
+          height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 50 - 32,
           child: ListView(children: [
             ...inputs,
           ])),
@@ -145,12 +145,20 @@ class Schema extends StatelessWidget {
           width: Get.width * 0.8,
           height: 50,
           child: ElevatedButton(
-              child: const Text('Submit'),
+              child: Text('Submit', style: Get.textTheme.button!.copyWith(color: Colors.white)),
               onPressed: () async {
                 await c.submit(requestSchema, name, schemaList);
                 Get.back();
               }))
-    ]);
+    ];
+    //Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children:
+
+    return true;
+  }
+
+  init(requestedSchema) async {
+    await c.init(requestedSchema);
+    return _builder(name);
   }
 
   @override
@@ -167,14 +175,14 @@ class Schema extends StatelessWidget {
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 16.0 * 2,
               child: FutureBuilder(
-                  future: c.init(requestSchema),
+                  future: init(requestSchema),
                   builder: (context, snapshot) {
                     log.i("snapshot.data:${snapshot.data}");
                     log.i("snapshot.hasData:${snapshot.hasData}");
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      return Obx(() => _builder(name));
+                      return Obx(() => Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: c.widgets));
                     }
                   }))
         ]);
