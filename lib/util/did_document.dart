@@ -22,6 +22,27 @@ enum AsymmetricKeyType {
   VerifiableCondition2021,
 }
 
+class KeyInfo {
+  KeyInfo(this.type, this.context);
+
+  String type;
+  String context;
+}
+
+Map<AsymmetricKeyType, dynamic> Key = {
+  AsymmetricKeyType.JsonWebKey2020: {},
+  AsymmetricKeyType.EcdsaSecp256k1VerificationKey2019: {},
+  AsymmetricKeyType.Ed25519VerificationKey2018: {},
+  AsymmetricKeyType.Bls12381G1Key2020: {},
+  AsymmetricKeyType.Bls12381G2Key2020: {},
+  AsymmetricKeyType.PgpVerificationKey2021: {},
+  AsymmetricKeyType.RsaVerificationKey2018: {},
+  AsymmetricKeyType.X25519KeyAgreementKey2019: {},
+  AsymmetricKeyType.SchnorrSecp256k1VerificationKey2019: {},
+  AsymmetricKeyType.EcdsaSecp256k1RecoveryMethod2020: {},
+  AsymmetricKeyType.VerifiableCondition2021: {},
+};
+
 enum PublicKeyType {
   publicKeyJwk,
   publicKeyMultibase,
@@ -76,6 +97,64 @@ class JsonTypeDIDDocument {
     "type": "",
     "controller": "",
   };
+
+  String _asymmetricKeyTypeContext(AsymmetricKeyType type) {
+    switch (type) {
+      case AsymmetricKeyType.JsonWebKey2020:
+        return "JsonWebKey2020";
+      case AsymmetricKeyType.EcdsaSecp256k1VerificationKey2019:
+        return "EcdsaSecp256k1VerificationKey2019";
+      case AsymmetricKeyType.Ed25519VerificationKey2018:
+        return "Ed25519VerificationKey2018";
+      case AsymmetricKeyType.Bls12381G1Key2020:
+        return "Bls12381G1Key2020";
+      case AsymmetricKeyType.Bls12381G2Key2020:
+        return "Bls12381G2Key2020";
+      case AsymmetricKeyType.PgpVerificationKey2021:
+        return "PgpVerificationKey2021";
+      case AsymmetricKeyType.RsaVerificationKey2018:
+        return "RsaVerificationKey2018";
+      case AsymmetricKeyType.X25519KeyAgreementKey2019:
+        return "X25519KeyAgreementKey2019";
+      case AsymmetricKeyType.SchnorrSecp256k1VerificationKey2019:
+        return "SchnorrSecp256k1VerificationKey2019";
+      case AsymmetricKeyType.EcdsaSecp256k1RecoveryMethod2020:
+        return "EcdsaSecp256k1RecoveryMethod2020";
+      case AsymmetricKeyType.VerifiableCondition2021:
+        return "VerifiableCondition2021";
+      default:
+        return "";
+    }
+  }
+
+  String _asymmetricKeyType(AsymmetricKeyType type) {
+    switch (type) {
+      case AsymmetricKeyType.JsonWebKey2020:
+        return "JsonWebKey2020";
+      case AsymmetricKeyType.EcdsaSecp256k1VerificationKey2019:
+        return "EcdsaSecp256k1VerificationKey2019";
+      case AsymmetricKeyType.Ed25519VerificationKey2018:
+        return "Ed25519VerificationKey2018";
+      case AsymmetricKeyType.Bls12381G1Key2020:
+        return "Bls12381G1Key2020";
+      case AsymmetricKeyType.Bls12381G2Key2020:
+        return "Bls12381G2Key2020";
+      case AsymmetricKeyType.PgpVerificationKey2021:
+        return "PgpVerificationKey2021";
+      case AsymmetricKeyType.RsaVerificationKey2018:
+        return "RsaVerificationKey2018";
+      case AsymmetricKeyType.X25519KeyAgreementKey2019:
+        return "X25519KeyAgreementKey2019";
+      case AsymmetricKeyType.SchnorrSecp256k1VerificationKey2019:
+        return "SchnorrSecp256k1VerificationKey2019";
+      case AsymmetricKeyType.EcdsaSecp256k1RecoveryMethod2020:
+        return "EcdsaSecp256k1RecoveryMethod2020";
+      case AsymmetricKeyType.VerifiableCondition2021:
+        return "VerifiableCondition2021";
+      default:
+        return "";
+    }
+  }
 
   dynamic _publicKeyType(PublicKeyType type, List<int> publicKey) {
     switch (type) {
@@ -132,20 +211,18 @@ class JsonTypeDIDDocument {
     base["proof"] = [proof];
   }
 
-  createDIDDocument(String did, List<int> publicKey) {
+  createDIDDocument(String did, AsymmetricKeyType keyType, PublicKeyType pubKeyType, List<int> publicKey) {
     log.i("JsonDIDDocument:createDIDDocument");
-
-    var pubKeyType = PublicKeyType.publicKeyMultibase;
 
     var didDocument = base;
 
     didDocument["@context"] = ["https://www.w3.org/ns/did/v1", "https://w3id.org/security/suites/ed25519-2020/v1"];
     didDocument["id"] = did;
     didDocument["authentication"] = [
-      getKeyObject(did, "Ed25519VerificationKey2018", did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
+      getKeyObject(did, _asymmetricKeyType(keyType), did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
     ];
     didDocument["verificationMethod"] = [
-      getKeyObject(did, "Ed25519VerificationKey2018", did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
+      getKeyObject(did, _asymmetricKeyType(keyType), did, pubKeyType, _publicKeyType(pubKeyType, publicKey))
     ];
 
     return json.encode(didDocument);
