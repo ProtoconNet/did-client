@@ -137,7 +137,8 @@ class Schema extends StatelessWidget {
       //     ])),
       SizedBox(
           height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 50 - 32,
-          child: ListView(children: [
+          child: ListView(
+            children: [
             ...inputs,
           ])),
 
@@ -174,7 +175,8 @@ class Schema extends StatelessWidget {
               margin: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 16.0 * 2,
-              child: FutureBuilder(
+              child: 
+              FutureBuilder(
                   future: init(requestSchema),
                   builder: (context, snapshot) {
                     log.i("snapshot.data:${snapshot.data}");
@@ -182,7 +184,10 @@ class Schema extends StatelessWidget {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      return Obx(() => Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: c.widgets));
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                        children: c.widgets
+                        );
                     }
                   }))
         ]);
