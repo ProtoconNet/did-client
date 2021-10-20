@@ -7,6 +7,32 @@ import 'package:fast_base58/fast_base58.dart';
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/crypto.dart';
 
+const VPRequestExample = {
+  "requestAttribute": [
+    {
+      "name": "driverLicense",
+      "restrictions": {"schemaId": "_schemaId", "credDefId": "_credDefId"},
+      "concealable": true
+    },
+    {
+      "name": "jejuPass",
+      "restrictions": {"schemaId": "_schemaId", "credDefId": "_credDefId"},
+      "concealable": true
+    }
+  ],
+  "predicateAttribute": [
+    {
+      "name": "이번엔 사용 안함",
+      "condition": "ZKP를 위한 컨디션 (보다 크다, 작다 등등)",
+      "value": "ZKP를 위한 값",
+      "restrictions": {"schemaId": "_schemaId", "credDefId": "_credDefId"}
+    }
+  ],
+  "selfAttestedAttribute": [
+    {"name": "유저에게 전달받는 추가 정보. 따로 검증은 안함"}
+  ]
+};
+
 class Verifier {
   Verifier(this.schemaLocation);
   final log = Log();

@@ -80,6 +80,37 @@ class Issuer {
     return json.decode(response.data);
   }
 
+  Future<bool> didAuthentication(String did, String authEndPoint, String privateKey) async {
+    log.i("Issuer:didAuthentication");
+
+    var response = await Dio().get(authEndPoint, queryParameters: {'did': did}).catchError((onError) {
+      log.e("Get error:${onError.toString()}");
+    });
+    log.i('response.data: ${response.data}');
+
+    final challenge = jsonDecode(response.data);
+
+    log.i('response.headers: ${response.headers}');
+    log.i('headers authorization: ${response.headers['authorization']}');
+
+    if (challenge.containsKey('payload')) {
+      final payload = challenge['payload'];
+      final token = response.headers['authorization']![0];
+      final challengeEndpoint = challenge['endPoint'];
+
+      final challengeBytes = utf8.encode(payload);
+
+      final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
+
+      final response2 = await responseChallenge(challengeEndpoint, Base58Encode(signature), token);
+      if (response2.data == "") {
+        log.le("Challenge Failed");
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<bool> didAuth(String payload, String endPoint, String token, String privateKey) async {
     log.i("Issuer:didAuth");
 
