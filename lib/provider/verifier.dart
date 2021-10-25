@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 // import 'package:http/http.dart' as http;
 import 'package:fast_base58/fast_base58.dart';
 
+// import 'package:wallet/model/vp.dart';
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/crypto.dart';
 
@@ -34,37 +35,110 @@ const VPRequestExample = {
 };
 
 class Verifier {
-  Verifier(this.schemaLocation);
+  Verifier(this.endPoint);
   final log = Log();
   final crypto = Crypto();
 
-  final String schemaLocation;
+  final String endPoint;
 
-  getVPSchema() async {
-    log.i("Verifier:getVPSchema");
-    final locations = await getSchemaLocation();
+  postVP() async {}
 
-    final response = await Dio().get(locations['schema']).catchError((onError) {
-      log.e("getVPSchema error: ${onError.toString()}");
+  Future<String?> presentationProposal(String did, String privateKey, String token) async {
+    log.i("Verifier:presentationProposal(did:$did, privateKey:$privateKey)");
+    final locations = await getUrls();
+    log.i('1:${endPoint + locations['getPresentationProposal']}');
+    log.i('did:$did');
+    log.i('token:$token');
+
+    final url = endPoint + locations['getPresentationProposal'] + "?did=$did";
+
+    log.i(url);
+
+    var response = await Dio()
+        .get(
+      endPoint + locations['getPresentationProposal'],
+      queryParameters: {"did": did},
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("PresentationProposal error:${onError.toString()}");
+    });
+    log.i('response.data: ${response.data}');
+
+    return response.data;
+  }
+
+  Future<dynamic> presentationProof(String did, String schemaID, String creDefId, String token) async {
+    log.i("Verifier:presentationProof(did:$did, schemaID:$schemaID, creDefId:$creDefId, token:$token)");
+    final locations = await getUrls();
+
+    var response = await Dio()
+        .get(
+      endPoint + locations['postPresentationProof'],
+      queryParameters: {"did": did, "schemaID": schemaID, "creDefId": creDefId},
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("PresentationProof error:${onError.toString()}");
+    });
+    log.i('response.data: ${response.data}');
+    log.i('response.data: ${json.decode(response.data)['VC']}');
+
+    return response;
+  }
+
+  ackMessage(String token) async {
+    log.i("Verifier:ackMessage(token:$token)");
+    final locations = await getUrls();
+
+    await Dio()
+        .get(
+      endPoint + locations['getAckMessage'],
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("CredentialProposal error:${onError.toString()}");
+    });
+  }
+
+  Future<Response<dynamic>> responseChallenge(String challengeUri, String encodedSignatureBytes, String token) async {
+    log.i("Issuer:responseChallenge()");
+    final response = await Dio()
+        .get(
+      challengeUri,
+      queryParameters: {'signature': encodedSignatureBytes},
+      options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("responseChallenge error:${onError.toString()}");
     });
 
     return response;
   }
 
-  Future<String> postVP(Map<String, dynamic> data, String privateKey) async {
-    log.i("Verifier:postVP");
-    log.i("params:$data");
-    final locations = await getSchemaLocation();
+  Future<Map<String, dynamic>> getUrls() async {
+    log.i("Issuer:getUrls");
+    log.i(endPoint);
 
-    log.i("locations['VPPost']:${locations['VPPost']}");
-    final response = await Dio()
-        .post(
-      locations["VPPost"],
-      data: data,
-      options: Options(contentType: Headers.jsonContentType),
-    )
+    final response = await Dio().get(endPoint + "/urls").catchError((onError) {
+      log.e("getUrls error:${onError.toString()}");
+    });
+
+    return json.decode(response.data);
+  }
+
+  Future<String> didAuthentication(String did, String privateKey) async {
+    log.i("Issuer:didAuthentication");
+
+    final locations = await getUrls();
+
+    log.i(locations);
+
+    var response = await Dio()
+        .post(endPoint + locations['didAuth'],
+            data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
         .catchError((onError) {
-      log.e("postVP error: ${onError.toString()}");
+      log.e("did Auth error:${onError.toString()}");
     });
 
     final challenge = jsonDecode(response.data);
@@ -73,52 +147,23 @@ class Verifier {
     log.i('headers authorization: ${response.headers['authorization']}');
 
     if (challenge.containsKey('payload')) {
-      final challengeResult =
-          await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']![0], privateKey);
-      log.i("challengeResult: $challengeResult");
+      final payload = challenge['payload'];
+      final token = response.headers['authorization']![0];
+      final challengeEndpoint = challenge['endPoint'];
+
+      final challengeBytes = utf8.encode(payload);
+
+      final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
+
+      final response2 = await responseChallenge(challengeEndpoint, Base58Encode(signature), token);
+      if (response2.data == "") {
+        log.le("Challenge Failed");
+        return "";
+      }
+
+      log.i(response2);
+      log.i(response2.data);
     }
-
-    return "";
-  }
-
-  getSchemaLocation() async {
-    log.i("Verifier:getSchemaLocation");
-    log.i("schemaLocation:$schemaLocation");
-
-    final response = await Dio().get(schemaLocation).catchError((onError) {
-      log.e("getSchemaLocation error: ${onError.toString()}");
-    });
-
-    return json.decode(response.data);
-  }
-
-  Future<bool> didAuth(String payload, endPoint, String token, String privateKey) async {
-    log.i('Verifier:didAuth');
-
-    final challengeBytes = utf8.encode(payload);
-
-    final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
-
-    final response2 = await responseChallenge(endPoint, Base58Encode(signature), token);
-    if (response2 == "") {
-      log.le("Challenge Failed");
-      return false;
-    }
-    return true;
-  }
-
-  responseChallenge(challengeUri, encodedSignatureBytes, token) async {
-    log.i('Verifier:responseChallenge');
-    final response = await Dio()
-        .get(
-      challengeUri,
-      queryParameters: {'signature': encodedSignatureBytes},
-      options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
-    )
-        .catchError((onError) {
-      log.e("responseChallenge error: ${onError.toString()}");
-    });
-
-    return response;
+    return response.headers['authorization']![0];
   }
 }

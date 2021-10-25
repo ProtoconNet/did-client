@@ -9,8 +9,8 @@ import 'package:wallet/view/vp_verifier.dart';
 import 'package:wallet/util/logger.dart';
 
 class VP extends StatelessWidget {
-  VP({key, required this.did, required this.name, required this.vc, required this.schemaRequest})
-      : c = Get.put(VPController(did, schemaRequest)),
+  VP({key, required this.did, required this.name, required this.vc, required this.urls})
+      : c = Get.put(VPController(did, urls)),
         super(key: key);
 
   final VPController c;
@@ -22,7 +22,7 @@ class VP extends StatelessWidget {
   final Map<String, dynamic> vc;
   final String did;
   final String name;
-  final String schemaRequest;
+  final String urls;
 
   List<Widget> _credentialSubjectList(Map<String, dynamic> credentialSubject) {
     // await c.getSchema(c.schemaRequest);
@@ -41,7 +41,7 @@ class VP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i("VP:build");
-    log.i(vcListController.vpManager.vps[0].name);
+    log.i(vcListController.vpManager.vps);
     return Background(
         appBar: AppBar(
           title: Text(name),
@@ -74,15 +74,19 @@ class VP extends StatelessWidget {
           ),
           Obx(() => Column(
                   children: (vcListController.vpManager.vps.map((vp) {
-                final active = c.vpActiveCheck(name, vp, vcListController.vcManager.vcs);
-
-                if (active == null) {
-                  return const SizedBox();
-                } else if (active) {
-                  return VPVerifier(did: did, vp: vp, enable: true);
-                } else {
-                  return VPVerifier(did: did, vp: vp, enable: false);
-                }
+                return FutureBuilder(
+                    future: c.vpActiveCheck(name, vp, vcListController.vcManager.vcs),
+                    builder: (context, snapshot) {
+                      final active = snapshot.data;
+                      // if (active == null) {
+                      //   return const SizedBox();
+                      // } else
+                      if (active as bool) {
+                        return VPVerifier(did: did, vp: vp, enable: true);
+                      } else {
+                        return VPVerifier(did: did, vp: vp, enable: false);
+                      }
+                    });
               }).toList()))),
         ]);
   }

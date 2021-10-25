@@ -7,51 +7,69 @@ import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/crypto.dart';
 
 class Issuer {
-  Issuer(this.schemaLocation);
+  Issuer(this.endPoint);
   final log = Log();
   final crypto = Crypto();
 
-  final String schemaLocation;
+  final String endPoint;
 
-  Future<Response<dynamic>> getVC(String token) async {
-    log.i("Issuer:getVC(token:$token)");
-    final locations = await getSchemaLocation();
-    final response = await Dio()
-        .get(
-      locations['VCGet'],
-      options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
-    )
-        .catchError((onError) {
-      log.e("VCGet error:${onError.toString()}");
-    });
-    return response;
-  }
+  Future<String?> credentialProposal(
+      String did, String schemaID, String creDefId, String privateKey, String token) async {
+    log.i("Issuer:credentialProposal(schemaID:$schemaID, creDefId:$creDefId, privateKey:$privateKey)");
+    final locations = await getUrls();
+    log.i('1:${endPoint + locations['getCredentialProposal']}');
+    log.i('did:$did');
+    log.i('token:$token');
 
-  Future<String?> postVC(Map<String, dynamic> data, String privateKey) async {
-    log.i("Issuer:postVC(data:$data, privateKey:$privateKey)");
-    final locations = await getSchemaLocation();
-    log.i('1:${locations['VCPost']}, $data');
+    final url = endPoint + locations['getCredentialProposal'] + "?did=$did&schemaID=$schemaID&creDefId=$creDefId";
+
+    log.i(url);
 
     var response = await Dio()
-        .post(locations['VCPost'], data: data, options: Options(contentType: Headers.jsonContentType))
+        .get(
+      endPoint + locations['getCredentialProposal'],
+      queryParameters: {"did": did, "schemaID": schemaID, "creDefId": creDefId},
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
         .catchError((onError) {
-      log.e("VCPost error:${onError.toString()}");
+      log.e("CredentialProposal error:${onError.toString()}");
     });
     log.i('response.data: ${response.data}');
 
-    final challenge = jsonDecode(response.data);
+    return token;
+  }
 
-    log.i('response.headers: ${response.headers}');
-    log.i('headers authorization: ${response.headers['authorization']}');
+  Future<dynamic> credentialRequest(String did, String schemaID, String creDefId, String token) async {
+    log.i("Issuer:credentialRequest(did:$did, schemaID:$schemaID, creDefId:$creDefId, token:$token)");
+    final locations = await getUrls();
 
-    if (challenge.containsKey('payload')) {
-      final challengeResult =
-          await didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']![0], privateKey);
-      if (challengeResult) {
-        return response.headers['authorization']![0];
-      }
-    }
-    return null;
+    var response = await Dio()
+        .get(
+      endPoint + locations['getCredentialRequest'],
+      queryParameters: {"did": did, "schemaID": schemaID, "creDefId": creDefId},
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("CredentialProposal error:${onError.toString()}");
+    });
+    log.i('response.data: ${response.data}');
+    log.i('response.data: ${json.decode(response.data)['VC']}');
+
+    return response;
+  }
+
+  ackMessage(String token) async {
+    log.i("Issuer:ackMessage(token:$token)");
+    final locations = await getUrls();
+
+    await Dio()
+        .get(
+      endPoint + locations['getAckMessage'],
+      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    )
+        .catchError((onError) {
+      log.e("CredentialProposal error:${onError.toString()}");
+    });
   }
 
   Future<Response<dynamic>> responseChallenge(String challengeUri, String encodedSignatureBytes, String token) async {
@@ -69,24 +87,30 @@ class Issuer {
     return response;
   }
 
-  Future<Map<String, dynamic>> getSchemaLocation() async {
-    log.i("Issuer:getSchemaLocation");
-    log.i(schemaLocation);
+  Future<Map<String, dynamic>> getUrls() async {
+    log.i("Issuer:getUrls");
+    log.i(endPoint);
 
-    final response = await Dio().get(schemaLocation).catchError((onError) {
-      log.e("getSchemaLocation error:${onError.toString()}");
+    final response = await Dio().get(endPoint + "/urls").catchError((onError) {
+      log.e("getUrls error:${onError.toString()}");
     });
 
     return json.decode(response.data);
   }
 
-  Future<bool> didAuthentication(String did, String authEndPoint, String privateKey) async {
+  Future<String> didAuthentication(String did, String privateKey) async {
     log.i("Issuer:didAuthentication");
 
-    var response = await Dio().get(authEndPoint, queryParameters: {'did': did}).catchError((onError) {
-      log.e("Get error:${onError.toString()}");
+    final locations = await getUrls();
+
+    log.i(locations);
+
+    var response = await Dio()
+        .post(endPoint + locations['didAuth'],
+            data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
+        .catchError((onError) {
+      log.e("did Auth error:${onError.toString()}");
     });
-    log.i('response.data: ${response.data}');
 
     final challenge = jsonDecode(response.data);
 
@@ -105,24 +129,12 @@ class Issuer {
       final response2 = await responseChallenge(challengeEndpoint, Base58Encode(signature), token);
       if (response2.data == "") {
         log.le("Challenge Failed");
-        return false;
+        return "";
       }
+
+      log.i(response2);
+      log.i(response2.data);
     }
-    return true;
-  }
-
-  Future<bool> didAuth(String payload, String endPoint, String token, String privateKey) async {
-    log.i("Issuer:didAuth");
-
-    final challengeBytes = utf8.encode(payload);
-
-    final signature = await crypto.sign(Algorithm.ed25519, challengeBytes, privateKey);
-
-    final response2 = await responseChallenge(endPoint, Base58Encode(signature), token);
-    if (response2.data == "") {
-      log.le("Challenge Failed");
-      return false;
-    }
-    return true;
+    return response.headers['authorization']![0];
   }
 }

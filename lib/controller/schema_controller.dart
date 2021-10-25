@@ -13,12 +13,21 @@ import 'package:wallet/util/logger.dart';
 import 'package:wallet/controller/vc_list_controller.dart';
 
 class SchemaController extends GetxController {
-  SchemaController({required this.did, required this.name, required this.requestSchema});
+  SchemaController(
+      {required this.did,
+      required this.name,
+      required this.urls,
+      required this.schemaID,
+      required this.credentialDefinitionID,
+      required this.schema});
 //      : issuer = Issuer(requestSchema);
 
   final String did;
   final String name;
-  final String requestSchema;
+  final String urls;
+  final String schemaID;
+  final String credentialDefinitionID;
+  final String schema;
 
   final GlobalVariable g = Get.find();
   final log = Log();
@@ -41,22 +50,22 @@ class SchemaController extends GetxController {
   RxList<Widget> widgets = <Widget>[].obs;
 
   @override
-  onInit() async {
+  onInit() {
     super.onInit();
 
-    await init(requestSchema);
+    init(schema);
   }
 
-  Future<bool> init(String schema) async {
+  init(String schema) {
     log.i("SchemaController:init(schema:$schema)");
-    log.i("requestSchema: $requestSchema");
+    log.i("schema: $schema");
     inputControllerList = [];
 
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
 
-    return await getSchema(schema);
+    return schemaList.value = json.decode(schema);
   }
 
   _setImageFile(File _new) {
@@ -79,26 +88,6 @@ class SchemaController extends GetxController {
     log.i("SchemaController:addDateTimeField");
     dateList.add(DateTime.now());
     timeList.add(DateTime.now());
-  }
-
-  Future<bool> getSchema(String schema) async {
-    log.i("SchemaController:getSchema(schema:$schema)");
-    log.i('getSchema:: $requestSchema :: $schema');
-    final issuer = Issuer(schema);
-    var locations = await issuer.getSchemaLocation();
-
-    var response = await platform.getSchema(locations['schema']);
-    if (response.data.containsKey('error')) {
-      return false;
-    }
-
-    log.i("schema: ${response.data['data']}, ${response.data.runtimeType}");
-
-    schemaList.value = json.decode(response.data['data']);
-
-    log.i("schemaList: $schemaList");
-
-    return true;
   }
 
   Future<String?> takeImage(int index) async {
@@ -191,21 +180,22 @@ class SchemaController extends GetxController {
       }
     }
 
-    // TODO change static vc1
-    var body = {"did": g.did.value, "schema": "vc1", "credentialSubject": credentialSubject};
-
-    log.i("body:${json.encode(body)}");
-
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
     log.i('pk: $pk');
-    final issuer = Issuer(schema);
-    var response = await issuer.postVC(body, pk);
+    final issuer = Issuer(urls);
+
+    final token = await issuer.didAuthentication(did, pk);
+
+    VCListController c = Get.find();
+    await c.vcManager.setByName(name, 'jwt', token);
+
+    var response = await issuer.credentialProposal(did, schemaID, credentialDefinitionID, pk, token);
 
     log.i("postVC Response: $response");
 
     if (response != null) {
-      VCListController c = Get.find();
       await c.vcManager.setByName(name, 'jwt', response);
+      // await c.vcManager.setByName(name, 'VC', json.encode(response2));
       // await c.vcManager.value.setByName(name, 'jwt', response);
       // c.vcManager.update((t) {});
     } else {

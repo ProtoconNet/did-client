@@ -11,13 +11,29 @@ import 'package:wallet/controller/schema_controller.dart';
 import 'package:wallet/util/logger.dart';
 
 class Schema extends StatelessWidget {
-  Schema({key, required this.did, required this.name, required this.requestSchema})
-      : c = Get.put(SchemaController(did: did, name: name, requestSchema: requestSchema)),
+  Schema(
+      {key,
+      required this.did,
+      required this.name,
+      required this.urls,
+      required this.schemaID,
+      required this.credentialDefinitionID,
+      required this.schema})
+      : c = Get.put(SchemaController(
+            did: did,
+            name: name,
+            urls: urls,
+            schemaID: schemaID,
+            credentialDefinitionID: credentialDefinitionID,
+            schema: schema)),
         super(key: key);
 
   final String did;
   final String name;
-  final String requestSchema;
+  final String urls;
+  final String schemaID;
+  final String credentialDefinitionID;
+  final String schema;
 
   final SchemaController c;
 
@@ -26,7 +42,7 @@ class Schema extends StatelessWidget {
 
   _builder(name) {
     log.i('Schema:builder');
-    log.i("${c.schemaList}: $requestSchema");
+    log.i("${c.schemaList}: $schema");
 
     final schemaList = c.schemaList;
     var inputs = [];
@@ -137,8 +153,7 @@ class Schema extends StatelessWidget {
       //     ])),
       SizedBox(
           height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 50 - 32,
-          child: ListView(
-            children: [
+          child: ListView(children: [
             ...inputs,
           ])),
 
@@ -148,7 +163,7 @@ class Schema extends StatelessWidget {
           child: ElevatedButton(
               child: Text('Submit', style: Get.textTheme.button!.copyWith(color: Colors.white)),
               onPressed: () async {
-                await c.submit(requestSchema, name, schemaList);
+                await c.submit(schema, name, schemaList);
                 Get.back();
               }))
     ];
@@ -157,14 +172,15 @@ class Schema extends StatelessWidget {
     return true;
   }
 
-  init(requestedSchema) async {
-    await c.init(requestedSchema);
+  init(schema) {
+    c.init(schema);
     return _builder(name);
   }
 
   @override
   Widget build(BuildContext context) {
     log.i('Schema:build');
+    init(schema);
     return Background(
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(0xff, 61, 61, 61),
@@ -175,21 +191,7 @@ class Schema extends StatelessWidget {
               margin: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               height: Get.height - Get.statusBarHeight - Get.bottomBarHeight - 16.0 * 2,
-              child: 
-              FutureBuilder(
-                  future: init(requestSchema),
-                  builder: (context, snapshot) {
-                    log.i("snapshot.data:${snapshot.data}");
-                    log.i("snapshot.hasData:${snapshot.hasData}");
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-                        children: c.widgets
-                        );
-                    }
-                  }))
+              child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: c.widgets))
         ]);
   }
 }

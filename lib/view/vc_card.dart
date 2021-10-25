@@ -29,9 +29,9 @@ class VCCard extends StatelessWidget {
   Widget _getLogoByName(String name) {
     log.i("VCCard:getLogoByName");
     const double height = 20;
-    if (name == "drivers license" || name == "운전면허증") {
+    if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/drivers_license_logo.png', height: height);
-    } else if (name == "jejupass" || name == "제주패스") {
+    } else if (name == "jejupass" || name == "jejuPass") {
       return Image.asset('assets/images/jejupass_logo.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
@@ -42,11 +42,11 @@ class VCCard extends StatelessWidget {
     log.i("VCCard:getCardByName");
     const double height = 200;
 
-    if (name == "drivers license" || name == "운전면허증") {
+    if (name == "drivers license" || name == "driverLicense") {
       return ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Image.asset('assets/images/drivers_license.png', height: height));
-    } else if (name == "jejupass" || name == "제주패스") {
+    } else if (name == "jejupass" || name == "jejuPass") {
       return ClipRRect(
           borderRadius: BorderRadius.circular(15), child: Image.asset('assets/images/jejupass.png', height: height));
     } else {
@@ -58,9 +58,9 @@ class VCCard extends StatelessWidget {
   Widget _getDeniedImageByName(String name) {
     log.i("VCCard:getWaitImageByName");
     const double height = 50;
-    if (name == "drivers license" || name == "운전면허증") {
+    if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/idDeny.png', height: height);
-    } else if (name == "jejupass" || name == "제주패스") {
+    } else if (name == "jejupass" || name == "jejuPass") {
       return Image.asset('assets/images/idDeny.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
@@ -70,9 +70,9 @@ class VCCard extends StatelessWidget {
   Widget _getWaitImageByName(String name) {
     log.i("VCCard:getWaitImageByName");
     const double height = 50;
-    if (name == "drivers license" || name == "운전면허증") {
+    if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/idReview.png', height: height);
-    } else if (name == "jejupass" || name == "제주패스") {
+    } else if (name == "jejupass" || name == "jejuPass") {
       return Image.asset('assets/images/idReview.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);

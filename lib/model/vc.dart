@@ -3,11 +3,15 @@ class VCModel {
   String description;
   String type;
   int icon;
-  String schemaRequest;
+  String urls;
+  String schemaID;
+  String credentialDefinitionID;
+  String schema;
   String jwt;
   Map<String, dynamic> vc;
 
-  VCModel(this.name, this.description, this.type, this.icon, this.schemaRequest, this.jwt, this.vc);
+  VCModel(this.name, this.description, this.type, this.icon, this.urls, this.schemaID, this.credentialDefinitionID,
+      this.schema, this.jwt, this.vc);
 
   getField(field) {
     switch (field) {
@@ -19,8 +23,14 @@ class VCModel {
         return type;
       case 'icon':
         return icon;
-      case 'schemaRequest':
-        return schemaRequest;
+      case 'urls':
+        return urls;
+      case 'schemaID':
+        return schemaID;
+      case 'credentialDefinitionID':
+        return credentialDefinitionID;
+      case 'schema':
+        return schema;
       case 'jwt':
         return jwt;
       case 'vc':
@@ -42,8 +52,17 @@ class VCModel {
       case 'icon':
         icon = value;
         break;
-      case 'schemaRequest':
-        schemaRequest = value;
+      case 'urls':
+        urls = value;
+        break;
+      case 'schemaID':
+        schemaID = value;
+        break;
+      case 'credentialDefinitionID':
+        credentialDefinitionID = value;
+        break;
+      case 'schema':
+        schema = value;
         break;
       case 'jwt':
         jwt = value;
@@ -59,7 +78,10 @@ class VCModel {
         description = json['description'],
         type = json['type'],
         icon = json['icon'],
-        schemaRequest = json['schemaRequest'],
+        urls = json['urls'],
+        schemaID = json['schemaID'],
+        credentialDefinitionID = json['credentialDefinitionID'],
+        schema = json['schema'],
         jwt = json['jwt'],
         vc = json['vc'];
 
@@ -68,7 +90,10 @@ class VCModel {
         'description': description,
         'type': type,
         'icon': icon,
-        'schemaRequest': schemaRequest,
+        'urls': urls,
+        'schemaID': schemaID,
+        'credentialDefinitionID': credentialDefinitionID,
+        'schema': schema,
         'jwt': jwt,
         'vc': vc,
       };

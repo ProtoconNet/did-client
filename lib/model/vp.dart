@@ -1,12 +1,11 @@
 class VPModel {
-  VPModel(this.name, this.description, this.type, this.icon, this.schemaRequest, this.vc);
+  VPModel(this.name, this.description, this.type, this.icon, this.endPoint);
 
   String name;
   String description;
   String type;
   int icon;
-  String schemaRequest;
-  List<dynamic> vc;
+  String endPoint;
 
   getField(field) {
     switch (field) {
@@ -18,10 +17,8 @@ class VPModel {
         return type;
       case 'icon':
         return icon;
-      case 'schemaRequest':
-        return schemaRequest;
-      case 'vc':
-        return vc;
+      case 'endPoint':
+        return endPoint;
     }
   }
 
@@ -39,11 +36,8 @@ class VPModel {
       case 'icon':
         icon = value;
         break;
-      case 'schemaRequest':
-        schemaRequest = value;
-        break;
-      case 'vc':
-        vc = value;
+      case 'endPoint':
+        endPoint = value;
         break;
     }
   }
@@ -53,15 +47,8 @@ class VPModel {
         description = json['description'],
         type = json['type'],
         icon = json['icon'],
-        schemaRequest = json['schemaRequest'],
-        vc = json['vc'];
+        endPoint = json['endPoint'];
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'description': description,
-        'type': type,
-        'icon': icon,
-        'schemaRequest': schemaRequest,
-        'vc': vc,
-      };
+  Map<String, dynamic> toJson() =>
+      {'name': name, 'description': description, 'type': type, 'icon': icon, 'endPoint': endPoint};
 }

@@ -52,7 +52,10 @@ class VCList extends StatelessWidget {
                                 name: vc.name,
                                 description: vc.description,
                                 type: vc.type,
-                                schemaRequest: vc.schemaRequest,
+                                urls: vc.urls,
+                                schemaID: vc.schemaID,
+                                credentialDefinitionID: vc.credentialDefinitionID,
+                                schema: vc.schema,
                                 vc: vc.vc,
                                 jwt: vc.jwt);
                           }).toList()));

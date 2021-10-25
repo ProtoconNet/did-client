@@ -26,17 +26,9 @@ class VPManager {
           vps.add(VPModel.fromJson(vp));
         }
       } else if (vps.isEmpty) {
-        setVP(json.encode(VPModel("SK 렌터카", "모바일 운전면허증과 제주패스가 있으면 렌터카 할인을 받을 수 있어요", "할인", 57815,
-            "http://mtm.securekim.com:3082/VPSchema?schema=rentCar", [
-          {
-            "name": "운전면허증",
-            "required": ["성명", "생년월일"]
-          },
-          {
-            "name": "제주패스",
-            "required": ["성명", "구매번호"]
-          },
-        ]).toJson()));
+        setVP(json.encode(
+            VPModel("SK 렌터카", "모바일 운전면허증과 제주패스가 있으면 렌터카 할인을 받을 수 있어요", "할인", 57815, "http://mtm.securekim.com:3082")
+                .toJson()));
       }
     }
   }

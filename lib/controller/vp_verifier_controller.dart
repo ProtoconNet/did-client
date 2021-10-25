@@ -23,7 +23,7 @@ class VPVerifierController extends GetxController {
     List<Map<String, dynamic>> vcs = [];
 
     VCListController vcListController = Get.find();
-
+/*
     for (var vcItem in vpModel.vc) {
       log.i("vcItem['name']: ${vcItem['name']}");
       var vc = vcListController.vcManager.getVC(vcItem['name']);
@@ -40,19 +40,28 @@ class VPVerifierController extends GetxController {
     log.i("my vp: $vp");
 
     return vp;
+    */
+    return {};
   }
 
   Future<String> postVP() async {
     log.i("VPVerifierController:postVP");
-    final verifier = Verifier(vpModel.schemaRequest);
+    final verifier = Verifier(vpModel.endPoint);
 
     final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
     log.i('privateKey:$privateKey');
-    final vp = await getVPSchema();
-    log.i('vp:$vp');
 
-    var response = await verifier.postVP({"did": did, "vp": vp}, privateKey);
+    final token = await verifier.didAuthentication(did, privateKey);
 
-    return response;
+    verifier.presentationProposal(did, privateKey, token);
+
+    // final vp = await getVPSchema();
+    // log.i('vp:$vp');
+
+    // var response = await verifier.postVP({"did": did, "vp": vp}, privateKey);
+
+    // return response;
+
+    return "";
   }
 }

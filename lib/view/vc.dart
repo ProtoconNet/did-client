@@ -17,7 +17,10 @@ class VC extends StatelessWidget {
       required this.name,
       required this.description,
       required this.type,
-      required this.schemaRequest,
+      required this.urls,
+      required this.schemaID,
+      required this.credentialDefinitionID,
+      required this.schema,
       required this.vc,
       required this.jwt})
       : super(key: key);
@@ -27,7 +30,10 @@ class VC extends StatelessWidget {
   final String name;
   final String description;
   final String type;
-  final String schemaRequest;
+  final String urls;
+  final String schemaID;
+  final String credentialDefinitionID;
+  final String schema;
   final Map<String, dynamic> vc;
   final String jwt;
 
@@ -45,11 +51,14 @@ class VC extends StatelessWidget {
         return InkWell(
             onTap: () async {
               log.i("go to Schema");
-              log.i("schemaRequest: $schemaRequest");
+              log.i("schema: $schema");
               await Get.to(Schema(
                 did: did,
                 name: name,
-                requestSchema: schemaRequest,
+                urls: urls,
+                schemaID: schemaID,
+                credentialDefinitionID: credentialDefinitionID,
+                schema: schema,
               ));
               VCListController vcListController = Get.find();
               await vcListController.setVCList(did);
@@ -69,11 +78,14 @@ class VC extends StatelessWidget {
         return InkWell(
             onTap: () async {
               log.i("go to Schema");
-              log.i("schemaRequest: $schemaRequest");
+              log.i("schema: $schema");
               await Get.to(Schema(
                 did: did,
                 name: name,
-                requestSchema: schemaRequest,
+                urls: urls,
+                schemaID: schemaID,
+                credentialDefinitionID: credentialDefinitionID,
+                schema: schema,
               ));
               VCListController vcListController = Get.find();
               await vcListController.setVCList(did);
@@ -100,10 +112,11 @@ class VC extends StatelessWidget {
     } else {
       // make onPress to Open VC as VP
       log.i('have VC');
+      log.i('$did:$name:$vc:$urls');
       return InkWell(
         onTap: () {
           // log.i("VC closedBuilder: ${vc['name']}");
-          Get.to(VP(did: did, name: name, vc: vc, schemaRequest: schemaRequest));
+          Get.to(VP(did: did, name: name, vc: vc, urls: urls));
         },
         child: VCCard(
             name: name,

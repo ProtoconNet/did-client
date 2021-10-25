@@ -45,6 +45,14 @@ class DIDList extends StatelessWidget {
                                 Get.offAll(CreateWallet());
                               },
                             ),
+                          ),
+                          PopupMenuItem(
+                            child: TextButton(
+                              child: const Text('DID Auth'),
+                              onPressed: () async {
+                                await c.didAuth();
+                              },
+                            ),
                           )
                         ]),
               ),

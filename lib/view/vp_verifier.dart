@@ -114,11 +114,11 @@ class VPVerifier extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text('${vp.name}에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
                     const SizedBox(height: 12),
-                    Column(
-                        children: vp.vc
-                            .map((vc) =>
-                                _requiredVC(vc['name'], vc['required'].join(", "), FontAwesomeIcons.addressCard))
-                            .toList()
+                    Column(children: []
+                        // vp.vc
+                        //     .map((vc) =>
+                        //         _requiredVC(vc['name'], vc['required'].join(", "), FontAwesomeIcons.addressCard))
+                        //     .toList()
                         // requiredVC('운전면허 정보', '성명, 생년월일, 운전면허번호', FontAwesomeIcons.addressCard),
                         // requiredVC('제주패스 정보', '성명, 예약번호, 유효기간', FontAwesomeIcons.ticketAlt),
                         ),

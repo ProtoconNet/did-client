@@ -36,8 +36,8 @@ class VCListController extends GetxController {
       if (vc.vc.isEmpty && vc.jwt != "") {
         log.i("getVC from issuer");
 
-        final issuer = Issuer(vc.schemaRequest);
-        var response = await issuer.getVC(vc.jwt);
+        final issuer = Issuer(vc.urls);
+        var response = await issuer.credentialRequest(did, vc.schemaID, vc.credentialDefinitionID, vc.jwt);
 
         // catchup denied
         if (json.decode(response.data).containsKey('error')) {
@@ -46,6 +46,7 @@ class VCListController extends GetxController {
           var data = json.decode(response.data)['VC'];
 
           await vcManager.setByName(vc.name, 'vc', data);
+          issuer.ackMessage(vc.jwt);
           await vcManager.setByName(vc.name, 'jwt', "");
         }
       }
