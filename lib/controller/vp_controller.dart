@@ -59,11 +59,11 @@ class VPController extends GetxController {
 
     final VCListController vcListController = Get.find();
 
-    final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
+    // final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
 
-    final token = await verifier.didAuthentication(did, privateKey);
+    // final token = await verifier.didAuthentication(did, privateKey);
 
-    final test = await verifier.presentationProposal(did, privateKey, token);
+    final test = await verifier.presentationProposal(did); //, privateKey, token);
 
     log.i(test);
 

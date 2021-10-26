@@ -41,26 +41,21 @@ class Verifier {
 
   final String endPoint;
 
-  postVP() async {}
-
-  Future<String?> presentationProposal(String did, String privateKey, String token) async {
-    log.i("Verifier:presentationProposal(did:$did, privateKey:$privateKey)");
+  Future<String?> presentationProposal(String did) async {
+    log.i("Verifier:presentationProposal(did:$did)");
     final locations = await getUrls();
     log.i('1:${endPoint + locations['getPresentationProposal']}');
     log.i('did:$did');
-    log.i('token:$token');
 
     final url = endPoint + locations['getPresentationProposal'] + "?did=$did";
 
     log.i(url);
 
-    var response = await Dio()
-        .get(
+    var response = await Dio().get(
       endPoint + locations['getPresentationProposal'],
       queryParameters: {"did": did},
-      options: Options(headers: {"Authorization": 'Bearer ' + token}),
-    )
-        .catchError((onError) {
+      // options: Options(headers: {"Authorization": 'Bearer ' + token}),
+    ).catchError((onError) {
       log.e("PresentationProposal error:${onError.toString()}");
     });
     log.i('response.data: ${response.data}');
@@ -68,15 +63,20 @@ class Verifier {
     return response.data;
   }
 
-  Future<dynamic> presentationProof(String did, String schemaID, String creDefId, String token) async {
-    log.i("Verifier:presentationProof(did:$did, schemaID:$schemaID, creDefId:$creDefId, token:$token)");
+  Future<dynamic> presentationProof(String did, Map<String, dynamic> vp, String token) async {
+    log.i("Verifier:presentationProof(did:$did, token:$token)");
     final locations = await getUrls();
 
+    log.i('{"did": $did, "vp", ${json.encode(vp)}}');
+
     var response = await Dio()
-        .get(
+        .post(
       endPoint + locations['postPresentationProof'],
-      queryParameters: {"did": did, "schemaID": schemaID, "creDefId": creDefId},
-      options: Options(headers: {"Authorization": 'Bearer ' + token}),
+      data: '{"did": "$did", "vp": ${json.encode(vp)}}',
+      options: Options(
+        contentType: Headers.jsonContentType,
+        headers: {"Authorization": 'Bearer ' + token},
+      ),
     )
         .catchError((onError) {
       log.e("PresentationProof error:${onError.toString()}");

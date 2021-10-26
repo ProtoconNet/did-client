@@ -104,6 +104,8 @@ class Issuer {
     final locations = await getUrls();
 
     log.i(locations);
+    log.i("did: $did");
+    log.i(endPoint + locations['didAuth']);
 
     var response = await Dio()
         .post(endPoint + locations['didAuth'],

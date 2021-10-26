@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 
 import 'package:fast_base58/fast_base58.dart';
@@ -18,13 +19,42 @@ class VPVerifierController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  Future<Map<String, dynamic>> getVPSchema() async {
+  getVPSchema() async {
     log.i("VPVerifierController:getVPSchema");
     List<Map<String, dynamic>> vcs = [];
 
     VCListController vcListController = Get.find();
-/*
-    for (var vcItem in vpModel.vc) {
+
+    final verifier = Verifier(vpModel.endPoint);
+
+    final a = await verifier.presentationProposal(did); //, privateKey, token);
+
+    log.i("a: $a");
+
+    final b = json.decode(a!)['requestAttribute'];
+
+    log.i("b: $b");
+
+    return b;
+  }
+
+  postVP() async {
+    log.i("VPVerifierController:postVP");
+    final VCListController vcListController = Get.find();
+    final verifier = Verifier(vpModel.endPoint);
+
+    final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
+    log.i('privateKey:$privateKey');
+
+    final token = await verifier.didAuthentication(did, privateKey);
+
+    final reqStr = await verifier.presentationProposal(did); //, privateKey, token);
+
+    final requirement = json.decode(reqStr!)['requestAttribute'];
+
+    List<Map<String, dynamic>> vcs = [];
+
+    for (var vcItem in requirement) {
       log.i("vcItem['name']: ${vcItem['name']}");
       var vc = vcListController.vcManager.getVC(vcItem['name']);
       if (vc != null) {
@@ -37,31 +67,12 @@ class VPVerifierController extends GetxController {
     final pk = await g.didManager.value.getDIDPK(did, g.password.value);
 
     var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
-    log.i("my vp: $vp");
+    log.i("my vp: ${json.encode(vp)}");
 
-    return vp;
-    */
-    return {};
-  }
+    var response = await verifier.presentationProof(did, vp, token);
 
-  Future<String> postVP() async {
-    log.i("VPVerifierController:postVP");
-    final verifier = Verifier(vpModel.endPoint);
+    log.i("asdf:$response");
 
-    final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
-    log.i('privateKey:$privateKey');
-
-    final token = await verifier.didAuthentication(did, privateKey);
-
-    verifier.presentationProposal(did, privateKey, token);
-
-    // final vp = await getVPSchema();
-    // log.i('vp:$vp');
-
-    // var response = await verifier.postVP({"did": did, "vp": vp}, privateKey);
-
-    // return response;
-
-    return "";
+    return response;
   }
 }

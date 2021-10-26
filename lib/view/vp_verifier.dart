@@ -58,6 +58,7 @@ class VPVerifier extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i("VPVerifier:build");
+    c.getVPSchema();
     return InkWell(
       child: Container(
           margin: EdgeInsets.only(left: Get.width * 0.125, right: Get.width * 0.125, bottom: 20),
@@ -112,16 +113,29 @@ class VPVerifier extends StatelessWidget {
                     Text('제주패스 회원 10% 할인',
                         style: Get.textTheme.subtitle1!.copyWith(color: Get.theme.colorScheme.secondary)),
                     const SizedBox(height: 20),
-                    Text('${vp.name}에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
-                    const SizedBox(height: 12),
-                    Column(children: []
-                        // vp.vc
-                        //     .map((vc) =>
-                        //         _requiredVC(vc['name'], vc['required'].join(", "), FontAwesomeIcons.addressCard))
-                        //     .toList()
-                        // requiredVC('운전면허 정보', '성명, 생년월일, 운전면허번호', FontAwesomeIcons.addressCard),
-                        // requiredVC('제주패스 정보', '성명, 예약번호, 유효기간', FontAwesomeIcons.ticketAlt),
-                        ),
+                    // Text('${vp.name}에서 아래 정보를 요청합니다.', style: Get.textTheme.subtitle1),
+                    // const SizedBox(height: 12),
+                    FutureBuilder(
+                        future: c.getVPSchema(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox();
+                          }
+                          log.i(snapshot.data);
+                          List<Widget> val = [];
+
+                          // for (var i = 0; i < a.length; i++) {
+                          //   var vc = snapshot.data[i];
+                          // val.add(
+                          //     _requiredVC(vc['name'], vc['concealable'].join(", "), FontAwesomeIcons.addressCard));
+                          //}
+                          return Column(children: val);
+                        }),
+                    // vp.vc
+                    //     .map((vc) =>
+                    //     .toList()
+                    // requiredVC('운전면허 정보', '성명, 생년월일, 운전면허번호', FontAwesomeIcons.addressCard),
+                    // requiredVC('제주패스 정보', '성명, 예약번호, 유효기간', FontAwesomeIcons.ticketAlt),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
