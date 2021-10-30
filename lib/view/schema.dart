@@ -42,7 +42,6 @@ class Schema extends StatelessWidget {
 
   _builder(name) {
     log.i('Schema:builder');
-    log.i("${c.schemaList}: $schema");
 
     final schemaList = c.schemaList;
     var inputs = [];
