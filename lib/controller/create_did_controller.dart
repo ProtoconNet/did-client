@@ -24,11 +24,7 @@ class CreateDIDController extends GetxController {
     final String did = 'did:mtm:' + encodedPub;
     g.did.value = did;
 
-    log.i("encodedPriv: $encodedPriv");
-
     final List<int> encrypted = await crypto.encryptPK(encodedPriv, password);
-
-    log.i("encrypted: $encrypted");
 
     await g.didManager.value.setDID(did, Base58Encode(encrypted), password);
 

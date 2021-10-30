@@ -24,22 +24,16 @@ class VPController extends GetxController {
 
   Future<bool?> getUrls(String schema) async {
     log.i("VPController:getSchema(schema:$schema)");
-    log.i('getSchema:: $urls :: $schema');
     final issuer = Issuer(schema);
     final platform = Platform();
     var locations = await issuer.getUrls();
 
     var response = await platform.getSchema(locations['schema']);
-    log.i("response: $response");
     if (response.data.containsKey('error')) {
       return null;
     }
 
-    log.i("schema: ${response.data}, ${response.data.runtimeType}");
-
     schemaList.value = json.decode(response.data);
-
-    log.i("schemaList: $schemaList");
 
     return true;
   }
@@ -65,17 +59,10 @@ class VPController extends GetxController {
 
     final test = await verifier.presentationProposal(did); //, privateKey, token);
 
-    log.i(test);
-
     final requestAttribute = json.decode(test!)['requestAttribute'];
 
-    log.i(requestAttribute);
-
     for (var reqAttr in requestAttribute) {
-      log.i(reqAttr['name']);
-
       for (var vc in vcListController.vcManager.vcs) {
-        log.i(vc.name);
         if (reqAttr['name'] == vc.name) {
           matchingCnt++;
         }

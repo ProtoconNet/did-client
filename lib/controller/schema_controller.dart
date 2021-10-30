@@ -58,7 +58,6 @@ class SchemaController extends GetxController {
 
   init(String schema) {
     log.i("SchemaController:init(schema:$schema)");
-    log.i("schema: $schema");
     inputControllerList = [];
 
     dateList.value = [];
@@ -181,7 +180,7 @@ class SchemaController extends GetxController {
     }
 
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
-    log.i('pk: $pk');
+
     final issuer = Issuer(urls);
 
     final token = await issuer.didAuthentication(did, pk);
@@ -191,7 +190,7 @@ class SchemaController extends GetxController {
 
     var response = await issuer.credentialProposal(did, schemaID, credentialDefinitionID, pk, token);
 
-    log.i("postVC Response: $response");
+    // log.i("postVC Response: $response");
 
     if (response != null) {
       await c.vcManager.setByName(name, 'jwt', response);

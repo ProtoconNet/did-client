@@ -34,14 +34,14 @@ class VCManager {
             "[]",
             "", {}).toJson()));
         setVC(json.encode(VCModel(
-            "jejuPass",
+            "protoconPass",
             "렌터카, 맛집, 숙소 등 제주여행에 필요한 다양한 서비스의 혜택을 받아보세요",
             "멤버십",
             59004,
             "http://mtm.securekim.com:3333",
             "schemaID2",
             "credentialDefinitionID2",
-            '[{"name":"buyId", "type":"string", "required":true, "reason":"jejupass buy id connect with did"}]',
+            '[{"name":"buyId", "type":"string", "required":true, "reason":"protocon pass buy id connect with did"}]',
             "", {}).toJson()));
       }
     }
@@ -50,7 +50,6 @@ class VCManager {
   readVC() async {
     log.i("VCManager:readVC");
     final vcList = json.decode(await storage.read(key: did) as String);
-    log.i("vcList: $vcList");
     vcs.value = [];
 
     for (var vc in vcList) {
