@@ -32,7 +32,6 @@ class DIDListController extends GetxController {
 
   didAuth() async {
     final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
-    log.i('pk: $pk');
 
     await issuer.didAuthentication(g.did.value, pk);
   }
@@ -41,8 +40,6 @@ class DIDListController extends GetxController {
     log.i("DIDListController:eraseAll");
     if (await storage.containsKey(key: "DIDList") == true) {
       String didList = await storage.read(key: "DIDList") as String;
-
-      log.i("erase ${json.decode(didList)}");
 
       for (var did in json.decode(didList).keys.toList()) {
         //var didVC = storage.read(key: did) as String;

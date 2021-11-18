@@ -29,11 +29,7 @@ class VPVerifierController extends GetxController {
 
     final a = await verifier.presentationProposal(did); //, privateKey, token);
 
-    log.i("a: $a");
-
     final b = json.decode(a!)['requestAttribute'];
-
-    log.i("b: $b");
 
     return b;
   }
@@ -44,7 +40,6 @@ class VPVerifierController extends GetxController {
     final verifier = Verifier(vpModel.endPoint);
 
     final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
-    log.i('privateKey:$privateKey');
 
     final token = await verifier.didAuthentication(did, privateKey);
 
@@ -67,11 +62,8 @@ class VPVerifierController extends GetxController {
     final pk = await g.didManager.value.getDIDPK(did, g.password.value);
 
     var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
-    log.i("my vp: ${json.encode(vp)}");
 
     var response = await verifier.presentationProof(did, vp, token);
-
-    log.i("asdf:$response");
 
     return response;
   }

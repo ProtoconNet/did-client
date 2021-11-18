@@ -17,13 +17,8 @@ class Issuer {
       String did, String schemaID, String creDefId, String privateKey, String token) async {
     log.i("Issuer:credentialProposal(schemaID:$schemaID, creDefId:$creDefId, privateKey:$privateKey)");
     final locations = await getUrls();
-    log.i('1:${endPoint + locations['getCredentialProposal']}');
-    log.i('did:$did');
-    log.i('token:$token');
 
-    final url = endPoint + locations['getCredentialProposal'] + "?did=$did&schemaID=$schemaID&creDefId=$creDefId";
-
-    log.i(url);
+    // final url = endPoint + locations['getCredentialProposal'] + "?did=$did&schemaID=$schemaID&creDefId=$creDefId";
 
     var response = await Dio()
         .get(
@@ -52,8 +47,8 @@ class Issuer {
         .catchError((onError) {
       log.e("CredentialProposal error:${onError.toString()}");
     });
-    log.i('response.data: ${response.data}');
-    log.i('response.data: ${json.decode(response.data)['VC']}');
+    // log.i('response.data: ${response.data}');
+    // log.i('response.data: ${json.decode(response.data)['VC']}');
 
     return response;
   }
@@ -89,7 +84,6 @@ class Issuer {
 
   Future<Map<String, dynamic>> getUrls() async {
     log.i("Issuer:getUrls");
-    log.i(endPoint);
 
     final response = await Dio().get(endPoint + "/urls").catchError((onError) {
       log.e("getUrls error:${onError.toString()}");
@@ -103,10 +97,6 @@ class Issuer {
 
     final locations = await getUrls();
 
-    log.i(locations);
-    log.i("did: $did");
-    log.i(endPoint + locations['didAuth']);
-
     var response = await Dio()
         .post(endPoint + locations['didAuth'],
             data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
@@ -115,9 +105,6 @@ class Issuer {
     });
 
     final challenge = jsonDecode(response.data);
-
-    log.i('response.headers: ${response.headers}');
-    log.i('headers authorization: ${response.headers['authorization']}');
 
     if (challenge.containsKey('payload')) {
       final payload = challenge['payload'];
@@ -133,9 +120,6 @@ class Issuer {
         log.le("Challenge Failed");
         return "";
       }
-
-      log.i(response2);
-      log.i(response2.data);
     }
     return response.headers['authorization']![0];
   }

@@ -32,9 +32,9 @@ class VCListController extends GetxController {
     log.i("VCListController:setVCList(did:$did)");
 
     for (var vc in vcManager.vcs) {
-      log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
+      // log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
       if (vc.vc.isEmpty && vc.jwt != "") {
-        log.i("getVC from issuer");
+        // log.i("getVC from issuer");
 
         final issuer = Issuer(vc.urls);
         var response = await issuer.credentialRequest(did, vc.schemaID, vc.credentialDefinitionID, vc.jwt);

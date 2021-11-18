@@ -19,7 +19,7 @@ class LoginController extends GetxController {
   onInit() async {
     super.onInit();
     // _checkAuthenticate();
-    log.i("biometric: ${g.biometric.value}");
+    // log.i("biometric: ${g.biometric.value}");
     if (g.biometric.value) {
       try {
         await biometricLogin();
@@ -72,20 +72,14 @@ class LoginController extends GetxController {
         // final password = await _noConfirmation.read();
 
         String? password = await authStorage.read();
-        log.i('password: $password');
 
         final did = g.didManager.value.getFirstDID();
-        log.i('a');
         final pk = await g.didManager.value.getDIDPK(did, password!);
-        log.i('a');
 
         if (pk == "") throw Error();
-        log.i('a');
 
         g.password.value = password;
-        log.i('a');
         g.did.value = did;
-        log.i('a');
         Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
       }
     } catch (e) {
@@ -108,9 +102,7 @@ class LoginController extends GetxController {
     log.i("LoginController:passwordLogin(password:$password)");
     try {
       final did = g.didManager.value.getFirstDID();
-      log.i('did: $did');
       final pk = await g.didManager.value.getDIDPK(did, password);
-      log.i('pk: $pk');
 
       if (pk == "") throw Error();
 

@@ -19,7 +19,6 @@ class DIDManager {
     }
     if (uninitialized) {
       var didListStr = await storage.read(key: "DIDList");
-      log.i("didListStr: $didListStr");
       dids = json.decode(didListStr!);
     }
     uninitialized = false;
@@ -27,7 +26,6 @@ class DIDManager {
 
   setDID(String did, String encodedPriv, String password) async {
     log.i("DIDManager:setDID(did:$did, encodedPriv:$encodedPriv, password:$password)");
-    log.i("$did : $encodedPriv : $password");
     dids[did] = encodedPriv;
 
     await storage.write(key: 'DIDList', value: json.encode(dids));

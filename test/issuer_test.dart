@@ -23,7 +23,7 @@ void main() async {
   group('issuer test', () {
     test('Get Schema Location Test', () async {
       var issuer = Issuer('http://mtm.securekim.com:3333/VCSchema?schema=driverLicense');
-      var response = await issuer.getSchemaLocation();
+      var response = await issuer.getUrls();
 
       expect(response.containsKey('schema'), true);
       expect(response.containsKey('VCPost'), true);

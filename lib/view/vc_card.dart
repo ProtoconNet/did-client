@@ -31,8 +31,8 @@ class VCCard extends StatelessWidget {
     const double height = 20;
     if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/drivers_license_logo.png', height: height);
-    } else if (name == "jejupass" || name == "jejuPass") {
-      return Image.asset('assets/images/jejupass_logo.png', height: height);
+    } else if (name == "protoconpass" || name == "protoconPass") {
+      return Image.asset('assets/images/protoconpass_logo.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
     }
@@ -46,9 +46,10 @@ class VCCard extends StatelessWidget {
       return ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: Image.asset('assets/images/drivers_license.png', height: height));
-    } else if (name == "jejupass" || name == "jejuPass") {
+    } else if (name == "protoconpass" || name == "protoconPass") {
       return ClipRRect(
-          borderRadius: BorderRadius.circular(15), child: Image.asset('assets/images/jejupass.png', height: height));
+          borderRadius: BorderRadius.circular(15),
+          child: Image.asset('assets/images/protoconpass.png', height: height));
     } else {
       return ClipRRect(
           borderRadius: BorderRadius.circular(15), child: Image.asset('assets/icons/flutter.png', height: height));
@@ -60,7 +61,7 @@ class VCCard extends StatelessWidget {
     const double height = 50;
     if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/idDeny.png', height: height);
-    } else if (name == "jejupass" || name == "jejuPass") {
+    } else if (name == "protoconpass" || name == "protoconPass") {
       return Image.asset('assets/images/idDeny.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);
@@ -72,7 +73,7 @@ class VCCard extends StatelessWidget {
     const double height = 50;
     if (name == "drivers license" || name == "driverLicense") {
       return Image.asset('assets/images/idReview.png', height: height);
-    } else if (name == "jejupass" || name == "jejuPass") {
+    } else if (name == "protoconpass" || name == "protoconPass") {
       return Image.asset('assets/images/idReview.png', height: height);
     } else {
       return Image.asset('assets/icons/flutter.png', height: height);

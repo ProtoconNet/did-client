@@ -268,16 +268,10 @@ class JsonTypeDIDDocument {
     // var splitToken = token.split('.');
     // var noPayloadToken = splitToken[0] + ".." + splitToken[2];
 
-    log.i(vp["proof"]);
-
     var vp2 = template;
 
     proof["jws"] = token; //noPayloadToken;
-
     vp2["proof"] = [proof];
-
-    log.i(token);
-    // log.i("jws: ${vp['proof']}");
 
     return vp;
   }
@@ -349,16 +343,11 @@ class DIDDocument {
     // var splitToken = token.split('.');
     // var noPayloadToken = splitToken[0] + ".." + splitToken[2];
 
-    log.i(vp["proof"]);
-
     var vp2 = template;
 
     proof["jws"] = token; //noPayloadToken;
 
     vp2["proof"] = [proof];
-
-    log.i(token);
-    // log.i("jws: ${vp['proof']}");
 
     return vp;
   }

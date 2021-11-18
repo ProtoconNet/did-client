@@ -60,7 +60,6 @@ class VPManager {
   loadVP() async {
     log.i("VPManager:readVP");
     final vpList = json.decode((await storage.read(key: did + ":vp"))!);
-    log.i("vcList: $vpList");
     vps.value = [];
 
     for (var vp in vpList) {

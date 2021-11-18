@@ -22,9 +22,6 @@ class VCList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log.i("VCList:build");
-    log.i("height:${Get.height}");
-    log.i("statusBarHeight:${Get.statusBarHeight}");
-    log.i("bottomBarHeight:${Get.bottomBarHeight}");
     return Container(
         alignment: Alignment.center,
         // height: Get.height - Get.statusBarHeight - Get.bottomBarHeight,

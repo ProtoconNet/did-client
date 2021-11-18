@@ -16,7 +16,7 @@ const VPRequestExample = {
       "concealable": true
     },
     {
-      "name": "jejuPass",
+      "name": "protoconPass",
       "restrictions": {"schemaId": "_schemaId", "credDefId": "_credDefId"},
       "concealable": true
     }
@@ -44,12 +44,8 @@ class Verifier {
   Future<String?> presentationProposal(String did) async {
     log.i("Verifier:presentationProposal(did:$did)");
     final locations = await getUrls();
-    log.i('1:${endPoint + locations['getPresentationProposal']}');
-    log.i('did:$did');
 
-    final url = endPoint + locations['getPresentationProposal'] + "?did=$did";
-
-    log.i(url);
+    // final url = endPoint + locations['getPresentationProposal'] + "?did=$did";
 
     var response = await Dio().get(
       endPoint + locations['getPresentationProposal'],
@@ -67,7 +63,7 @@ class Verifier {
     log.i("Verifier:presentationProof(did:$did, token:$token)");
     final locations = await getUrls();
 
-    log.i('{"did": $did, "vp", ${json.encode(vp)}}');
+    // log.i('{"did": $did, "vp", ${json.encode(vp)}}');
 
     var response = await Dio()
         .post(
@@ -81,8 +77,6 @@ class Verifier {
         .catchError((onError) {
       log.e("PresentationProof error:${onError.toString()}");
     });
-    log.i('response.data: ${response.data}');
-    log.i('response.data: ${json.decode(response.data)['VC']}');
 
     return response;
   }
@@ -118,7 +112,6 @@ class Verifier {
 
   Future<Map<String, dynamic>> getUrls() async {
     log.i("Issuer:getUrls");
-    log.i(endPoint);
 
     final response = await Dio().get(endPoint + "/urls").catchError((onError) {
       log.e("getUrls error:${onError.toString()}");
@@ -132,8 +125,6 @@ class Verifier {
 
     final locations = await getUrls();
 
-    log.i(locations);
-
     var response = await Dio()
         .post(endPoint + locations['didAuth'],
             data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
@@ -143,8 +134,8 @@ class Verifier {
 
     final challenge = jsonDecode(response.data);
 
-    log.i('response.headers: ${response.headers}');
-    log.i('headers authorization: ${response.headers['authorization']}');
+    // log.i('response.headers: ${response.headers}');
+    // log.i('headers authorization: ${response.headers['authorization']}');
 
     if (challenge.containsKey('payload')) {
       final payload = challenge['payload'];
@@ -160,9 +151,6 @@ class Verifier {
         log.le("Challenge Failed");
         return "";
       }
-
-      log.i(response2);
-      log.i(response2.data);
     }
     return response.headers['authorization']![0];
   }
