@@ -46,14 +46,6 @@ class DIDList extends StatelessWidget {
                               },
                             ),
                           ),
-                          // PopupMenuItem(
-                          //   child: TextButton(
-                          //     child: const Text('DID Auth'),
-                          //     onPressed: () async {
-                          //       await c.didAuth();
-                          //     },
-                          //   ),
-                          // )
                         ]),
               ),
             ]),

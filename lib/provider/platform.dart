@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' as g;
 
 import 'package:wallet/util/logger.dart';
 import 'package:wallet/util/did_document.dart';
@@ -12,6 +13,8 @@ class Platform {
     log.i("Platform:getDIDDocument(getDIDDocumentUri:$getDIDDocumentUri)");
     log.i(getDIDDocumentUri);
     final response = await Dio().get(getDIDDocumentUri).catchError((onError) {
+      g.Get.snackbar("Connection Error", "platform.getDIDDocument Connection Error");
+      g.Get.snackbar("", "");
       log.e("getDIDDocument error: ${onError.toString()}");
     });
 
@@ -25,6 +28,8 @@ class Platform {
     var response = await Dio()
         .post(setDIDDocumentUri, options: Options(contentType: Headers.jsonContentType), data: document)
         .catchError((onError) {
+      g.Get.snackbar("Connection Error", "platform.setDIDDocument Connection Error");
+      g.Get.snackbar("", "");
       log.e("setDIDDocument error: ${onError.toString()}");
     });
 
@@ -34,6 +39,8 @@ class Platform {
   Future<Response<dynamic>> getSchema(String schemaUri) async {
     log.i("Platform:getSchema(schemaUri:$schemaUri)");
     final response = await Dio().get(schemaUri).catchError((onError) {
+      g.Get.snackbar("Connection Error", "platform.getSchema Connection Error");
+      g.Get.snackbar("", "");
       log.e("getSchema error: ${onError.toString()}");
     });
 

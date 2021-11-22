@@ -33,26 +33,26 @@ class CreateDIDController extends GetxController {
 
   Future<bool> registerDidDocument(String did) async {
     log.i("CreateDIDController:registerDidDocument(did:$did)");
-    try {
-      await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-    } catch (e) {
-      log.i("DID Not Found. Let's Register");
+    // try {
+    //   await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    // } catch (e) {
+    //   log.i("DID Not Found. Let's Register");
 
-      var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
-      log.i("set did document response: $response");
+    var response = await platform.setDIDDocument(dotenv.env['REGISTER_DID_DOCUMENT']!, did);
+    log.i("set did document response: $response");
 
-      var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
-      log.i("response2: $response2");
-      if (response2.data['message'] == "success") {
-        log.i("DID Registration Success");
-        return true;
-      } else {
-        log.i("DID Registration Failed");
-        return false;
-      }
-    } finally {
-      log.i("DID register done");
+    var response2 = await platform.getDIDDocument(dotenv.env['GET_DID_DOCUMENT']! + did);
+    log.i("response2: $response2");
+    if (response2.data['message'] == "success") {
+      log.i("DID Registration Success");
+      return true;
+    } else {
+      log.i("DID Registration Failed");
+      return false;
     }
-    return false;
+    // } finally {
+    //   log.i("DID register done");
+    // }
+    // return false;
   }
 }

@@ -21,17 +21,21 @@ class VPVerifierController extends GetxController {
 
   getVPSchema() async {
     log.i("VPVerifierController:getVPSchema");
-    List<Map<String, dynamic>> vcs = [];
+    // List<Map<String, dynamic>> vcs = [];
 
-    VCListController vcListController = Get.find();
+    // VCListController vcListController = Get.find();
 
     final verifier = Verifier(vpModel.endPoint);
 
-    final a = await verifier.presentationProposal(did); //, privateKey, token);
+    try {
+      final a = await verifier.presentationProposal(did); //, privateKey, token);
 
-    final b = json.decode(a!)['requestAttribute'];
+      final b = json.decode(a!)['requestAttribute'];
 
-    return b;
+      return b;
+    } catch (e) {
+      log.e(e);
+    }
   }
 
   postVP() async {
@@ -41,30 +45,34 @@ class VPVerifierController extends GetxController {
 
     final privateKey = await g.didManager.value.getDIDPK(did, g.password.value);
 
-    final token = await verifier.didAuthentication(did, privateKey);
+    try {
+      final token = await verifier.didAuthentication(did, privateKey);
 
-    final reqStr = await verifier.presentationProposal(did); //, privateKey, token);
+      final reqStr = await verifier.presentationProposal(did); //, privateKey, token);
 
-    final requirement = json.decode(reqStr!)['requestAttribute'];
+      final requirement = json.decode(reqStr!)['requestAttribute'];
 
-    List<Map<String, dynamic>> vcs = [];
+      List<Map<String, dynamic>> vcs = [];
 
-    for (var vcItem in requirement) {
-      log.i("vcItem['name']: ${vcItem['name']}");
-      var vc = vcListController.vcManager.getVC(vcItem['name']);
-      if (vc != null) {
-        vcs.add(vc.toJson()['vc']);
+      for (var vcItem in requirement) {
+        log.i("vcItem['name']: ${vcItem['name']}");
+        var vc = vcListController.vcManager.getVC(vcItem['name']);
+        if (vc != null) {
+          vcs.add(vc.toJson()['vc']);
+        }
       }
+
+      final didDocument = DIDDocument();
+
+      final pk = await g.didManager.value.getDIDPK(did, g.password.value);
+
+      var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
+
+      var response = await verifier.presentationProof(did, vp, token);
+
+      return response;
+    } catch (e) {
+      log.e(e);
     }
-
-    final didDocument = DIDDocument();
-
-    final pk = await g.didManager.value.getDIDPK(did, g.password.value);
-
-    var vp = await didDocument.createVP(did, did, did, vcs, [...Base58Decode(pk), ...Base58Decode(did.substring(8))]);
-
-    var response = await verifier.presentationProof(did, vp, token);
-
-    return response;
   }
 }

@@ -26,14 +26,18 @@ class VPController extends GetxController {
     log.i("VPController:getSchema(schema:$schema)");
     final issuer = Issuer(schema);
     final platform = Platform();
-    var locations = await issuer.getUrls();
+    try {
+      var locations = await issuer.getUrls();
 
-    var response = await platform.getSchema(locations['schema']);
-    if (response.data.containsKey('error')) {
-      return null;
+      var response = await platform.getSchema(locations['schema']);
+      if (response.data.containsKey('error')) {
+        return null;
+      }
+
+      schemaList.value = json.decode(response.data);
+    } catch (e) {
+      log.e(e);
     }
-
-    schemaList.value = json.decode(response.data);
 
     return true;
   }
@@ -57,20 +61,24 @@ class VPController extends GetxController {
 
     // final token = await verifier.didAuthentication(did, privateKey);
 
-    final test = await verifier.presentationProposal(did); //, privateKey, token);
+    try {
+      final res = await verifier.presentationProposal(did); //, privateKey, token);
 
-    final requestAttribute = json.decode(test!)['requestAttribute'];
+      final requestAttribute = json.decode(res!)['requestAttribute'];
 
-    for (var reqAttr in requestAttribute) {
-      for (var vc in vcListController.vcManager.vcs) {
-        if (reqAttr['name'] == vc.name) {
-          matchingCnt++;
+      for (var reqAttr in requestAttribute) {
+        for (var vc in vcListController.vcManager.vcs) {
+          if (reqAttr['name'] == vc.name) {
+            matchingCnt++;
+          }
         }
       }
-    }
 
-    if (matchingCnt == requestAttribute.length) {
-      vpMatching = true;
+      if (matchingCnt == requestAttribute.length) {
+        vpMatching = true;
+      }
+    } catch (e) {
+      log.e(e);
     }
 
     return vpMatching;

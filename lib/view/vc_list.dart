@@ -43,10 +43,11 @@ class VCList extends StatelessWidget {
 
                       return Obx(() => Column(
                               children: c.vcManager.vcs.map((vc) {
+                            var name = vc.name == "driverLicense" ? "Driver's license" : "Protocon pass";
                             return VC(
                                 did: did,
                                 icon: vc.icon,
-                                name: vc.name,
+                                name: name,
                                 description: vc.description,
                                 type: vc.type,
                                 urls: vc.urls,

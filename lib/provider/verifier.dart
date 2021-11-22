@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart' as g;
 
 import 'package:dio/dio.dart';
 // import 'package:http/http.dart' as http;
@@ -52,6 +53,8 @@ class Verifier {
       queryParameters: {"did": did},
       // options: Options(headers: {"Authorization": 'Bearer ' + token}),
     ).catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.presentationProposal Connection Error");
+      g.Get.snackbar("", "");
       log.e("PresentationProposal error:${onError.toString()}");
     });
     log.i('response.data: ${response.data}');
@@ -75,6 +78,8 @@ class Verifier {
       ),
     )
         .catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.presentationProof Connection Error");
+      g.Get.snackbar("", "");
       log.e("PresentationProof error:${onError.toString()}");
     });
 
@@ -91,6 +96,8 @@ class Verifier {
       options: Options(headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.ackMessage Connection Error");
+      g.Get.snackbar("", "");
       log.e("CredentialProposal error:${onError.toString()}");
     });
   }
@@ -104,6 +111,8 @@ class Verifier {
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.responseChallenge Connection Error");
+      g.Get.snackbar("", "");
       log.e("responseChallenge error:${onError.toString()}");
     });
 
@@ -114,6 +123,8 @@ class Verifier {
     log.i("Issuer:getUrls");
 
     final response = await Dio().get(endPoint + "/urls").catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.getUrls Connection Error");
+      g.Get.snackbar("", "");
       log.e("getUrls error:${onError.toString()}");
     });
 
@@ -129,6 +140,8 @@ class Verifier {
         .post(endPoint + locations['didAuth'],
             data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
         .catchError((onError) {
+      g.Get.snackbar("Connection Error", "verifier.didAuthentication Connection Error");
+      g.Get.snackbar("", "");
       log.e("did Auth error:${onError.toString()}");
     });
 

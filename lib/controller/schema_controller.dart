@@ -183,35 +183,39 @@ class SchemaController extends GetxController {
 
     final issuer = Issuer(urls);
 
-    final token = await issuer.didAuthentication(did, pk);
+    try {
+      final token = await issuer.didAuthentication(did, pk);
 
-    VCListController c = Get.find();
-    await c.vcManager.setByName(name, 'jwt', token);
+      VCListController c = Get.find();
+      await c.vcManager.setByName(name, 'jwt', token);
 
-    var response = await issuer.credentialProposal(did, schemaID, credentialDefinitionID, pk, token);
+      var response = await issuer.credentialProposal(did, schemaID, credentialDefinitionID, pk, token);
 
-    // log.i("postVC Response: $response");
+      // log.i("postVC Response: $response");
 
-    if (response != null) {
-      await c.vcManager.setByName(name, 'jwt', response);
-      // await c.vcManager.setByName(name, 'VC', json.encode(response2));
-      // await c.vcManager.value.setByName(name, 'jwt', response);
-      // c.vcManager.update((t) {});
-    } else {
-      await Get.dialog(AlertDialog(
-          content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const Text('VC Proposal Failed'),
-          const SizedBox(
-            width: 5,
-          ),
-          ElevatedButton(
-            child: const Text('OK'),
-            onPressed: () => Get.back(),
-          ),
-        ],
-      )));
+      if (response != null) {
+        await c.vcManager.setByName(name, 'jwt', response);
+        // await c.vcManager.setByName(name, 'VC', json.encode(response2));
+        // await c.vcManager.value.setByName(name, 'jwt', response);
+        // c.vcManager.update((t) {});
+      } else {
+        await Get.dialog(AlertDialog(
+            content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text('VC Proposal Failed'),
+            const SizedBox(
+              width: 5,
+            ),
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () => Get.back(),
+            ),
+          ],
+        )));
+      }
+    } catch (e) {
+      log.e(e);
     }
   }
 }

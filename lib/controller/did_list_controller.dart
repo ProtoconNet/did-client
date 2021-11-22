@@ -5,12 +5,10 @@ import 'package:wallet/util/secure_storage.dart';
 
 import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/util/logger.dart';
-import 'package:wallet/provider/issuer.dart';
 
 class DIDListController extends GetxController {
   final GlobalVariable g = Get.find();
   final log = Log();
-  final issuer = Issuer("http://mtm.securekim.com:3333");
 
   final storage = FlutterSecureStorage();
 
@@ -28,12 +26,6 @@ class DIDListController extends GetxController {
     if (appDir.existsSync()) {
       appDir.deleteSync(recursive: true);
     }
-  }
-
-  didAuth() async {
-    final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
-
-    await issuer.didAuthentication(g.did.value, pk);
   }
 
   eraseAll() async {

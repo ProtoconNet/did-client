@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:get/get.dart' as g;
+import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
@@ -27,6 +29,8 @@ class Issuer {
       options: Options(headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("connection error", "issuer.credentialProposal connection error");
+      g.Get.snackbar("", "");
       log.e("CredentialProposal error:${onError.toString()}");
     });
     log.i('response.data: ${response.data}');
@@ -45,6 +49,8 @@ class Issuer {
       options: Options(headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("connection error", "issuer.credentialRequest connection error");
+      g.Get.snackbar("", "");
       log.e("CredentialProposal error:${onError.toString()}");
     });
     // log.i('response.data: ${response.data}');
@@ -63,6 +69,8 @@ class Issuer {
       options: Options(headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("connection error", "issuer.ackMessage connection error");
+      g.Get.snackbar("", "");
       log.e("CredentialProposal error:${onError.toString()}");
     });
   }
@@ -76,6 +84,8 @@ class Issuer {
       options: Options(contentType: Headers.jsonContentType, headers: {"Authorization": 'Bearer ' + token}),
     )
         .catchError((onError) {
+      g.Get.snackbar("connection error", "issuer.responseChallenge connection error");
+      g.Get.snackbar("", "");
       log.e("responseChallenge error:${onError.toString()}");
     });
 
@@ -86,6 +96,8 @@ class Issuer {
     log.i("Issuer:getUrls");
 
     final response = await Dio().get(endPoint + "/urls").catchError((onError) {
+      g.Get.snackbar("Connection Error", "issuer.getUrls Connection Error");
+      g.Get.snackbar("", "");
       log.e("getUrls error:${onError.toString()}");
     });
 
@@ -101,6 +113,8 @@ class Issuer {
         .post(endPoint + locations['didAuth'],
             data: '{"did":"$did"}', options: Options(contentType: Headers.jsonContentType))
         .catchError((onError) {
+      g.Get.snackbar("connection error", "issuer.didAuthentication connection error");
+      g.Get.snackbar("", "");
       log.e("did Auth error:${onError.toString()}");
     });
 
