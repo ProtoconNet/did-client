@@ -15,6 +15,7 @@ class VC extends StatelessWidget {
       required this.did,
       required this.icon,
       required this.name,
+      required this.display,
       required this.description,
       required this.type,
       required this.urls,
@@ -28,6 +29,7 @@ class VC extends StatelessWidget {
   final String did;
   final int icon;
   final String name;
+  final String display;
   final String description;
   final String type;
   final String urls;
@@ -55,6 +57,7 @@ class VC extends StatelessWidget {
               await Get.to(Schema(
                 did: did,
                 name: name,
+                display: display,
                 urls: urls,
                 schemaID: schemaID,
                 credentialDefinitionID: credentialDefinitionID,
@@ -69,6 +72,7 @@ class VC extends StatelessWidget {
             },
             child: VCCard(
                 name: name,
+                display: display,
                 description: description,
                 type: type,
                 icon: IconData(icon, fontFamily: 'MaterialIcons'),
@@ -82,6 +86,7 @@ class VC extends StatelessWidget {
               await Get.to(Schema(
                 did: did,
                 name: name,
+                display: display,
                 urls: urls,
                 schemaID: schemaID,
                 credentialDefinitionID: credentialDefinitionID,
@@ -96,6 +101,7 @@ class VC extends StatelessWidget {
             },
             child: VCCard(
                 name: name,
+                display: display,
                 description: description,
                 type: type,
                 icon: IconData(icon, fontFamily: 'MaterialIcons'),
@@ -104,6 +110,7 @@ class VC extends StatelessWidget {
         log.i('wait VC');
         return VCCard(
             name: name,
+            display: display,
             description: description,
             type: type,
             icon: IconData(icon, fontFamily: 'MaterialIcons'),
@@ -120,6 +127,7 @@ class VC extends StatelessWidget {
         },
         child: VCCard(
             name: name,
+            display: display,
             description: description,
             type: type,
             icon: IconData(icon, fontFamily: 'MaterialIcons'),

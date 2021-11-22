@@ -48,6 +48,7 @@ class VCList extends StatelessWidget {
                                 did: did,
                                 icon: vc.icon,
                                 name: vc.name,
+                                display: vc.display,
                                 description: vc.description,
                                 type: vc.type,
                                 urls: vc.urls,

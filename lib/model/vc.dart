@@ -1,5 +1,6 @@
 class VCModel {
   String name;
+  String display;
   String description;
   String type;
   int icon;
@@ -10,13 +11,15 @@ class VCModel {
   String jwt;
   Map<String, dynamic> vc;
 
-  VCModel(this.name, this.description, this.type, this.icon, this.urls, this.schemaID, this.credentialDefinitionID,
-      this.schema, this.jwt, this.vc);
+  VCModel(this.name, this.display, this.description, this.type, this.icon, this.urls, this.schemaID,
+      this.credentialDefinitionID, this.schema, this.jwt, this.vc);
 
   getField(field) {
     switch (field) {
       case 'name':
         return name;
+      case 'display':
+        return display;
       case 'description':
         return description;
       case 'type':
@@ -42,6 +45,9 @@ class VCModel {
     switch (field) {
       case 'name':
         name = value;
+        break;
+      case 'display':
+        display = value;
         break;
       case 'description':
         description = value;
@@ -75,6 +81,7 @@ class VCModel {
 
   VCModel.fromJson(Map<String, dynamic> json)
       : name = json['name'],
+        display = json['display'],
         description = json['description'],
         type = json['type'],
         icon = json['icon'],
@@ -87,6 +94,7 @@ class VCModel {
 
   Map<String, dynamic> toJson() => {
         'name': name,
+        'display': display,
         'description': description,
         'type': type,
         'icon': icon,

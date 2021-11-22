@@ -12,13 +12,13 @@ class DIDListController extends GetxController {
 
   final storage = FlutterSecureStorage();
 
-  _deleteCacheDir() async {
-    final cacheDir = await getTemporaryDirectory();
+  // _deleteCacheDir() async {
+  //   final cacheDir = await getTemporaryDirectory();
 
-    if (cacheDir.existsSync()) {
-      cacheDir.deleteSync(recursive: true);
-    }
-  }
+  //   if (cacheDir.existsSync()) {
+  //     cacheDir.deleteSync(recursive: true);
+  //   }
+  // }
 
   _deleteAppDir() async {
     final appDir = await getApplicationSupportDirectory();
@@ -46,6 +46,6 @@ class DIDListController extends GetxController {
     g.didManager.value.dids = {};
 
     await _deleteAppDir();
-    await _deleteCacheDir();
+    // await _deleteCacheDir();
   }
 }

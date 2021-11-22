@@ -15,6 +15,7 @@ class Schema extends StatelessWidget {
       {key,
       required this.did,
       required this.name,
+      required this.display,
       required this.urls,
       required this.schemaID,
       required this.credentialDefinitionID,
@@ -30,6 +31,7 @@ class Schema extends StatelessWidget {
 
   final String did;
   final String name;
+  final String display;
   final String urls;
   final String schemaID;
   final String credentialDefinitionID;
@@ -183,7 +185,7 @@ class Schema extends StatelessWidget {
     return Background(
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(0xff, 61, 61, 61),
-            title: Text(name,
+            title: Text(display,
                 style: GoogleFonts.roboto(textStyle: Get.theme.textTheme.headline6?.copyWith(color: Colors.white)))),
         children: [
           Container(

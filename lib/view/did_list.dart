@@ -38,7 +38,7 @@ class DIDList extends StatelessWidget {
                     itemBuilder: (context) => [
                           PopupMenuItem(
                             child: TextButton(
-                              child: const Text('Erase DID'),
+                              child: const Text('Erase All Data'),
                               onPressed: () async {
                                 await c.eraseAll();
 

@@ -9,6 +9,7 @@ class VCCard extends StatelessWidget {
   VCCard(
       {key,
       required this.name,
+      required this.display,
       required this.description,
       required this.type,
       required this.icon,
@@ -16,6 +17,7 @@ class VCCard extends StatelessWidget {
       : super(key: key);
 
   final String name;
+  final String display;
   final String description;
   final String type;
   final IconData icon;
@@ -26,7 +28,7 @@ class VCCard extends StatelessWidget {
   final GlobalVariable g = Get.find();
   final log = Log();
 
-  Widget _getLogoByName(String name) {
+  Widget _getLogoByName() {
     log.i("VCCard:getLogoByName");
     const double height = 20;
     if (name == "drivers license" || name == "driverLicense" || name == "Driver's license") {
@@ -38,7 +40,7 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget _getCardByName(String name) {
+  Widget _getCardByName() {
     log.i("VCCard:getCardByName");
     const double height = 200;
 
@@ -56,7 +58,7 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget _getDeniedImageByName(String name) {
+  Widget _getDeniedImageByName() {
     log.i("VCCard:getWaitImageByName");
     const double height = 50;
     if (name == "drivers license" || name == "driverLicense" || name == "Driver's license") {
@@ -68,7 +70,7 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget _getWaitImageByName(String name) {
+  Widget _getWaitImageByName() {
     log.i("VCCard:getWaitImageByName");
     const double height = 50;
     if (name == "drivers license" || name == "driverLicense" || name == "Driver's license") {
@@ -80,31 +82,31 @@ class VCCard extends StatelessWidget {
     }
   }
 
-  Widget _contentByStatus(String name, String status) {
+  Widget _contentByStatus(String status) {
     log.i("VCCard:contentByStatus");
     if (status == "noVC") {
       return Padding(
           padding: const EdgeInsets.all(20),
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName()]),
             Text(description, style: Get.textTheme.bodyText1),
-            Text(name + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
+            Text(display + ' 추가하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
           ]));
     } else if (status == "VC") {
-      return _getCardByName(name);
+      return _getCardByName();
     } else if (status == "denied") {
       return Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
-        _getDeniedImageByName(name),
-        Text('$name 발급이 거절 되었습니다.'),
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName()]),
+        _getDeniedImageByName(),
+        Text('$display 발급이 거절 되었습니다.'),
         Text('재신청하기', style: Get.textTheme.button!.copyWith(color: Get.theme.primaryColor)),
       ]);
     } else {
       // wait
       return Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName(name)]),
-        _getWaitImageByName(name),
-        Text('담당자 확인 후 $name 이(가) 발급됩니다.')
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [_getLogoByName()]),
+        _getWaitImageByName(),
+        Text('담당자 확인 후 $display 이(가) 발급됩니다.')
       ]);
     }
   }
@@ -139,7 +141,7 @@ class VCCard extends StatelessWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomRight,
                             colors: [Colors.white, Colors.grey.shade200])),
-                    child: _contentByStatus(name, status)),
+                    child: _contentByStatus(status)),
               ),
               Opacity(
                   opacity: 1.0,
