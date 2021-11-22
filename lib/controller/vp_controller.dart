@@ -68,7 +68,8 @@ class VPController extends GetxController {
 
       for (var reqAttr in requestAttribute) {
         for (var vc in vcListController.vcManager.vcs) {
-          if (reqAttr['name'] == vc.name) {
+          log.i("${reqAttr['name']}, ${vc.name}, ${vc.vc}");
+          if (reqAttr['name'] == vc.name && vc.vc.containsKey('id')) {
             matchingCnt++;
           }
         }
