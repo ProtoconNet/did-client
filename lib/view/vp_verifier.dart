@@ -150,7 +150,7 @@ class VPVerifier extends StatelessWidget {
                                   title: "인증 완료",
                                   content: const Text("인증이 성공적으로 완료 되었습니다."),
                                   confirm: ElevatedButton(
-                                    child: const Text('ok'),
+                                    child: const Text('OK', style: TextStyle(color: Colors.white)),
                                     onPressed: () {
                                       Get.back();
                                     },
@@ -160,7 +160,7 @@ class VPVerifier extends StatelessWidget {
                                   title: "VP 인증 실패",
                                   content: const Text("인증이 실패 하였습니다."),
                                   confirm: ElevatedButton(
-                                    child: const Text('ok'),
+                                    child: const Text('OK', style: TextStyle(color: Colors.white)),
                                     onPressed: () {
                                       Get.back();
                                     },

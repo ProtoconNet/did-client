@@ -44,7 +44,7 @@ class VP extends StatelessWidget {
     log.i(vcListController.vpManager.vps);
     return Background(
         appBar: AppBar(
-          title: Text(name),
+          title: Text(name, style: Get.textTheme.headline5!.copyWith(fontWeight: FontWeight.w600, color: Colors.white)),
         ),
         children: [
           Container(
@@ -78,13 +78,14 @@ class VP extends StatelessWidget {
                     future: c.vpActiveCheck(name, vp, vcListController.vcManager.vcs),
                     builder: (context, snapshot) {
                       final active = snapshot.data;
-                      // if (active == null) {
-                      //   return const SizedBox();
-                      // } else
-                      if (active as bool) {
-                        return VPVerifier(did: did, vp: vp, enable: true);
+                      if (active == null) {
+                        return const SizedBox();
                       } else {
-                        return VPVerifier(did: did, vp: vp, enable: false);
+                        if (active as bool) {
+                          return VPVerifier(did: did, vp: vp, enable: true);
+                        } else {
+                          return VPVerifier(did: did, vp: vp, enable: false);
+                        }
                       }
                     });
               }).toList()))),

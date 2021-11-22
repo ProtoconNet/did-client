@@ -78,7 +78,7 @@ class Login extends StatelessWidget {
                     onPressed: () async {
                       await c.passwordLogin(_pass.text);
                     },
-                    child: Text('enter'.tr)))),
+                    child: Text('enter'.tr, style: Get.textTheme.button!.copyWith(color: Colors.white))))),
         FutureBuilder(
           future: c.canBiometricAuth(),
           builder: (context, snapshot) {

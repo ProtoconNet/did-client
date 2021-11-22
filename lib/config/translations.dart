@@ -61,7 +61,7 @@ class Messages extends Translations {
           'confirmPasswordMsg': '확인 비밀번호를 입력하세요',
           'confirmPasswordHintMsg': '확인 비밀번호',
           'confirmPasswordLabelMsg': '확인',
-          'submit': '제출',
+          'submit': '확인',
           'account': 'DID가 생성되었습니다.',
           'goToHome': '시작',
           'login': '로그인',

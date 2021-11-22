@@ -136,7 +136,7 @@ class ReceivePassword extends StatelessWidget {
                           child: ElevatedButton(
                             child: c.status.value
                                 ? Text('submit'.tr, style: Get.textTheme.button!.copyWith(color: Colors.white))
-                                : const Text('check password'),
+                                : Text('submit'.tr),
                             onPressed: c.status.value
                                 ? () async {
                                     Get.to(CreateDID(password: confirmPass.text));
