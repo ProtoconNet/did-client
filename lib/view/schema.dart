@@ -182,6 +182,11 @@ class Schema extends StatelessWidget {
   Widget build(BuildContext context) {
     log.i('Schema:build');
     init(schema);
+
+    // if (c.schemaList.isEmpty) {
+    //   c.submit(schema, name, []);
+    //   Get.back();
+    // }
     return Background(
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(0xff, 61, 61, 61),
