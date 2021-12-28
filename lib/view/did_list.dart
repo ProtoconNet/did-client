@@ -10,6 +10,8 @@ import 'package:wallet/view/vc_list.dart';
 import 'package:wallet/view/create_wallet.dart';
 import 'package:wallet/util/logger.dart';
 
+import 'package:wallet/view/step.dart';
+
 class DIDList extends StatelessWidget {
   DIDList({Key? key}) : super(key: key);
   final GlobalVariable g = Get.find();

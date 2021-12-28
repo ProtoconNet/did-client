@@ -7,6 +7,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:wallet/provider/global_variable.dart';
 
 import 'package:wallet/widget/background.dart';
+import 'package:wallet/view/step.dart';
 import 'package:wallet/controller/schema_controller.dart';
 import 'package:wallet/util/logger.dart';
 
@@ -165,6 +166,7 @@ class Schema extends StatelessWidget {
               child: Text('Submit', style: Get.textTheme.button!.copyWith(color: Colors.white)),
               onPressed: () async {
                 await c.submit(schema, name, schemaList);
+                await Get.to(MyStep(did: did, name: display));
                 Get.back();
               }))
     ];

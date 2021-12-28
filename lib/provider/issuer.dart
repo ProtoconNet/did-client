@@ -96,10 +96,13 @@ class Issuer {
     log.i("Issuer:getUrls");
 
     final response = await Dio().get(endPoint + "/urls").catchError((onError) {
+      log.i("response");
       g.Get.snackbar("Connection Error", "issuer.getUrls Connection Error");
       g.Get.snackbar("", "");
       log.e("getUrls error:${onError.toString()}");
     });
+
+    log.i(response);
 
     return json.decode(response.data);
   }
