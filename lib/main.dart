@@ -3,13 +3,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
+// import 'package:camera/camera.dart';
 
 import 'package:wallet/config/translations.dart';
-import 'package:wallet/providers/global_variable.dart';
+import 'package:wallet/provider/global_variable.dart';
 import 'package:wallet/config/theme.dart';
-import 'package:wallet/routes/wallet_route.dart';
+import 'package:wallet/wallet_route.dart';
+import 'package:wallet/util/logger.dart';
+
+// List<CameraDescription> cameras = [];
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // cameras = await availableCameras();
   await initService();
   runApp(WigglerWallet());
 }
@@ -23,30 +29,37 @@ initService() async {
   } else {
     await dotenv.load(fileName: "default.env");
   }
-  Logger.level = Level.warning;
+  Logger.level = Level.info;
 
   await GetStorage.init();
 
-  Get.put(GlobalVariable(), permanent: true);
+  var g = Get.put(GlobalVariable(), permanent: true);
+  await g.init();
 }
 
 class WigglerWallet extends StatelessWidget {
+  WigglerWallet({Key? key}) : super(key: key);
+
+  final log = Log();
+
   @override
   Widget build(BuildContext context) {
+    log.i("WigglerWallet:build");
     return GetMaterialApp(
       title: 'Wiggler Wallet',
       theme: theme,
-      darkTheme: darkTheme,
+      darkTheme: theme, // darkTheme,
       themeMode: GlobalVariable().themeMode(GlobalVariable().theme),
       translations: Messages(),
       locale: GlobalVariable().languageMode(GlobalVariable().language),
-      fallbackLocale: Locale('en', 'US'),
-      initialRoute: '/',
-      getPages: [GetPage(name: '/', page: () => WalletRoute())],
+      fallbackLocale: const Locale('en', 'US'),
+      home: WalletRoute(),
+      // initialRoute: '/',
+      // getPages: [GetPage(name: '/', page: () => WalletRoute())],
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (BuildContext context) => Scaffold(body: Center(child: Text('Not Found'))),
+          builder: (BuildContext context) => const Scaffold(body: Center(child: Text('Not Found'))),
         );
       },
     );

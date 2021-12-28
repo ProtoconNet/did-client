@@ -1,65 +1,146 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:local_auth/local_auth.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:fast_base58/fast_base58.dart';
-
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+// import 'package:wallet/util/biometric_storage.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
+import 'package:wallet/view/did_list.dart';
 
 class LoginController extends GetxController {
-  final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
 
-  login(password) async {
+  var onError = false.obs;
+
+  @override
+  onInit() async {
+    super.onInit();
+    // _checkAuthenticate();
+    // log.i("biometric: ${g.biometric.value}");
+    if (g.biometric.value) {
+      try {
+        await biometricLogin();
+      } catch (e) {
+        log.e(e);
+      }
+    }
+  }
+
+  Future<bool> canBiometricAuth() async {
+    final response = await BiometricStorage().canAuthenticate();
+    log.i('checked if authentication was possible: $response');
+    final supportsAuthenticated =
+        response == CanAuthenticateResponse.success || response == CanAuthenticateResponse.statusUnknown;
+    return supportsAuthenticated;
+  }
+
+  biometricLogin() async {
+    log.i("LoginController:biometricLogin");
     try {
-      final passwordBytes = utf8.encode(password);
-      // Generate a random secret key.
-      final sink = Sha256().newHashSink();
-      sink.add(passwordBytes);
-      sink.close();
-      final passwordHash = await sink.hash();
+      final authenticate = await canBiometricAuth();
+      if (authenticate) {
+        BiometricStorageFile authStorage =
+            await BiometricStorage().getStorage('login', options: StorageFileInitOptions());
+        // var customPrompt = await BiometricStorage().getStorage('login',
+        //     options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30),
+        //     promptInfo: const PromptInfo(
+        //       androidPromptInfo: AndroidPromptInfo(
+        //         title: 'Custom title',
+        //         subtitle: 'Custom subtitle',
+        //         description: 'Custom description',
+        //         negativeButton: 'Nope!',
+        //       ),
+        //     ));
 
-      final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
-      final encrypter = encrypt.Encrypter(encrypt.AES(key));
+        // log.i('onInit try to read biometric storage');
+        // // var authStorage = BiometricStorage('login');
+        // var authStorage = await BiometricStorage().getStorage('login',
+        //     options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30, authenticationRequired: true),
+        //     promptInfo: const PromptInfo(
+        //       androidPromptInfo: AndroidPromptInfo(
+        //         title: 'Custom title',
+        //         subtitle: 'Custom subtitle',
+        //         description: 'Custom description',
+        //         negativeButton: 'Nope!',
+        //       ),
+        //     ));
+        log.i('onInit try to read biometric storage 2');
+        // log.i('${_noConfirmation.name} ');
+        // final password = await _noConfirmation.read();
 
-      final didListStr = await storage.read(key: 'DIDList') as String;
-      log.i("didListStr: $didListStr");
-      final didList = json.decode(didListStr);
-      log.i("did first: $didList, ${didList.runtimeType}");
-      final privateKey = didList.values.toList()[0];
-      final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
+        String? password = await authStorage.read();
 
-      final iv = encrypt.IV.fromLength(16);
-      final decrypted = encrypter.decrypt(encrypted, iv: iv);
+        final did = g.didManager.value.getFirstDID();
+        final pk = await g.didManager.value.getDIDPK(did, password!);
 
-      final clearText = Base58Decode(decrypted);
+        if (pk == "") throw Error();
 
-      final algorithm = Ed25519();
-      final keyPair = await algorithm.newKeyPairFromSeed(clearText);
-      final pubKey = await keyPair.extractPublicKey();
-      final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
-      g.inputPassword(password);
-      g.inputDID(did);
-      Get.offAllNamed('/');
+        g.password.value = password;
+        g.did.value = did;
+        Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
+      }
     } catch (e) {
       log.e(e);
-      // log.i("${password} is not correct password");
-      await Get.defaultDialog(
-          title: "incorrectPassword".tr,
-          content: Text('incorrectPassword'.tr),
-          confirm: ElevatedButton(
-            child: Text('ok'.tr),
-            style: Get.theme.textButtonTheme.style,
-            onPressed: () {
-              Get.back();
-            },
-          ));
+      onError.value = true;
+      // await Get.defaultDialog(
+      //     title: "incorrectPasswordTitle".tr,
+      //     content: Text('incorrectPasswordContent'.tr),
+      //     confirm: ElevatedButton(
+      //       child: Text('ok'.tr),
+      //       style: Get.theme.textButtonTheme.style,
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //     ));
+    }
+  }
+
+  passwordLogin(String password) async {
+    log.i("LoginController:passwordLogin(password:$password)");
+    try {
+      final did = g.didManager.value.getFirstDID();
+      final pk = await g.didManager.value.getDIDPK(did, password);
+
+      if (pk == "") throw Error();
+
+      g.password.value = password;
+      g.did.value = did;
+
+      if (g.biometric.value) {
+        // var authStorage = BiometricStorage('login');
+        var authStorage = await BiometricStorage().getStorage(
+          'login',
+          options: StorageFileInitOptions(authenticationValidityDurationSeconds: 30, authenticationRequired: true),
+          // promptInfo: const PromptInfo(
+          //   androidPromptInfo: AndroidPromptInfo(
+          //     title: 'Custom title',
+          //     subtitle: 'Custom subtitle',
+          //     description: 'Custom description',
+          //     negativeButton: 'Nope!',
+          //   ),
+          //)
+        );
+        authStorage.write(password);
+      }
+
+      Get.offAll(DIDList(), transition: Transition.fadeIn, duration: const Duration(milliseconds: 1000));
+    } catch (e) {
+      log.e(e);
+      onError.value = true;
+      log.i("$password is not correct password");
+      // await Get.defaultDialog(
+      //     title: "incorrectPasswordTitle".tr,
+      //     content: Text('incorrectPasswordContent'.tr),
+      //     confirm: ElevatedButton(
+      //       child: Text('ok'.tr),
+      //       style: Get.theme.textButtonTheme.style,
+      //       onPressed: () {
+      //         Get.back();
+      //       },
+      //     ));
     }
   }
 }

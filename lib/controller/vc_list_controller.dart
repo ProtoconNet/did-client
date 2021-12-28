@@ -1,56 +1,59 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/model/vc_manager.dart';
+import 'package:wallet/model/vp_manager.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class VCListController extends GetxController {
-  final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  VCListController(this.did)
+      : vcManager = VCManager(did),
+        vpManager = VPManager(did);
+
+  final String did;
+  VCManager vcManager;
+  VPManager vpManager;
+
+  final GlobalVariable g = Get.find();
   final log = Log();
-  final issuer = Issuer();
 
-  getVCList(did) async {
-    log.i("getVCList");
-    if (!(await storage.containsKey(key: did))) {
-      final staticVCList = json.decode(dotenv.env['STATIC_VC_LIST'] as String);
-      log.i('staticVCList', staticVCList);
-      await storage.write(key: did, value: json.encode(staticVCList));
-    }
+  @override
+  onInit() async {
+    super.onInit();
 
-    log.i("vc list: ${await storage.read(key: did) as String}");
+    await vcManager.init();
+    await vpManager.init();
+  }
 
-    var vcList = json.decode(await storage.read(key: did) as String);
+  setVCList(String did) async {
+    log.i("VCListController:setVCList(did:$did)");
 
-    List<Map<String, dynamic>> retVCList = [];
-    for (var vc in vcList) {
-      if (vc['VC'].isEmpty && vc['JWT'] != "") {
-        log.i("getVC from issuer");
-        // log.i(vc['VC']);
-        // log.i(vc['JWT']);
-        var response = await issuer.getVC(Uri.parse(vc['getVC']), vc['JWT']);
+    for (var vc in vcManager.vcs) {
+      // log.i("vc:${vc.name}:${vc.vc}:${vc.jwt}");
+      if (vc.vc.isEmpty && vc.jwt != "") {
+        // log.i("getVC from issuer");
 
-        if (json.decode(response.body).containsKey('error')) {
-          // return;
-          break;
+        final issuer = Issuer(vc.urls);
+        try {
+          var response = await issuer.credentialRequest(did, vc.schemaID, vc.credentialDefinitionID, vc.jwt);
+
+          // catchup denied
+          if (json.decode(response.data).containsKey('error')) {
+            await vcManager.setByName(vc.name, 'jwt', "denied");
+          } else {
+            var data = json.decode(response.data)['VC'];
+
+            await vcManager.setByName(vc.name, 'vc', data);
+            issuer.ackMessage(vc.jwt);
+            await vcManager.setByName(vc.name, 'jwt', "");
+          }
+        } catch (e) {
+          log.e(e);
         }
-
-        // log.i(response.body);
-        var data = json.decode(response.body)['VC'];
-        // log.i(data);
-        // if (data.containedKey("VC")) {
-        vc['VC'] = data;
-        await DIDManager(did: did).setVCFieldByName(vc['name'], 'VC', data);
-        await DIDManager(did: did).setVCFieldByName(vc['name'], 'JWT', "");
-        //}
       }
-      retVCList.add(vc);
     }
-    log.i(retVCList.runtimeType);
-    return retVCList;
   }
 }
