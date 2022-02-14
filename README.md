@@ -24,7 +24,7 @@ REGISTER_DID_DOCUMENT="http://49.50.164.195:8080/v1/DIDDocument"
 ##### Issuer config
 ```
 // root의 default.env 수정
-STATIC_VC_LIST=[{"name": "Driver's License", "icon": 57815, "schemaRequest": "http://mtm.securekim.com:3333/VCScheme?scheme=driverLicense", "requestVC":"", "getVC":"", "JWT": "", "VC": {}},{"name": "Protocon Pass", "icon": 59004, "schemaRequest": "http://mtm.securekim.com:3333/VCScheme?scheme=JejuPass", "requestVC":"", "getVC":"", "JWT": "", "VC": {}}]
+STATIC_VC_LIST=[{"name": "Driver's License", "icon": 57815, "schemaRequest": "http://mtm.securekim.com:3333/VCScheme?scheme=driverLicense", "requestVC":"", "getVC":"", "JWT": "", "VC": {}},{"name": "Protocon Pass", "icon": 59004, "schemaRequest": "http://mtm.securekim.com:3333/VCScheme?scheme=ProtoconPass", "requestVC":"", "getVC":"", "JWT": "", "VC": {}}]
 ```
 
 A few resources to get you started if this is your first Flutter project:
