@@ -1,1 +1,5 @@
-include: package:lints/recommended.yaml
+include: package:flutter_lints/flutter.yaml
+# linter:
+#   rules:
+#     - test_types_in_equals
+#     - always_use_package_imports

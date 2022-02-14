@@ -1,34 +1,40 @@
 import 'dart:io';
 import 'dart:convert';
+// import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:fast_base58/fast_base58.dart';
+import 'package:image/image.dart' as img;
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/platform.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/providers/secure_storage.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/issuer.dart';
+import 'package:wallet/provider/platform.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
+import 'package:wallet/controller/vc_list_controller.dart';
 
 class SchemaController extends GetxController {
-  SchemaController({required this.did, required this.name, required this.requestSchema});
+  SchemaController(
+      {required this.did,
+      required this.name,
+      required this.urls,
+      required this.schemaID,
+      required this.credentialDefinitionID,
+      required this.schema});
+//      : issuer = Issuer(requestSchema);
 
   final String did;
   final String name;
-  final String requestSchema;
+  final String urls;
+  final String schemaID;
+  final String credentialDefinitionID;
+  final String schema;
 
-  final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
-  final issuer = Issuer();
+  // final Issuer issuer;
   final platform = Platform();
 
-  var inputControllerList = <TextEditingController>[];
-  var inputs = <Widget>[];
+  var inputControllerList = [];
 
   var dateList = [].obs;
   var timeList = [].obs;
@@ -38,166 +44,113 @@ class SchemaController extends GetxController {
   var image = ''.obs;
   File? imageFile;
 
-  var schema = ''.obs;
+  RxList<dynamic> schemaList = [].obs;
+  // var schema = ''.obs;
 
-  initInputItems() {
-    inputControllerList = <TextEditingController>[];
-    inputs = <Widget>[];
+  RxList<Widget> widgets = <Widget>[].obs;
+
+  @override
+  onInit() {
+    super.onInit();
+
+    init(schema);
+  }
+
+  init(String schema) {
+    log.i("SchemaController:init(schema:$schema)");
+    inputControllerList = [];
 
     dateList.value = [];
     timeList.value = [];
     imageList.value = [];
+
+    return schemaList.value = json.decode(schema);
   }
 
-  setImageFile(File _new) {
+  _setImageFile(File _new) {
+    log.i("SchemaController:setImageFile");
     imageFile = _new;
     update();
   }
 
-  setDate(val) {
-    date.value = val;
-  }
+  // _getDateTime() {
+  //   return DateTime(
+  //       date.value.year, date.value.month, date.value.day, time.value.hour, time.value.minute, time.value.second);
+  // }
 
-  setTime(val) {
-    time.value = val;
-  }
-
-  setImage(val) {
-    image.value = val;
-  }
-
-  getDateTime() {
-    return DateTime(
-        date.value.year, date.value.month, date.value.day, time.value.hour, time.value.minute, time.value.second);
-  }
-
-  addDateTimeField() {
-    dateList.add(DateTime.now());
-    timeList.add(DateTime.now());
-  }
-
-  addImageField() {
-    imageList.add('');
-  }
-
-  setDateAt(val, index) {
-    dateList.add(val);
-  }
-
-  setTimeAt(val, index) {
-    timeList[index] = val;
-  }
-
-  setImageAt(val, index) {
-    imageList[index] = val;
-  }
-
-  getDateTimeAt(i) {
+  _getDateTimeAt(int i) {
     return DateTime(
         dateList[i].year, dateList[i].month, dateList[i].day, timeList[i].hour, timeList[i].minute, timeList[i].second);
   }
 
-  dynamicFields(String name, String requestSchema) async {
-    log.i('dynamicFields: $name : $requestSchema');
-    var response = await issuer.getSchemaLocation(Uri.parse(requestSchema));
-
-    log.i("response.body:${response.body}");
-
-    var endpoints = json.decode(response.body);
-
-    await DIDManager(did: did).setVCFieldByName(name, 'requestVC', endpoints['VCPost']);
-    await DIDManager(did: did).setVCFieldByName(name, 'getVC', endpoints['VCGet']);
-
-    response = await platform.getScheme(Uri.parse(endpoints['scheme']));
-    if (json.decode(response.body).containsKey('error')) {
-      return;
-    }
-
-    schema.value = json.decode(response.body)['data'];
-    final schemaList = json.decode(json.decode(response.body)['data']);
-
-    return schemaList;
-    // } else {
-    //   final schemaList = json.decode(schema.value);
-
-    //   return schemaList;
-    // }
+  addDateTimeField() {
+    log.i("SchemaController:addDateTimeField");
+    dateList.add(DateTime.now());
+    timeList.add(DateTime.now());
   }
 
-  Future takeImage(index) async {
+  Future<String?> takeImage(int index) async {
+    log.i("SchemaController:takeImage(index:$index)");
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      setImageFile(File(pickedFile.path));
+      _setImageFile(File(pickedFile.path));
 
       var imageBytes = await File(pickedFile.path).readAsBytes();
       var imageBase64 = base64Encode(imageBytes);
-      setImageAt(imageBase64, index);
+
+      imageList[index] = imageBase64;
+
+      return pickedFile.path;
+    } else {
+      log.i('No image selected.');
+      return null;
+    }
+  }
+
+  Future<String?> getImage(int index) async {
+    log.i("SchemaController:getImage(index:$index)");
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _setImageFile(File(pickedFile.path));
+
+      var isHEIC = pickedFile.path.substring(pickedFile.path.length - 4, pickedFile.path.length);
+
+      log.i("isHEIC: $isHEIC");
+
+      var imageBytes = await pickedFile.readAsBytes();
+      // var imageBase64 = base64Encode(imageBytes);
+
+      // long 320
+      var imageTemp = img.decodeImage(imageBytes) as img.Image;
+      img.Image resizedImg;
+      if (imageTemp.height > imageTemp.width) {
+        resizedImg = img.copyResize(imageTemp, height: 320);
+      } else {
+        resizedImg = img.copyResize(imageTemp, width: 320);
+      }
+
+      var jpg = img.encodeJpg(resizedImg, quality: 95);
+      var jpgBase64 = base64Encode(jpg);
+
+      imageList[index] = jpgBase64;
+
       return pickedFile.path;
     } else {
       log.i('No image selected.');
     }
   }
 
-  Future getImage(index) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  submit(String schema, String name, List<dynamic> data) async {
+    log.i("SchemaController:submit(schema:$schema, name:$name, data:$data)");
+    Map<String, dynamic> credentialSubject = {};
 
-    if (pickedFile != null) {
-      setImageFile(File(pickedFile.path));
-
-      var imageBytes = await File(pickedFile.path).readAsBytes();
-      var imageBase64 = base64Encode(imageBytes);
-      setImageAt(imageBase64, index);
-      return pickedFile.path;
-    } else {
-      log.i('No image selected.');
-    }
-  }
-
-  didAuth(payload, endPoint, token) async {
-    log.i('did Auth');
-    final passwordBytes = utf8.encode(g.password.value);
-    // Generate a random secret key.
-    final sink = Sha256().newHashSink();
-    sink.add(passwordBytes);
-    sink.close();
-    final passwordHash = await sink.hash();
-
-    final key = encrypt.Key.fromBase64(base64Encode(passwordHash.bytes));
-    final encrypter = encrypt.Encrypter(encrypt.AES(key));
-
-    final privateKey = await storage.read(key: 'privateKey') as String;
-    final encrypted = encrypt.Encrypted.fromBase64(base64Encode(Base58Decode(privateKey)));
-
-    final iv = encrypt.IV.fromLength(16);
-    final decrypted = encrypter.decrypt(encrypted, iv: iv);
-
-    final clearText = Base58Decode(decrypted);
-
-    final algorithm = Ed25519();
-    final keyPair = await algorithm.newKeyPairFromSeed(clearText);
-    // final pubKey = await keyPair.extractPublicKey();
-    // final did = 'did:mtm:' + Base58Encode(pubKey.bytes);
-
-    final challengeBytes = utf8.encode(payload);
-
-    final signature = await algorithm.sign(challengeBytes, keyPair: keyPair);
-
-    final response2 = await issuer.responseChallenge(Uri.parse(endPoint), Base58Encode(signature.bytes), token);
-    if (response2 == "") {
-      log.le("Challenge Failed");
-    }
-  }
-
-  submit(name, data) async {
-    log.i("submit");
-    var credentialSubject = {};
-
-    var imageI = 0;
-    var datetimeI = 0;
-    var j = 0;
+    int imageI = 0;
+    int datetimeI = 0;
+    int j = 0;
 
     for (var i = 0; i < data.length; i++) {
       final item = data[i];
@@ -214,11 +167,11 @@ class SchemaController extends GetxController {
           break;
         case 'image':
           // log.i(imageList.value[imageI]);
-          credentialSubject[item['name']] = 'image'; //imageList.value[imageI];
+          credentialSubject[item['name']] = imageList[imageI];
           imageI++;
           break;
         case 'datetime':
-          final DateTime datetime = getDateTimeAt(datetimeI);
+          final DateTime datetime = _getDateTimeAt(datetimeI);
           // log.i(datetime);
           credentialSubject[item['name']] = datetime.toIso8601String();
           datetimeI++;
@@ -226,41 +179,43 @@ class SchemaController extends GetxController {
       }
     }
 
-    // log.i(credentialSubject);
-    var body = {"did": g.did.value, "scheme": "vc1", "credentialSubject": credentialSubject};
+    final pk = await g.didManager.value.getDIDPK(g.did.value, g.password.value);
 
-    log.i("body:${json.encode(body)}");
+    final issuer = Issuer(urls);
 
-    log.i("uri:${await DIDManager(did: did).getVCFieldByName(name, "requestVC")}");
+    try {
+      final token = await issuer.didAuthentication(did, pk);
 
-    var response = await issuer.requestVC(
-        Uri.parse(await DIDManager(did: did).getVCFieldByName(name, "requestVC")), json.encode(body));
-    log.i("result of request VC: ${response.body}");
+      VCListController c = Get.find();
+      await c.vcManager.setByName(name, 'jwt', token);
 
-    if (response.body == 'Error' || json.decode(response.body).containsKey('error')) {
-      await Get.dialog(AlertDialog(
-          content: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text('VC Proposal Failed'),
-          SizedBox(
-            width: 5,
-          ),
-          ElevatedButton(
-            child: Text('OK'),
-            onPressed: () => Get.back(),
-          ),
-        ],
-      )));
-      return;
-    }
+      var response = await issuer.credentialProposal(did, schemaID, credentialDefinitionID, pk, token);
 
-    await DIDManager(did: did).setVCFieldByName(name, 'JWT', response.headers['authorization']);
+      // log.i("postVC Response: $response");
 
-    final challenge = jsonDecode(response.body);
-
-    if (challenge.containsKey('payload')) {
-      didAuth(challenge['payload'], challenge['endPoint'], response.headers['authorization']);
+      if (response != null) {
+        await c.vcManager.setByName(name, 'jwt', response);
+        // await c.vcManager.setByName(name, 'VC', json.encode(response2));
+        // await c.vcManager.value.setByName(name, 'jwt', response);
+        // c.vcManager.update((t) {});
+      } else {
+        await Get.dialog(AlertDialog(
+            content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text('VC Proposal Failed'),
+            const SizedBox(
+              width: 5,
+            ),
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () => Get.back(),
+            ),
+          ],
+        )));
+      }
+    } catch (e) {
+      log.e(e);
     }
   }
 }

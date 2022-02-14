@@ -1,27 +1,51 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:wallet/util/secure_storage.dart';
 
-import 'package:wallet/providers/issuer.dart';
-import 'package:wallet/providers/global_variable.dart';
-import 'package:wallet/utils/logger.dart';
+import 'package:wallet/provider/global_variable.dart';
+import 'package:wallet/util/logger.dart';
 
 class DIDListController extends GetxController {
-  final storage = FlutterSecureStorage();
-  final g = Get.put(GlobalVariable());
+  final GlobalVariable g = Get.find();
   final log = Log();
-  final issuer = Issuer();
 
-  getDIDList() async {
-    log.i("getDIDList");
+  final storage = FlutterSecureStorage();
 
-    var didListStr = await storage.read(key: "DIDList") as String;
+  // _deleteCacheDir() async {
+  //   final cacheDir = await getTemporaryDirectory();
 
-    log.i(didListStr);
+  //   if (cacheDir.existsSync()) {
+  //     cacheDir.deleteSync(recursive: true);
+  //   }
+  // }
 
-    var didList = json.decode(didListStr);
+  _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
 
-    log.i(didList);
-    return didList;
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
+  eraseAll() async {
+    log.i("DIDListController:eraseAll");
+    if (await storage.containsKey(key: "DIDList") == true) {
+      String didList = await storage.read(key: "DIDList") as String;
+
+      for (var did in json.decode(didList).keys.toList()) {
+        //var didVC = storage.read(key: did) as String;
+        if (await storage.containsKey(key: did) == true) {
+          await storage.delete(key: did);
+        }
+      }
+      await storage.delete(key: "DIDList");
+    }
+    g.biometric.value = false;
+
+    g.didManager.value.dids = {};
+
+    await _deleteAppDir();
+    // await _deleteCacheDir();
   }
 }
